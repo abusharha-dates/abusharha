@@ -1,3 +1,1 @@
-/* ===== إعداد التطبيق =====
-   الصق هنا رابط Web App من Google Apps Script (الرابط اللي ينتهي بـ /exec) بين علامتي التنصيص */
-window.TAMR_API_URL = 'ضع_رابط_Web_App_هنا';
+window.TAMR_API_URL = 'https://script.google.com/macros/s/AKfycbxpOlXx1RaE2eZPxIvHOH2nB7qbcy3MjJjsWNiWZL_nDTgxoUvyU1EmvL57QrClslsJYA/exec';
