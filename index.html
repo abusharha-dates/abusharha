@@ -139,6 +139,7 @@ nav button.navcfg{opacity:.6;padding:8px 10px}nav button.navcfg:hover{opacity:1}
 .lgrem{display:flex;align-items:center;gap:8px;margin:10px 0 0;font-size:14px;cursor:pointer}.lgrem input{width:auto!important;margin:0}b.uno{font-variant-numeric:tabular-nums;color:var(--palm)}
 .lgk{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:0 0 12px}.lgc{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);cursor:pointer;text-align:start;font:inherit;color:inherit}.lgc span{font-size:12.5px;font-weight:700;color:var(--muted)}.lgc b{font-size:20px;font-variant-numeric:tabular-nums}.lgc small{font-size:11px;color:var(--muted)}.lgc.on{outline:2px solid var(--palm);background:var(--surface)}.lgc.z{opacity:.55}.lgc.all{background:var(--surface)}
 .lgch{margin:0 0 12px}.lgk2{grid-template-columns:repeat(2,minmax(0,220px))}.lgc.cx b{color:var(--bad)}.lgc.ed b{color:var(--gold)}@media (max-width:900px){.lgk{grid-template-columns:repeat(4,1fr)}}@media (max-width:560px){.lgk{grid-template-columns:repeat(2,1fr)}}
+.tgbox{border:1px solid color-mix(in srgb,#229ED9 45%,var(--line));background:color-mix(in srgb,#229ED9 7%,var(--surface));padding:12px 14px}.tgbox p{margin:4px 0 10px;font-size:13.5px}.tgbox .mrow2 a{text-decoration:none;text-align:center;color:inherit}.tgbox .tglater{margin-top:8px;background:none;border:0;color:var(--muted);font-size:12.5px;cursor:pointer;text-decoration:underline}.ntlinks{display:flex;flex-direction:column;gap:6px;margin-top:8px}.ntlinks div{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:14px}
 .ntsec{border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:8px 0}.ntsec summary{cursor:pointer;font-weight:800}.ntsteps{margin:8px 0;padding-inline-start:20px;font-size:13px;color:var(--muted)}.ntsteps li{margin:3px 0}
 .hello{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.hrefresh{flex:0 0 auto;font-weight:800}
 .appver{text-align:center;font-size:12px;color:var(--muted);padding:18px 12px 28px;opacity:.85;white-space:normal;line-height:1.7}@media (max-width:700px){.appver{padding-bottom:90px}}
@@ -1466,6 +1467,8 @@ function fixWeights(s) {
 }
 function fixUnit(u) { u = String(u || '').trim(); return u === 'كيلو' || u === 'كغ' || u === 'كجم' ? 'كجم' : u; }
 /* ===== المستخدمون والصلاحيات (مشتركة) ===== */
+/* 🔔 تنبيهات المستخدمين: تُجمع هنا أثناء العملية، والخادم يرسلها على تيليجرام بعد نجاحها */
+var __OUT = [];
 var PERMS = ['recv', 'recvBr', 'supAdd', 'tasksAssign', 'close', 'trqReq', 'trqExec', 'trqRecv', 'trqCancel', 'expReturn', 'expRecv', 'dmg', 'tasks', 'count', 'items', 'purch', 'convert', 'expenses', 'maint', 'invoices', 'where', 'log', 'dash', 'reports', 'mrep', 'upl', 'profit', 'obl', 'att', 'hr', 'audit', 'users', 'layout', 'convEdit'];
 var MGR_ONLY = ['users', 'layout', 'convEdit'];
 var ROLES = ['مدير', 'عامل مستودع'];
@@ -2980,7 +2983,7 @@ var DB = null, IM = {}, LM = {}, SHOP = '', CUR = 'home', ME = null, TOKEN = '',
 /* live = داخل Google Apps Script، api = التطبيق المستضاف (يتصل بالسيرفر عبر الرابط في config.js)، demo = نسخة تجريبية محلية */
 var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(window.TAMR_API_URL).trim() : '';
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 54, APP_DATE = '2026-10-17';
+var APP_BUILD = 56, APP_DATE = '2026-10-17';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -3177,6 +3180,11 @@ var Demo = (function () {
   function passOffD() { var s = (D.settings || []).find(function (x) { return x.key === 'passOff'; }); return !s || String(s.value) !== '0'; }
   function needP(w, p) { if (!userCan(w, p)) throw new Error('e_noperm'); }
   function mgr(w) { if (w.role !== MANAGER_ROLE) throw new Error('e_manager'); }
+  /* تنبيه لأسماء مستخدمين محددين (يُستبعد صاحب العملية والموقوفين والمكرر) */
+  function ntf(to, text, except) { var seen = {}; to = (to || []).filter(function (n) { if (!n || n === except || seen[n]) return false; seen[n] = 1; return D.workers.some(function (x) { return x.name === n && x.active !== 'موقوف'; }); }); if (to.length && __OUT.length < 200) __OUT.push({ to: to, text: String(text) }); }
+  function whoCan(p) { return D.workers.filter(function (x) { return x.active !== 'موقوف' && userCan(x, p); }).map(function (x) { return x.name; }); }
+  function mgrsN() { return D.workers.filter(function (x) { return x.active !== 'موقوف' && x.role === MANAGER_ROLE; }).map(function (x) { return x.name; }); }
+  function rl(n) { return (Math.round(Number(n) * 100) / 100) + ' ريال'; }
   function needReason(r) { if (!r || String(r).trim().length < 3) throw new Error('e_reason'); }
   function touch(w, owner, dt) { if (w.role === MANAGER_ROLE) return; if (owner !== w.name) throw new Error('e_notyours'); if (String(dt).slice(0, 10) !== now().slice(0, 10)) throw new Error('e_nottoday'); }
   function delta(item, loc, d) { if (!d) return; var s = find(item, loc), have = s ? Number(s.qty) : 0; if (have + d < 0) throw new Error('e_undoqty|' + have + '|' + loc); if (!s) { s = { item: item, loc: loc, qty: 0, expiry: '', updated: '' }; D.stock.push(s); } s.qty = have + d; s.updated = now(); }
@@ -3258,6 +3266,7 @@ var Demo = (function () {
     if (st === 'منجزة' && kind === 'نقل') apply(m);
     x.status = st; x.doneAt = now();
     if (st !== 'منجزة') aud(w.name, 'إلغاء مهمة', id + ': ' + (kind === 'نقل' ? desc(m) : x.title) + ' — المكلف: ' + x.worker);
+    if (kind !== 'ذاتية') { var tt = kind === 'نقل' ? (x.itemName || '') + ' × ' + x.qty + ' (' + lname(x.from) + ' ← ' + lname(x.to) + ')' : x.title; if (st === 'منجزة') ntf([x.by], '✅ ' + w.name + ' أنجز المهمة:\n' + tt, w.name); else ntf([x.worker], '❌ أُلغيت مهمتك:\n' + tt + '\nبواسطة: ' + w.name, w.name); }
     save(); return allFor(w);
   }
   reload();
@@ -3503,6 +3512,7 @@ var Demo = (function () {
       if (kind === 'نقل') checkMove({ type: 'نقل', item: x.item, from: x.from, to: x.to, qty: x.qty });
       else if (!String(x.title || '').trim()) throw new Error('e_title');
       D.tasks.push({ id: 'T' + String(Date.now()).slice(-6), date: now(), worker: x.worker, item: kind === 'نقل' ? x.item : '', itemName: kind === 'نقل' ? nm(x.item) : '', from: kind === 'نقل' ? x.from : '', to: kind === 'نقل' ? x.to : '', qty: kind === 'نقل' ? Number(x.qty) : '', status: 'جديدة', doneAt: '', note: x.note || '', kind: kind, title: String(x.title || '').trim(), by: w.name });
+      ntf([x.worker], kind === 'نقل' ? '📋 مهمة نقل جديدة من ' + w.name + '\n' + nm(x.item) + ' × ' + Number(x.qty) + '\n' + lname(x.from) + ' ← ' + lname(x.to) + (x.note ? '\n📝 ' + x.note : '') : '📋 مهمة جديدة من ' + w.name + '\n' + String(x.title).trim() + (x.note ? '\n📝 ' + x.note : ''), w.name);
       save(); return allFor(w);
     },
     convertStock: function (tok, cv) {
@@ -3556,6 +3566,7 @@ var Demo = (function () {
       if (x.status !== 'بانتظار الاعتماد') throw new Error('e_pudone');
       if (ok) { x.status = ''; x.apprBy = w.name; x.apprAt = now(); aud(w.name, 'اعتماد مشتريات استهلاكية', x.id + ': ' + x.pack + ' × ' + x.qty + ' — ' + x.total + ' ريال (أدخلها ' + x.user + ')'); }
       else { needReason(reason); x.status = 'مرفوض'; x.rejBy = w.name; x.rejAt = now(); x.rejReason = String(reason).trim(); aud(w.name, 'رفض مشتريات استهلاكية', x.id + ': ' + x.pack + ' × ' + x.qty + ' — السبب: ' + reason); }
+      ntf([x.user], (ok ? '✅ اعتُمدت مشترياتك: ' : '❌ رُفضت مشترياتك: ') + x.pack + ' × ' + x.qty + ' — ' + rl(x.total) + (ok ? '' : '\nالسبب: ' + reason), w.name);
       save(); return allFor(w);
     },
     addPurchase: function (tok, p) {
@@ -3569,6 +3580,7 @@ var Demo = (function () {
       var hp = D.settings.find(function (x) { return x.key === 'hiddenPacks'; }); if (hp) hp.value = String(hp.value || '').split('|').filter(function (x) { return x && x !== p.pack; }).join('|');
       /* مشتريات غير المدير تحتاج اعتماد المدير قبل أن تدخل الرصيد والتكاليف */
       D.purchases.push({ status: w.role === MANAGER_ROLE ? '' : 'بانتظار الاعتماد', apprBy: w.role === MANAGER_ROLE ? w.name : '', id: 'P-' + ('000' + (D.purchases.length + 1)).slice(-4), date: now(), user: w.name, pack: p.pack, qty: k.qty, price: k.price, total: Math.round(k.total * 100) / 100, note: String(p.note || '').trim(), cartons: k.cartons, per: k.per, cartonPrice: k.cartonPrice });
+      if (w.role !== MANAGER_ROLE) ntf(mgrsN(), '🛒 مشتريات استهلاكية بانتظار اعتمادك\n' + p.pack + ' × ' + k.qty + ' — ' + rl(k.total) + '\nأدخلها: ' + w.name, w.name);
       save(); return allFor(w);
     },
     addOp: function (tok, op) { var w = wuser(tok); if (!String(op.remark || '').trim()) throw new Error('e_remark'); D.ops.push({ date: now(), user: w.name, type: op.type || 'صيانة', remark: String(op.remark).trim() }); save(); return allFor(w); },
@@ -3588,6 +3600,7 @@ var Demo = (function () {
         var n = 1; D.trq.forEach(function (k) { n = Math.max(n, Number(String(k.id).replace(/\D/g, '')) + 1); });
         r = { id: 'TR-' + ('000' + n).slice(-4), created: tm, by: w.name, from: x.from, to: x.to, note: String(x.note || '').trim(), status: 'جديد', lines: lines, execBy: '', execAt: '', execNote: '', recvBy: '', recvAt: '', recvNote: '', photo: '', shortage: 0, cancelReason: '' };
         D.trq.push(r); aud(w.name, 'طلب نقل', r.id + ': ' + lname(r.from) + ' ← ' + lname(r.to) + ' — ' + lines.map(function (l) { return l.itemName + ' × ' + l.qty; }).join('، '));
+        ntf(whoCan('trqExec'), '🚚 طلب نقل جديد ' + r.id + '\n' + lname(r.from) + ' ← ' + lname(r.to) + '\nطلبه: ' + w.name + '\n' + lines.map(function (l) { return '• ' + l.itemName + ' × ' + l.qty; }).join('\n') + (r.note ? '\n📝 ' + r.note : ''), w.name);
         save(); var o = allFor(w); o.lastTrq = r.id; return o;
       }
       r = get();
@@ -3610,6 +3623,7 @@ var Demo = (function () {
         });
         r.status = 'ملغى'; r.cancelStage = stage; r.cancelBy = w.name; r.cancelAt = tm; r.cancelReason = String(reason).trim();
         aud(w.name, 'إلغاء طلب نقل', r.id + ' (طلبه ' + r.by + '، المرحلة: ' + stage + ')' + (ret.length ? ' — أُرجع إلى ' + lname(r.from) + ': ' + ret.join('، ') : '') + ' — السبب: ' + reason);
+        ntf([r.by, r.execBy], '❌ أُلغي طلب النقل ' + r.id + '\n' + lname(r.from) + ' ← ' + lname(r.to) + '\nبواسطة: ' + w.name + '\nالسبب: ' + reason, w.name);
       } else if (op === 'short') {
         if (!(w.role === MANAGER_ROLE || userCan(w, 'trqCancel'))) throw new Error('e_noperm');
         if (r.status !== 'مستلم' || !(Number(r.shortage) > 0)) throw new Error('e_trqstate'); if (r.shortRes) throw new Error('e_trqshortdone');
@@ -3627,6 +3641,7 @@ var Demo = (function () {
         r.lines.forEach(function (l) { l.sent = l._s; delete l._s; if (l.sent > 0) { dl(l.item, r.from, -l.sent); mv(l.item, r.from, '', l.sent, 'طلب نقل ' + r.id + ' — إرسال إلى ' + lname(r.to) + ' (قيد النقل)'); } });
         r.status = 'قيد النقل'; r.execBy = w.name; r.execAt = tm; r.execNote = String(x.note || '').trim();
         aud(w.name, 'تنفيذ نقل', r.id + ': ' + lname(r.from) + ' ← ' + lname(r.to) + ' — ' + r.lines.map(function (l) { return l.itemName + ' ' + l.sent + '/' + l.qty; }).join('، '));
+        ntf(whoCan('trqRecv').concat([r.by]), '📦 طلب النقل ' + r.id + ' في الطريق إلى ' + lname(r.to) + ' — بانتظار الاستلام\nأرسله: ' + w.name + '\n' + r.lines.map(function (l) { return '• ' + l.itemName + ' × ' + l.sent; }).join('\n'), w.name);
       } else if (op === 'recv') {
         needP(w, 'trqRecv'); if (r.status !== 'قيد النقل') throw new Error('e_trqstate');
         if (!x.photo || !x.photo.url) throw new Error('e_trqphoto');
@@ -3635,6 +3650,7 @@ var Demo = (function () {
         r.lines.forEach(function (l) { l.recv = l._r; delete l._r; if (l.recv > 0) { dl(l.item, r.to, l.recv); mv(l.item, '', r.to, l.recv, 'طلب نقل ' + r.id + ' — استلام من ' + lname(r.from)); } var d = Number(l.sent) - l.recv; if (d > 0) { short += d; sl.push(l.itemName + ' (' + d + ')'); } });
         r.status = 'مستلم'; r.recvBy = w.name; r.recvAt = tm; r.recvNote = String(x.note || '').trim(); r.photo = x.photo.url; r.shortage = Math.round(short * 1000) / 1000;
         aud(w.name, short ? 'استلام نقل بنقص' : 'استلام نقل', r.id + ': في ' + lname(r.to) + (short ? ' — نقص: ' + sl.join('، ') : ' — مطابق'));
+        ntf([r.by, r.execBy].concat(short ? whoCan('trqCancel') : []), (short ? '⚠️ استلام بنقص — طلب النقل ' : '✅ تم استلام طلب النقل ') + r.id + ' في ' + lname(r.to) + '\nاستلمه: ' + w.name + (short ? '\nالنقص: ' + sl.join('، ') : ''), w.name);
       } else throw new Error('e_type');
       save(); return allFor(w);
     },
@@ -3786,7 +3802,7 @@ var Demo = (function () {
       var cb = custodyBy(D.expenses)[w.name] || { bal: 0, pend: 0 }, avail = Math.round((cb.bal - cb.pend) * 100) / 100;
       if (amt > avail) throw new Error('e_rtover|' + Math.max(0, avail));
       D.expenses.push({ id: 'R' + Date.now(), date: now(), user: w.name, kind: 'إرجاع', amount: amt, person: to, desc: String(x.note || '').trim() || 'إعادة مبلغ فائض', status: 'معلق', confBy: '', confAt: '', rejReason: '', photo: '' });
-      aud(w.name, 'إعادة مبلغ فائض', amt + ' ريال إلى ' + to + ' — بانتظار تأكيد الاستلام'); save(); return allFor(w);
+      aud(w.name, 'إعادة مبلغ فائض', amt + ' ريال إلى ' + to + ' — بانتظار تأكيد الاستلام'); ntf([to], '💵 ' + w.name + ' أعاد لك ' + rl(amt) + ' (مبلغ فائض من العهدة)\nأكّد الاستلام من النظام', w.name); save(); return allFor(w);
     },
     expConfirm: function (tok, id, ok, reason) {
       var w = wuser(tok); var r = D.expenses.find(function (k) { return k.id === id && k.kind === 'إرجاع'; }); if (!r) throw new Error('e_noexp');
@@ -3794,6 +3810,7 @@ var Demo = (function () {
       if (!ok) { needReason(reason); r.status = 'مرفوض'; r.rejReason = String(reason).trim(); }
       else r.status = 'مؤكد';
       r.confBy = w.name; r.confAt = now();
+      ntf([r.user], (ok ? '✅ ' + w.name + ' أكّد استلام ' : '❌ ' + w.name + ' رفض استلام ') + rl(r.amount) + (ok ? '' : '\nالسبب: ' + reason), w.name);
       aud(w.name, ok ? 'تأكيد استلام مبلغ مرتجع' : 'رفض استلام مبلغ مرتجع', r.amount + ' ريال من ' + r.user + (ok ? '' : ' — السبب: ' + reason)); save(); return allFor(w);
     },
     addExpense: function (tok, e) {
@@ -3802,6 +3819,7 @@ var Demo = (function () {
       if (kind === 'مصروف' && !String(e.desc || '').trim()) throw new Error('e_desc');
       if (kind === 'إيداع' && !String(e.person || '').trim()) throw new Error('e_fdperson');
       D.expenses.push({ id: 'E' + Date.now(), date: now(), user: w.name, kind: kind, amount: amt, desc: String(e.desc || '').trim(), person: String(e.person || '').trim(), photo: e.photo && e.photo.url ? e.photo.url : '' });
+      if (kind === 'إيداع') ntf([String(e.person || '').trim()], '💰 استلمت عهدة ' + rl(amt) + ' من ' + w.name + (String(e.desc || '').trim() ? '\n📝 ' + String(e.desc).trim() : ''), w.name);
       save(); return allFor(w);
     },
     maintDone: function (tok, id, r, forW) {
@@ -3821,7 +3839,8 @@ var Demo = (function () {
       var wk = (Array.isArray(x.worker) ? x.worker : String(x.worker || '').split(',')).map(function (n) { return String(n).trim(); }).filter(function (n) { return n && D.workers.some(function (k) { return k.name === n; }); });
       if (x.kind !== 'نظافة' && wk.length > 1) wk = wk.slice(0, 1);
       var ct = CLEAN_TASKS.find(function (c) { return c[1] === title; });
-      D.maintTasks.push({ id: 'MT' + Date.now(), title: title, title_bn: ct ? ct[2] : '', days: days, worker: wk.join(','), created: now(), by: w.name, start: String(x.start || '').slice(0, 10), kind: x.kind === 'نظافة' ? 'نظافة' : 'صيانة' }); save(); return allFor(w);
+      D.maintTasks.push({ id: 'MT' + Date.now(), title: title, title_bn: ct ? ct[2] : '', days: days, worker: wk.join(','), created: now(), by: w.name, start: String(x.start || '').slice(0, 10), kind: x.kind === 'نظافة' ? 'نظافة' : 'صيانة' });
+      ntf(wk.length ? wk : whoCan('maint'), (x.kind === 'نظافة' ? '🧹 مهمة نظافة جديدة: ' : '🔧 مهمة صيانة جديدة: ') + title + '\nكل ' + days + ' يوم' + (x.start ? ' — تبدأ ' + String(x.start).slice(0, 10) : ''), w.name); save(); return allFor(w);
     },
     deleteMaintTask: function (tok, id) {
       var w = wuser(tok); mgr(w); var t0 = D.maintTasks.find(function (x) { return x.id === id; }); if (!t0) throw new Error('e_notask');
@@ -3843,12 +3862,13 @@ var Demo = (function () {
       var ses = { id: 'JR-' + ('000' + n).slice(-4), date: tm, loc: c.loc, worker: w.name, status: 'معلق', appBy: '', appAt: '', rejReason: '',
         lines: c.lines.map(function (L) { var a = Number(L.actual), s = find(L.item, c.loc), sys = s ? Number(s.qty) : 0; return { item: L.item, itemName: nm(L.item), system: sys, actual: a, diff: Math.round((a - sys) * 1000) / 1000 }; }) };
       D.countSessions.push(ses);
-      if (w.role === MANAGER_ROLE) countApply(ses, w); else aud(w.name, 'إرسال جرد للاعتماد', ses.id + ' — ' + lname(c.loc) + ': ' + ses.lines.length + ' صنف');
+      if (w.role === MANAGER_ROLE) countApply(ses, w); else { aud(w.name, 'إرسال جرد للاعتماد', ses.id + ' — ' + lname(c.loc) + ': ' + ses.lines.length + ' صنف'); ntf(mgrsN(), '📋 جرد بانتظار الاعتماد ' + ses.id + '\n' + lname(c.loc) + ' — ' + ses.lines.length + ' صنف\nأرسله: ' + w.name, w.name); }
       save(); return allFor(w);
     },
     reviewCount: function (tok, id, ok, reason) {
       var w = wuser(tok); mgr(w); needP(w, 'count');
       var ses = D.countSessions.find(function (k) { return k.id === id; }); if (!ses) throw new Error('e_nocount'); if (ses.status !== 'معلق') throw new Error('e_countdone');
+      ntf([ses.worker], (ok ? '✅ اعتُمد جردك ' : '❌ رُفض جردك ') + ses.id + ' — ' + lname(ses.loc) + (ok ? '' : '\nالسبب: ' + reason), w.name);
       if (ok) countApply(ses, w);
       else { needReason(reason); ses.status = 'مرفوض'; ses.appBy = w.name; ses.appAt = now(); ses.rejReason = String(reason).trim(); aud(w.name, 'رفض جرد', ses.id + ' — ' + lname(ses.loc) + ' (' + ses.worker + ') — السبب: ' + reason); }
       save(); return allFor(w);
@@ -4031,7 +4051,7 @@ var Demo = (function () {
         var oldT = c.total, act = isM ? 'تعديل من المدير' : (c.status === 'مُعاد' ? 'تعديل وإعادة إرسال' : 'تعديل');
         Object.keys(n).forEach(function (k) { c[k] = n[k]; });
         if (x.photoBal && x.photoBal.url) c.photoBal = x.photoBal.url; if (x.photoSys && x.photoSys.url) c.photoSys = x.photoSys.url;
-        if (!c.photoBal || !c.photoSys) throw new Error('e_clphotos'); c.edited = now() + ' — ' + w.name; if (!isM) c.status = 'معلق';
+        if (!c.photoBal || !c.photoSys) throw new Error('e_clphotos'); c.edited = now() + ' — ' + w.name; if (!isM) { c.status = 'معلق'; ntf(mgrsN(), '🧮 إقفال مُعدَّل بانتظار الاعتماد\n' + lname(n.loc) + ' — ' + n.date + '\nالإجمالي: ' + rl(n.total) + '\nأدخله: ' + w.name, w.name); }
         c.log = lg(c.log, act, 'الإجمالي ' + oldT + ' ← ' + n.total + (reason ? ' — ' + reason : ''));
         aud(w.name, isM ? 'تعديل إقفال' : 'إعادة إرسال إقفال', id + ' — ' + lname(n.loc) + ' ' + n.date + ': الإجمالي من ' + oldT + ' إلى ' + n.total + (reason ? ' — السبب: ' + reason : ''));
       } else {
@@ -4039,6 +4059,7 @@ var Demo = (function () {
         if (!D.locations.some(function (l) { return l.code === n2.loc && l.active !== 'محذوف'; })) throw new Error('e_chooseloc');
         if (!x.photoBal || !x.photoBal.url || !x.photoSys || !x.photoSys.url) throw new Error('e_clphotos'); n2.photoBal = x.photoBal.url; n2.photoSys = x.photoSys.url;
         n2.id = 'C' + Date.now(); n2.user = w.name; n2.created = now(); n2.edited = ''; n2.status = 'معلق'; n2.log = lg('', 'إدخال', 'الإجمالي ' + n2.total); D.dailyClose.push(n2);
+        ntf(mgrsN(), '🧮 إقفال يومي بانتظار الاعتماد\n' + lname(n2.loc) + ' — ' + n2.date + '\nالإجمالي: ' + rl(n2.total) + '\nأدخله: ' + w.name, w.name);
       }
       save(); return allFor(w);
     },
@@ -4046,6 +4067,7 @@ var Demo = (function () {
       var w = wuser(tok); mgr(w); note = String(note || '').trim(); if (action === 'return') needReason(note);
       var c = D.dailyClose.find(function (v) { return v.id === id; }); if (!c) throw new Error('e_noclose');
       c.status = action === 'approve' ? 'معتمد' : 'مُعاد';
+      ntf([c.user], (action === 'approve' ? '✅ اعتُمد إقفالك: ' : '↩️ أُعيد إقفالك للتعديل: ') + lname(c.loc) + ' — ' + c.date + ' — ' + rl(c.total) + (note ? '\n📝 ' + note : ''), w.name);
       c.log = (c.log ? c.log + '\n' : '') + now() + ' | ' + w.name + ' | ' + (action === 'approve' ? 'اعتماد' : 'إعادة للموظف للتعديل') + (note ? ' | ' + note : '');
       aud(w.name, action === 'approve' ? 'اعتماد إقفال' : 'إعادة إقفال للتعديل', lname(c.loc) + ' ' + c.date + ' — ' + c.total + ' ريال (أدخله ' + c.user + ')' + (note ? ' — ' + note : '')); save(); return allFor(w);
     },
@@ -4121,7 +4143,7 @@ var Demo = (function () {
       var id = 1; D.invoices.forEach(function (v) { id = Math.max(id, Number(v.id) + 1); });
       var pend = w.role !== MANAGER_ROLE; // فاتورة الفرع من المستخدمين تحتاج تعميد المدير
       D.invoices.push({ pendN: '', id: id, date: date, created: now(), user: w.name, invType: BR_TYPE, payType: pay, supplier: sup, supInv: String(x.supInv || '').trim(), total: amt, count: 0, status: pend ? 'بانتظار التعميد' : '', edited: '', loc: loc, doc: x.doc.url, docPdf: !!x.doc.pdf, docName: String(x.doc.name || '') });
-      invSup(sup, w.name); aud(w.name, pend ? 'فاتورة فرع بانتظار التعميد' : 'فاتورة فرع', 'رقم ' + id + ' — ' + lname(loc) + ' — ' + sup + ' — ' + amt + ' ريال ' + pay);
+      invSup(sup, w.name); if (pend) ntf(mgrsN(), '🧾 فاتورة فرع بانتظار التعميد — رقم ' + id + '\n' + lname(loc) + ' — ' + sup + ' — ' + rl(amt) + ' ' + pay + '\nأدخلها: ' + w.name, w.name); aud(w.name, pend ? 'فاتورة فرع بانتظار التعميد' : 'فاتورة فرع', 'رقم ' + id + ' — ' + lname(loc) + ' — ' + sup + ' — ' + amt + ' ريال ' + pay);
       save(); var o = allFor(w); o.lastInvoice = id; o.lastInvPend = pend; return o;
     },
     saveOpening: function (tok, x) {
@@ -4149,7 +4171,7 @@ var Demo = (function () {
       if (!pend) { Object.keys(E).forEach(function (it) { delta(it, loc, E[it]); }); invMv(id, n, loc, w.name); }
       invLn(id, n);
       D.invoices.push({ pendN: pend ? JSON.stringify(n) : '', id: id, date: n.date, created: now(), user: w.name, invType: n.invType, payType: n.payType, supplier: n.supplier, supInv: n.supInv, total: n.total, count: n.lines.length, status: pend ? 'بانتظار التعميد' : '', edited: '', loc: loc, doc: x.doc && x.doc.url ? x.doc.url : '', docPdf: !!(x.doc && x.doc.pdf), docName: x.doc ? String(x.doc.name || '') : '' });
-      invSup(n.supplier, w.name); if (!pend) invCost(n); else aud(w.name, 'إدخال فاتورة بانتظار التعميد', 'فاتورة ' + id + ' — ' + n.supplier + ' — ' + n.total + ' ريال'); save(); var o = allFor(w); o.lastInvoice = id; o.lastInvPend = pend; return o;
+      invSup(n.supplier, w.name); if (!pend) invCost(n); else { aud(w.name, 'إدخال فاتورة بانتظار التعميد', 'فاتورة ' + id + ' — ' + n.supplier + ' — ' + n.total + ' ريال'); ntf(mgrsN(), '🧾 فاتورة مشتريات بانتظار التعميد — رقم ' + id + '\n' + n.supplier + ' — ' + rl(n.total) + '\nالموقع: ' + lname(loc) + '\nأدخلها: ' + w.name, w.name); } save(); var o = allFor(w); o.lastInvoice = id; o.lastInvPend = pend; return o;
     },
     editInvoice: function (tok, id, x, reason) {
       var w = wuser(tok); mgr(w); needReason(reason); reason = String(reason).trim();
@@ -4173,13 +4195,13 @@ var Demo = (function () {
     approveInvoice: function (tok, id, ok, reason) {
       var w = wuser(tok); mgr(w); var h = D.invoices.find(function (v) { return String(v.id) === String(id); }); if (!h) throw new Error('e_noinv');
       if (h.status !== 'بانتظار التعميد') throw new Error('e_invnotpend');
-      if (!ok) { needReason(reason); h.status = 'مرفوضة — ' + String(reason).trim(); h.pendN = ''; h.apprBy = w.name; h.apprAt = now(); aud(w.name, 'رفض تعميد فاتورة', 'فاتورة ' + id + ' (' + h.user + ') — السبب: ' + reason); save(); return allFor(w); }
+      if (!ok) { needReason(reason); h.status = 'مرفوضة — ' + String(reason).trim(); h.pendN = ''; h.apprBy = w.name; h.apprAt = now(); aud(w.name, 'رفض تعميد فاتورة', 'فاتورة ' + id + ' (' + h.user + ') — السبب: ' + reason); ntf([h.user], '❌ رُفضت فاتورتك رقم ' + id + ' — ' + h.supplier + ' — ' + rl(h.total) + '\nالسبب: ' + reason, w.name); save(); return allFor(w); }
       if (h.invType !== BR_TYPE) { /* فاتورة الفرع: مبلغ فقط بدون مخزون */
         var n = JSON.parse(h.pendN || '{}'), loc = invLocD(h.loc), E = invEffect(n.invType, n.lines);
         invStock(E, loc); Object.keys(E).forEach(function (it) { delta(it, loc, E[it]); }); invMv(id, n, loc, h.user); invCost(n);
       }
       h.status = ''; h.pendN = ''; h.apprBy = w.name; h.apprAt = now();
-      aud(w.name, 'تعميد فاتورة', 'فاتورة ' + id + ' — ' + h.supplier + ' — ' + h.total + ' ريال (أدخلها ' + h.user + ')'); save(); return allFor(w);
+      aud(w.name, 'تعميد فاتورة', 'فاتورة ' + id + ' — ' + h.supplier + ' — ' + h.total + ' ريال (أدخلها ' + h.user + ')'); ntf([h.user], '✅ تم تعميد فاتورتك رقم ' + id + ' — ' + h.supplier + ' — ' + rl(h.total), w.name); save(); return allFor(w);
     },
     cancelInvoice: function (tok, id, reason) {
       var w = wuser(tok); mgr(w); needReason(reason); reason = String(reason).trim();
@@ -4661,6 +4683,26 @@ function myDayCard() {
 }
 function homeRefresh(b) { if (b) b.disabled = true; refresh().then(function () { toast('✅ ' + t('homeRefreshed')); }).then(function () { if (b) b.disabled = false; }); }
 function renderAppVer() { var f = document.getElementById('appVer'); if (f) f.innerHTML = '🛠️ ' + esc(t('appVerTxt', APP_BUILD, APP_DATE)); }
+/* 🔔 ربط المستخدم بتنبيهات تيليجرام (يظهر في الرئيسية لمن لم يربط بعد) */
+var TGME = null, TGME_LD = false;
+function tgHomeBox() {
+  if (MODE === 'demo' || !ME || ME.readonly) return '';
+  if (TGME && TGME._n !== ME.name) { TGME = null; TGME_LD = false; }
+  if (!TGME) {
+    if (!TGME_LD) { TGME_LD = true; var n0 = ME.name; call('tgMe', [TOKEN]).then(function (r) { TGME = r || {}; TGME._n = n0; var b = $('tgBox'); if (b) b.outerHTML = tgBoxHtml(); }).catch(function () { TGME = { on: false, _n: n0 }; }); }
+    return '<div id="tgBox"></div>';
+  }
+  return tgBoxHtml();
+}
+function tgBoxHtml() {
+  if (!TGME || !TGME.on || TGME.linked || !TGME.bot || store('tamr-tgdis') === todayS()) return '<div id="tgBox"></div>';
+  return '<div id="tgBox" class="card tgbox"><b>🔔 ' + esc(t('tgT')) + '</b><p class="muted">' + esc(t('tgHint')) + '</p><div class="mrow2"><a class="btn" target="_blank" rel="noopener" href="https://t.me/' + encodeURIComponent(TGME.bot) + '?start=' + encodeURIComponent(TGME.code) + '">1️⃣ ' + esc(t('tgOpen')) + '</a><button class="primary" type="button" onclick="tgCheck(this)">2️⃣ ' + esc(t('tgCheck')) + '</button></div><button class="tglater" type="button" onclick="tgLater()">' + esc(t('tgLater')) + '</button></div>';
+}
+function tgCheck(b) {
+  b.disabled = true;
+  call('tgLink', [TOKEN]).then(function (r) { b.disabled = false; if (r && r.linked) { TGME.linked = true; toast('✅ ' + t('tgDone')); var x = $('tgBox'); if (x) x.outerHTML = tgBoxHtml(); } else toast('⚠️ ' + t('tgNotYet'), true); }).catch(function (e) { b.disabled = false; toast('⚠️ ' + tErr(e), true); });
+}
+function tgLater() { store('tamr-tgdis', todayS()); var x = $('tgBox'); if (x) x.outerHTML = '<div id="tgBox"></div>'; }
 function renderHome() {
   renderAppVer();
   var mgr = isMgr(), mine = DB.tasks.filter(function (x) { return x.status === 'جديدة' && x.worker === ME.name; }), pend = DB.tasks.filter(function (x) { return x.status === 'جديدة'; });
@@ -4678,6 +4720,7 @@ function renderHome() {
   if (NAVED) { $('v-home').innerHTML = h + navEditor(); return; }
   if (staffDay) h += myDayCard();
   h += rtInCard();
+  h += tgHomeBox();
   if (ME.readonly) h += '<div class="banner info">👁️ ' + esc(t('roBanner')) + '</div>';
   if (mgr && can('close') && clPending().length) h += '<button class="banner warn" onclick="show(\'close\');$(\'clfSt\').value=\'معلق\';renderClose()">🧮 ' + esc(t('clBannerMgr', clPending().length)) + '</button>';
   if (!mgr && !staffDay && can('close') && clReturnedMine().length) h += '<button class="banner bad" onclick="show(\'close\')">↩️ ' + esc(t('clBannerEmp', clReturnedMine().length)) + '</button>';
@@ -5260,7 +5303,7 @@ function ntRender() {
   h += '<label class="chk" style="margin:0 0 10px"><input type="checkbox" id="ntOn"' + (NT.on ? ' checked' : '') + '> <b>' + esc(t('ntOn')) + '</b></label>' +
     '<div class="form"><label><span>' + esc(t('ntHour')) + '</span><select id="ntHour">' + hrs + '</select></label></div>' +
     '<details class="ntsec"' + (NT.tgToken ? ' open' : '') + '><summary>✈️ ' + esc(t('ntTg')) + ' <small class="muted">' + esc(t('ntRec')) + '</small></summary><ol class="ntsteps"><li>' + esc(t('ntTg1')) + '</li><li>' + esc(t('ntTg2')) + '</li><li>' + esc(t('ntTg3')) + '</li></ol>' +
-    '<div class="form"><label class="wide"><span>Bot Token</span><input id="ntTgTok" dir="ltr" autocomplete="off" value="' + esc(NT.tgToken || '') + '"></label><label class="wide"><span>' + esc(t('ntTgChats')) + '</span><input id="ntTgChats" dir="ltr" autocomplete="off" value="' + esc(NT.tgChats || '') + '"></label></div><button class="btn sm" type="button" onclick="ntFindChats()">🔍 ' + esc(t('ntFind')) + '</button><div id="ntChats"></div></details>' +
+    '<div class="form"><label class="wide"><span>Bot Token</span><input id="ntTgTok" dir="ltr" autocomplete="off" value="' + esc(NT.tgToken || '') + '"></label><label class="wide"><span>' + esc(t('ntTgChats')) + '</span><input id="ntTgChats" dir="ltr" autocomplete="off" value="' + esc(NT.tgChats || '') + '"></label></div><button class="btn sm" type="button" onclick="ntFindChats()">🔍 ' + esc(t('ntFind')) + '</button><div id="ntChats"></div></details>' + ntAlertsSec() +
     '<details class="ntsec"' + (NT.waList ? ' open' : '') + '><summary>🟢 ' + esc(t('ntWa')) + '</summary><ol class="ntsteps"><li>' + esc(t('ntWa1')) + '</li><li>' + esc(t('ntWa2')) + '</li><li>' + esc(t('ntWa3')) + '</li></ol>' +
     '<div class="form"><label class="wide"><span>' + esc(t('ntWaList')) + '</span><textarea id="ntWa" rows="3" dir="ltr" placeholder="966500000000 123456">' + esc(NT.waList || '') + '</textarea></label></div></details>' +
     '<details class="ntsec"' + (NT.emails ? ' open' : '') + '><summary>📧 ' + esc(t('ntMail')) + '</summary><div class="form"><label class="wide"><span>' + esc(t('ntMails')) + '</span><input id="ntMail" dir="ltr" value="' + esc(NT.emails || '') + '"></label></div></details>' +
@@ -5268,7 +5311,18 @@ function ntRender() {
     (NT.last ? '<p class="muted" style="margin:10px 0 0;font-size:12.5px">' + esc(t('ntLast')) + ' ' + esc(NT.last) + '</p>' : '');
   c.innerHTML = h;
 }
-function ntVals() { return { on: $('ntOn').checked, hour: Number($('ntHour').value), tgToken: $('ntTgTok').value.trim(), tgChats: $('ntTgChats').value.trim(), waList: $('ntWa').value.trim(), emails: $('ntMail').value.trim() }; }
+function ntAlertsSec() {
+  var hrs = ''; for (var i = 0; i < 24; i++) hrs += '<option value="' + i + '"' + (Number(NT.amHour === undefined || NT.amHour === '' ? 8 : NT.amHour) === i ? ' selected' : '') + '>' + fmt12(pad(i) + ':00') + '</option>';
+  var LK = NT.links || [], U = (DB.workers || []).filter(function (w) { return w.active !== 'موقوف' && w.nologin !== 'نعم'; });
+  return '<details class="ntsec" open><summary>📲 ' + esc(t('ntAlT')) + '</summary><p class="hint" style="margin:6px 0">' + esc(t('ntAlHint')) + '</p>' +
+    '<label class="chk" style="margin:6px 0"><input type="checkbox" id="ntAl"' + (NT.alertsOn ? ' checked' : '') + '> <b>' + esc(t('ntAlOn')) + '</b></label>' +
+    '<label class="chk" style="margin:6px 0"><input type="checkbox" id="ntAm"' + (NT.amOn ? ' checked' : '') + '> ' + esc(t('ntAmOn')) + '</label>' +
+    '<div class="form"><label><span>' + esc(t('ntAmHour')) + '</span><select id="ntAmH">' + hrs + '</select></label></div>' +
+    '<b style="display:block;margin-top:10px">' + esc(t('ntLinked')) + ' (' + U.filter(function (w) { return LK.indexOf(w.name) > -1; }).length + '/' + U.length + ')</b><div class="ntlinks">' +
+    U.map(function (w) { var y = LK.indexOf(w.name) > -1; return '<div><span>' + (y ? '✅ ' : '⚪ ') + esc(w.name) + ' <small class="muted">' + esc(y ? t('ntLinkY') : t('ntLinkN')) + '</small></span>' + (y ? '<span style="display:flex;gap:8px;align-items:center"><label class="chk" style="margin:0;font-size:13px"><input type="checkbox" class="ntRpt" value="' + esc(w.name) + '"' + ((NT.rptUsers || []).indexOf(w.name) > -1 ? ' checked' : '') + '> 📊 ' + esc(t('ntRptU')) + '</label><button class="btn sm" type="button" onclick="ntUnlink(' + q(w.name) + ')">' + esc(t('ntUnlink')) + '</button></span>' : '') + '</div>'; }).join('') + '</div></details>';
+}
+function ntUnlink(n) { call('tgUnlink', [TOKEN, n]).then(function () { NT.links = (NT.links || []).filter(function (x) { return x !== n; }); if (TGME && n === ME.name) TGME.linked = false; ntRender(); }).catch(function (e) { toast('⚠️ ' + tErr(e), true); }); }
+function ntVals() { return { rptUsers: Array.prototype.slice.call(document.querySelectorAll('.ntRpt:checked')).map(function (e) { return e.value; }), alertsOn: $('ntAl').checked, amOn: $('ntAm').checked, amHour: Number($('ntAmH').value), on: $('ntOn').checked, hour: Number($('ntHour').value), tgToken: $('ntTgTok').value.trim(), tgChats: $('ntTgChats').value.trim(), waList: $('ntWa').value.trim(), emails: $('ntMail').value.trim() }; }
 function ntSave() { var v = ntVals(); call('notifySet', [TOKEN, v]).then(function (r) { NT = r; toast(t(v.on ? 'ntSavedOn' : 'ntSaved', fmt12(pad(v.hour) + ':00'))); ntRender(); }).catch(function (e) { toast('⚠️ ' + tErr(e), true); }); }
 function ntTest() { var v = ntVals(); toast('⏳'); call('notifySet', [TOKEN, v]).then(function (r) { NT = r; return call('notifyTest', [TOKEN]); }).then(function (r) { ntRender(); toast((r.sent.length ? '✅ ' + t('ntSent', r.sent.join('، ')) : '') + (r.errors.length ? ' ⚠️ ' + r.errors.join(' | ') : ''), !!r.errors.length); }).catch(function (e) { toast('⚠️ ' + tErr(e), true); }); }
 function ntFindChats() { var tk = $('ntTgTok').value.trim(); if (!tk) return toast('⚠️ Bot Token', true); call('notifyChats', [TOKEN, tk]).then(function (L) { $('ntChats').innerHTML = L.length ? '<div style="margin-top:8px">' + L.map(function (c0) { return '<button type="button" class="chip" onclick="var e=$(\'ntTgChats\');e.value=(e.value?e.value+\',\':\'\')+' + q(c0.id) + '">➕ ' + esc(c0.name) + ' <small dir="ltr">' + esc(c0.id) + '</small></button>'; }).join(' ') + '</div>' : '<p class="muted" style="margin:8px 0 0">' + esc(t('ntNoChats')) + '</p>'; }).catch(function (e) { toast('⚠️ ' + tErr(e), true); }); }
@@ -7318,7 +7372,7 @@ function mrCalc(data, ym, items) {
     cvEPack: 'نوع العبوة', cvEPackPrice: 'سعر العبوة الفارغة', cvESale: 'سعر البيع للحبة', cvEditHint: 'عند الحفظ يُعكس التحويل الأصلي (ترجع الكراتين وتُسحب الحبات) ثم يُعاد بالقيم الجديدة وبنفس الرقم، وتُحدَّث التكلفة ورصيد العبوات. يُسجَّل التعديل وسببه في سجل التدقيق.',
     cvEditQ: 'حفظ تعديل التحويل {0}؟', cvEdited: '✅ تم تعديل التحويل {0}', e_nocv: 'التحويل غير موجود', e_cvused: 'لا يمكن التعديل — الحبات الناتجة لم تعد كلها في الموقع (المتوفر {0}). تم بيع أو نقل جزء منها',
     au_cvedit: 'تعديل تحويل مخزني', mrGone: '(محذوف)', clLocHint: 'الفروع تُضاف وتُحذف من فواتير المشتريات', mrManageLoc: 'إدارة الفروع', e_loctrq: 'لا يمكن الحذف — عليه طلب نقل لم يكتمل. أكمله أو ألغِه أولاً',
-    mrLocHint: 'الخانات تعرض الفروع والمخازن المعرّفة في فواتير المشتريات ({0}). الإضافة والتعديل والحذف من «فواتير المشتريات» ← قائمة المخزن فقط، وأي تغيير يظهر هنا وفي كل النظام تلقائياً.', mrYear: 'السنة', e_date: 'التاريخ غير صحيح', mcT: 'التكلفة والأرباح اليومية (إدخال يدوي)', mcHist: 'الأيام المُدخلة', e_date: 'التاريخ غير صحيح', mcHint: 'اختر اليوم وأدخل تكلفة وربح كل فرع، وتظهر في «تقرير تفصيلي» و«الأرباح». اليوم غير المُدخل تكلفته وأرباحه صفر. إذا كتبت التكلفة وتركت الربح فارغاً يُحسب = مبيعات النظام − الضريبة − التكلفة. للتعديل: غيّر الأرقام واحفظ، أو اضغط ✏️ تعديل في «الأيام المُدخلة».', mcProfit: 'الأرباح', mcManual: 'مُدخل يدوياً', mcAutoTag: 'غير مُدخل', mcCalcTag: 'محسوب من التكلفة', mcSave: 'حفظ التكلفة والأرباح', mcSaved: '✅ تم حفظ التكلفة والأرباح', mcNote: 'في هذه الفترة {0} يوم/فرع تكلفته وأرباحه مُدخلة يدوياً (✍️) من نافذة «رفع بيانات».', mr2Closes: '{0} إقفال', mr2AfterObl: 'بعد خصم مصاريف ورواتب {0}', mr2ShortOver: 'العجز', mr2CostT: 'إجمالي التكلفة', mr2CostSub: 'تكلفة البضاعة المباعة في الفروع خلال الفترة', mr2NetEq: 'الأرباح − الالتزامات', mrKc: 'مقارنة', homeRefresh: 'تحديث', homeRefreshed: 'تم تحديث البيانات', appVerTxt: 'أبوشرحة للتمور — عدد مرات تطوير النظام: {0} — آخر تحديث {1}', ntT: 'إشعار تقرير المبيعات اليومي', ntHint: 'يرسل لك كل يوم في الساعة اللي تحددها مبيعات كل فرع من الإقفال اليومي، والفروع اللي ما سجّلت إقفال، والإجمالي والضريبة والأرباح المُدخلة. لو اخترت ساعة بعد منتصف الليل (قبل 6 الفجر) يرسل تقرير اليوم السابق.', ntDemo: 'الإشعارات تشتغل في النسخة المنشورة (Google Apps Script أو التطبيق) فقط، وليس في النسخة التجريبية.', ntOn: 'تفعيل الإرسال اليومي', ntHour: 'وقت الإرسال (بتوقيت الرياض)', ntTg: 'تيليجرام', ntRec: '(الأسهل والأضمن — مجاني)', ntTg1: 'في تيليجرام ابحث عن @BotFather وأرسل له /newbot واختر اسم للبوت، وانسخ الـ Token اللي يعطيك والصقه تحت.', ntTg2: 'افتح البوت الجديد وأرسل له أي رسالة (مثل: مرحبا). ولو تبغى الإشعار يوصل لقروب، أضف البوت للقروب وأرسل فيه رسالة.', ntTg3: 'اضغط «جلب المحادثات» واختر اسمك أو القروب، ثم احفظ واضغط «إرسال تجريبي».', ntTgChats: 'رقم المحادثة (Chat ID) — أكثر من واحد افصل بفاصلة', ntFind: 'جلب المحادثات', ntNoChats: 'ما فيه محادثات — أرسل رسالة للبوت أولاً ثم أعد المحاولة.', ntWa: 'واتساب (عن طريق CallMeBot المجاني)', ntWa1: 'احفظ الرقم +34 644 66 32 62 في جوالك باسم CallMeBot.', ntWa2: 'أرسل له بالواتساب: I allow callmebot to send me messages', ntWa3: 'يرد عليك برقم apikey. اكتب تحت رقمك (مع 966) وبعده مسافة ثم الـ apikey — كل شخص في سطر.', ntWaList: 'الرقم والـ apikey (سطر لكل شخص)', ntMail: 'الإيميل', ntMails: 'الإيميلات — أكثر من واحد افصل بفاصلة', ntTest: 'إرسال تجريبي الآن', ntSaved: '✅ تم الحفظ — الإرسال اليومي متوقف', ntSavedOn: '✅ تم الحفظ — يُرسل التقرير يومياً الساعة {0}', ntSent: 'تم الإرسال إلى: {0}', ntLast: 'آخر إرسال تلقائي:', e_offline: 'لا يوجد اتصال بالإنترنت', e_net: 'تعذّر الاتصال بالسيرفر — تأكد من الإنترنت وحاول مرة ثانية', lgRefresh: 'تحديث', lgRefreshed: '✅ تم تحديث السجل', permTasksAssign: 'توكيل المهام للموظفين', e_assignonly: 'توكيل المهام للمدير والمشرف فقط', mcEdited: '✅ تم تعديل التكلفة والأرباح', mcDeleted: 'تم حذف الإدخال', mcDelQ: 'حذف تكلفة وأرباح {0} ليوم {1}؟', lgInv: 'فاتورة', lgPay: 'سداد آجل', lgPur: 'مشتريات استهلاكية', lgExp: 'مصروف', lgDep: 'إيداع عهدة', lgRet: 'إرجاع مبلغ', lgClose: 'إقفال يومي', lgTrq: 'طلب نقل', lgCount: 'جرد', lgLines: '{0} صنف', lgWhat: 'البيان', lgTask: 'المهام', lgTaskNew: 'توكيل مهمة', lgTaskDone: 'تنفيذ مهمة', lgTaskCx: 'إلغاء مهمة', lgMaint: 'النظافة والصيانة', lgClean: 'تمت النظافة', lgMaint1: 'تمت الصيانة', lgAtt: 'الحضور والانصراف', lgAllUsers: 'كل المستخدمين', lgLogin: 'الدخول وكلمة السر', lgHr: 'الرواتب والموظفين', lgAdm: 'إجراءات إدارية', lgCx: 'الحركات الملغاة', lgEd: 'الحركات المعدّلة', lgCx1: 'ملغاة', lgEd1: 'معدّلة', lgEdOld: 'نسخة قبل التعديل', lgCxBy: 'ألغاه {0} — السبب: {1}', lgShown: 'يُعرض آخر {0}', lgAll: 'كل الحركات', lgVal: 'بالتكلفة {0}', lgQV: 'كمية {0} — {1}', usrNoAuto: 'تلقائي', e_uno: 'رقم المستخدم أرقام فقط (حتى 6 أرقام)', lgUserLbl: 'رقم المستخدم', lgRem: 'حفظ رقم المستخدم وكلمة السر على هذا الجهاز', e_lguser: 'اكتب رقم المستخدم', usrNo: 'رقم المستخدم', usrLoginOn: 'تفعيل دخول هذا الموظف للنظام (لازم تكتب له كلمة سر)', pfcSum: 'الأرباح والضريبة والمستلم والتكاليف', pfcT: 'مقارنة الفترات', pfcChart: 'الأرباح والضريبة والمستلم والتكاليف', ptT: 'تحويل المبلغ للأرباح', ptExp: 'الأرباح + الضريبة', ptDone: 'المُحوَّل', ptRest: 'المتبقي للتحويل', ptBtn: 'تحويل للأرباح', ptQ: 'تحويل {0} للأرباح؟', ptMsg: 'سيظهر المبلغ في نافذة «الأرباح» ضمن «إجمالي المبلغ المستلم».', ptDoneT: '✅ تم تحويل {0} للأرباح', ptDelQ: 'حذف هذا التحويل؟', ptDeleted: 'تم حذف التحويل', mrMissT: '{0} يوم/فرع فيه مبيعات بدون إدخال التكلفة والأرباح — أرباحها محسوبة صفر حتى تُدخلها:', mrMissGo: 'إدخال من «رفع البيانات»', mdT: 'إنجازي اليوم', mdDone: 'المنجز', mdTodo: 'غير المنجز', mdNoneDone: 'لم يُسجَّل إنجاز بعد اليوم', mdNoneTodo: 'لا يوجد شيء متبقي ✅', mdTaskDone: 'مهمة منجزة: {0}', mdTaskOpen: 'مهمة مطلوبة: {0}', mdTrqExec: 'نفّذت النقل {0} إلى {1}', mdTrqRecv: 'استلمت النقل {0} من {1}', mdTrqReq: 'أرسلت طلب النقل {0}', mdTrqToExec: 'تنفيذ النقل {0} إلى {1}', mdTrqToRecv: 'استلام النقل {0} من {1}', mdClose: 'إقفال {0}: {1}', mdCloseNone: 'الإقفال اليومي لم يُسجَّل بعد', mdCloseRet: '{0} إقفال مُعاد يحتاج تعديل', mdInv: 'أدخلت {0} فاتورة مشتريات', mdPurch: 'أدخلت {0} مشتريات استهلاكية', mdExp: 'سجّلت {0} مصروف', mdDmg: 'سجّلت {0} تالف', mdCount: 'أرسلت {0} جرد', mdRtConf: 'تأكيد استلام {0} من {1}', mdExpPhoto: 'إرفاق صورة مصروف: {0}', mr2Share: 'من المبيعات', mr2ShareT: 'حصة الفرع من إجمالي مبيعات كل الفروع في الفترة', mrcProfitL: 'الأرباح', mrcBy: 'قارن حسب:', mrcDays: 'أيام', mrcMonths: 'شهور', mrcYears: 'سنوات', mrcPer: 'الفترة {0}', mrcAddP: 'إضافة فترة', mrcTitle: 'مقارنة الفترات', mrcMet: 'المؤشرات', mrcItem: 'البند', mrcDiff: 'الفرق', mrcDiffNote: 'الفرق = {0} مقارنة بـ {1}. الأخضر تحسّن والأحمر تراجع.', mrcPct: 'نسبة الأرباح', mrcCloses: 'عدد الإقفالات', mrcChart: 'المبيعات والتكلفة والأرباح والضريبة', mrcBrT: 'مبيعات الفروع', mrcBranch: 'الفرع', mrVt: 'جدول', mrVc: 'رسم بياني', mrcSum: 'ملخص الفترة', mrcBr: 'مقارنة الفروع', mrcTrendD: 'المبيعات والأرباح حسب الأيام', mrcTrendM: 'المبيعات والأرباح حسب الشهور', mrcNone: 'لا توجد بيانات في هذه الفترة', mr2VatT: 'إجمالي الضريبة', mr2VatSub: 'ضريبة القيمة المضافة على مبيعات الفروع في الفترة', mr2TrCost: 'إجمالي تكلفة البضاعة المحوّلة من المستودع إلى الفروع', mr2TrSub: '{0} حركة نقل إلى {1} فرع — بسعر التكلفة', mr2Branches: 'أداء الفروع', mr2Margin: 'نسبة الربح', mr2Vat: 'الضريبة 15%', mr2Avg: 'متوسط يومي', mr2Cashiers: 'الإقفالات حسب الكاشير', mr2SumOf: 'مجموع {0} (كل الفروع)', mr2Compare: 'مقارنة الفروع', mr2Item: 'البند', mr2Fin: 'الملخص المالي', mr2BrProfit: 'أرباح الفروع', mr2How: 'طريقة الحساب'
+    mrLocHint: 'الخانات تعرض الفروع والمخازن المعرّفة في فواتير المشتريات ({0}). الإضافة والتعديل والحذف من «فواتير المشتريات» ← قائمة المخزن فقط، وأي تغيير يظهر هنا وفي كل النظام تلقائياً.', mrYear: 'السنة', e_date: 'التاريخ غير صحيح', mcT: 'التكلفة والأرباح اليومية (إدخال يدوي)', mcHist: 'الأيام المُدخلة', e_date: 'التاريخ غير صحيح', mcHint: 'اختر اليوم وأدخل تكلفة وربح كل فرع، وتظهر في «تقرير تفصيلي» و«الأرباح». اليوم غير المُدخل تكلفته وأرباحه صفر. إذا كتبت التكلفة وتركت الربح فارغاً يُحسب = مبيعات النظام − الضريبة − التكلفة. للتعديل: غيّر الأرقام واحفظ، أو اضغط ✏️ تعديل في «الأيام المُدخلة».', mcProfit: 'الأرباح', mcManual: 'مُدخل يدوياً', mcAutoTag: 'غير مُدخل', mcCalcTag: 'محسوب من التكلفة', mcSave: 'حفظ التكلفة والأرباح', mcSaved: '✅ تم حفظ التكلفة والأرباح', mcNote: 'في هذه الفترة {0} يوم/فرع تكلفته وأرباحه مُدخلة يدوياً (✍️) من نافذة «رفع بيانات».', mr2Closes: '{0} إقفال', mr2AfterObl: 'بعد خصم مصاريف ورواتب {0}', mr2ShortOver: 'العجز', mr2CostT: 'إجمالي التكلفة', mr2CostSub: 'تكلفة البضاعة المباعة في الفروع خلال الفترة', mr2NetEq: 'الأرباح − الالتزامات', mrKc: 'مقارنة', tgT: 'فعّل تنبيهات تيليجرام', tgHint: 'عشان توصلك على جوالك أول بأول المهام وطلبات النقل والاعتمادات الخاصة فيك. اضغط 1 وبعدها «Start» في تيليجرام، وارجع هنا واضغط 2.', tgOpen: 'فتح البوت في تيليجرام', tgCheck: 'تأكيد الربط', tgLater: 'لاحقاً', tgDone: 'تم ربط تيليجرام — بتوصلك التنبيهات', tgNotYet: 'ما وصلت رسالتك للبوت — اضغط 1 ثم «Start» في تيليجرام، وبعدها أعد المحاولة', e_tgoff: 'تنبيهات تيليجرام غير مفعّلة من المدير', ntAlT: 'تنبيهات المستخدمين (تيليجرام)', ntAlHint: 'كل مستخدم يربط حسابه من الصفحة الرئيسية (مربع «فعّل تنبيهات تيليجرام»)، وتوصله التنبيهات حسب صلاحياته: المهام الموكلة له، طلبات النقل (التنفيذ والاستلام)، الفواتير والمشتريات والإقفال والجرد بانتظار الاعتماد (للمدير) ونتيجة الاعتماد لصاحبها، العهد والمبالغ المرتجعة، ومهام النظافة والصيانة.', ntAlOn: 'تفعيل تنبيهات المستخدمين', ntAmOn: 'تذكير الصباح: ملخص يومي لكل مستخدم باللي عليه (المهام، النظافة والصيانة المستحقة، الطلبات المعلقة)', ntAmHour: 'وقت تذكير الصباح (بتوقيت الرياض)', ntLinked: 'المستخدمون المربوطون — علّم «📊 التقرير اليومي» لمن تبغى يوصله تقرير المبيعات', ntLinkY: 'مربوط', ntLinkN: 'غير مربوط', ntUnlink: 'إلغاء الربط', ntRptU: 'التقرير اليومي', homeRefresh: 'تحديث', homeRefreshed: 'تم تحديث البيانات', appVerTxt: 'أبوشرحة للتمور — عدد مرات تطوير النظام: {0} — آخر تحديث {1}', ntT: 'إشعار تقرير المبيعات اليومي', ntHint: 'يرسل لك كل يوم في الساعة اللي تحددها مبيعات كل فرع من الإقفال اليومي، والفروع اللي ما سجّلت إقفال، والإجمالي والضريبة والأرباح المُدخلة. لو اخترت ساعة بعد منتصف الليل (قبل 6 الفجر) يرسل تقرير اليوم السابق.', ntDemo: 'الإشعارات تشتغل في النسخة المنشورة (Google Apps Script أو التطبيق) فقط، وليس في النسخة التجريبية.', ntOn: 'تفعيل الإرسال اليومي', ntHour: 'وقت الإرسال (بتوقيت الرياض)', ntTg: 'تيليجرام', ntRec: '(الأسهل والأضمن — مجاني)', ntTg1: 'في تيليجرام ابحث عن @BotFather وأرسل له /newbot واختر اسم للبوت، وانسخ الـ Token اللي يعطيك والصقه تحت.', ntTg2: 'افتح البوت الجديد وأرسل له أي رسالة (مثل: مرحبا). ولو تبغى الإشعار يوصل لقروب، أضف البوت للقروب وأرسل فيه رسالة.', ntTg3: 'اضغط «جلب المحادثات» واختر اسمك أو القروب، ثم احفظ واضغط «إرسال تجريبي».', ntTgChats: 'رقم المحادثة (Chat ID) — أكثر من واحد افصل بفاصلة', ntFind: 'جلب المحادثات', ntNoChats: 'ما فيه محادثات — أرسل رسالة للبوت أولاً ثم أعد المحاولة.', ntWa: 'واتساب (عن طريق CallMeBot المجاني)', ntWa1: 'احفظ الرقم +34 644 66 32 62 في جوالك باسم CallMeBot.', ntWa2: 'أرسل له بالواتساب: I allow callmebot to send me messages', ntWa3: 'يرد عليك برقم apikey. اكتب تحت رقمك (مع 966) وبعده مسافة ثم الـ apikey — كل شخص في سطر.', ntWaList: 'الرقم والـ apikey (سطر لكل شخص)', ntMail: 'الإيميل', ntMails: 'الإيميلات — أكثر من واحد افصل بفاصلة', ntTest: 'إرسال تجريبي الآن', ntSaved: '✅ تم الحفظ — الإرسال اليومي متوقف', ntSavedOn: '✅ تم الحفظ — يُرسل التقرير يومياً الساعة {0}', ntSent: 'تم الإرسال إلى: {0}', ntLast: 'آخر إرسال تلقائي:', e_offline: 'لا يوجد اتصال بالإنترنت', e_net: 'تعذّر الاتصال بالسيرفر — تأكد من الإنترنت وحاول مرة ثانية', lgRefresh: 'تحديث', lgRefreshed: '✅ تم تحديث السجل', permTasksAssign: 'توكيل المهام للموظفين', e_assignonly: 'توكيل المهام للمدير والمشرف فقط', mcEdited: '✅ تم تعديل التكلفة والأرباح', mcDeleted: 'تم حذف الإدخال', mcDelQ: 'حذف تكلفة وأرباح {0} ليوم {1}؟', lgInv: 'فاتورة', lgPay: 'سداد آجل', lgPur: 'مشتريات استهلاكية', lgExp: 'مصروف', lgDep: 'إيداع عهدة', lgRet: 'إرجاع مبلغ', lgClose: 'إقفال يومي', lgTrq: 'طلب نقل', lgCount: 'جرد', lgLines: '{0} صنف', lgWhat: 'البيان', lgTask: 'المهام', lgTaskNew: 'توكيل مهمة', lgTaskDone: 'تنفيذ مهمة', lgTaskCx: 'إلغاء مهمة', lgMaint: 'النظافة والصيانة', lgClean: 'تمت النظافة', lgMaint1: 'تمت الصيانة', lgAtt: 'الحضور والانصراف', lgAllUsers: 'كل المستخدمين', lgLogin: 'الدخول وكلمة السر', lgHr: 'الرواتب والموظفين', lgAdm: 'إجراءات إدارية', lgCx: 'الحركات الملغاة', lgEd: 'الحركات المعدّلة', lgCx1: 'ملغاة', lgEd1: 'معدّلة', lgEdOld: 'نسخة قبل التعديل', lgCxBy: 'ألغاه {0} — السبب: {1}', lgShown: 'يُعرض آخر {0}', lgAll: 'كل الحركات', lgVal: 'بالتكلفة {0}', lgQV: 'كمية {0} — {1}', usrNoAuto: 'تلقائي', e_uno: 'رقم المستخدم أرقام فقط (حتى 6 أرقام)', lgUserLbl: 'رقم المستخدم', lgRem: 'حفظ رقم المستخدم وكلمة السر على هذا الجهاز', e_lguser: 'اكتب رقم المستخدم', usrNo: 'رقم المستخدم', usrLoginOn: 'تفعيل دخول هذا الموظف للنظام (لازم تكتب له كلمة سر)', pfcSum: 'الأرباح والضريبة والمستلم والتكاليف', pfcT: 'مقارنة الفترات', pfcChart: 'الأرباح والضريبة والمستلم والتكاليف', ptT: 'تحويل المبلغ للأرباح', ptExp: 'الأرباح + الضريبة', ptDone: 'المُحوَّل', ptRest: 'المتبقي للتحويل', ptBtn: 'تحويل للأرباح', ptQ: 'تحويل {0} للأرباح؟', ptMsg: 'سيظهر المبلغ في نافذة «الأرباح» ضمن «إجمالي المبلغ المستلم».', ptDoneT: '✅ تم تحويل {0} للأرباح', ptDelQ: 'حذف هذا التحويل؟', ptDeleted: 'تم حذف التحويل', mrMissT: '{0} يوم/فرع فيه مبيعات بدون إدخال التكلفة والأرباح — أرباحها محسوبة صفر حتى تُدخلها:', mrMissGo: 'إدخال من «رفع البيانات»', mdT: 'إنجازي اليوم', mdDone: 'المنجز', mdTodo: 'غير المنجز', mdNoneDone: 'لم يُسجَّل إنجاز بعد اليوم', mdNoneTodo: 'لا يوجد شيء متبقي ✅', mdTaskDone: 'مهمة منجزة: {0}', mdTaskOpen: 'مهمة مطلوبة: {0}', mdTrqExec: 'نفّذت النقل {0} إلى {1}', mdTrqRecv: 'استلمت النقل {0} من {1}', mdTrqReq: 'أرسلت طلب النقل {0}', mdTrqToExec: 'تنفيذ النقل {0} إلى {1}', mdTrqToRecv: 'استلام النقل {0} من {1}', mdClose: 'إقفال {0}: {1}', mdCloseNone: 'الإقفال اليومي لم يُسجَّل بعد', mdCloseRet: '{0} إقفال مُعاد يحتاج تعديل', mdInv: 'أدخلت {0} فاتورة مشتريات', mdPurch: 'أدخلت {0} مشتريات استهلاكية', mdExp: 'سجّلت {0} مصروف', mdDmg: 'سجّلت {0} تالف', mdCount: 'أرسلت {0} جرد', mdRtConf: 'تأكيد استلام {0} من {1}', mdExpPhoto: 'إرفاق صورة مصروف: {0}', mr2Share: 'من المبيعات', mr2ShareT: 'حصة الفرع من إجمالي مبيعات كل الفروع في الفترة', mrcProfitL: 'الأرباح', mrcBy: 'قارن حسب:', mrcDays: 'أيام', mrcMonths: 'شهور', mrcYears: 'سنوات', mrcPer: 'الفترة {0}', mrcAddP: 'إضافة فترة', mrcTitle: 'مقارنة الفترات', mrcMet: 'المؤشرات', mrcItem: 'البند', mrcDiff: 'الفرق', mrcDiffNote: 'الفرق = {0} مقارنة بـ {1}. الأخضر تحسّن والأحمر تراجع.', mrcPct: 'نسبة الأرباح', mrcCloses: 'عدد الإقفالات', mrcChart: 'المبيعات والتكلفة والأرباح والضريبة', mrcBrT: 'مبيعات الفروع', mrcBranch: 'الفرع', mrVt: 'جدول', mrVc: 'رسم بياني', mrcSum: 'ملخص الفترة', mrcBr: 'مقارنة الفروع', mrcTrendD: 'المبيعات والأرباح حسب الأيام', mrcTrendM: 'المبيعات والأرباح حسب الشهور', mrcNone: 'لا توجد بيانات في هذه الفترة', mr2VatT: 'إجمالي الضريبة', mr2VatSub: 'ضريبة القيمة المضافة على مبيعات الفروع في الفترة', mr2TrCost: 'إجمالي تكلفة البضاعة المحوّلة من المستودع إلى الفروع', mr2TrSub: '{0} حركة نقل إلى {1} فرع — بسعر التكلفة', mr2Branches: 'أداء الفروع', mr2Margin: 'نسبة الربح', mr2Vat: 'الضريبة 15%', mr2Avg: 'متوسط يومي', mr2Cashiers: 'الإقفالات حسب الكاشير', mr2SumOf: 'مجموع {0} (كل الفروع)', mr2Compare: 'مقارنة الفروع', mr2Item: 'البند', mr2Fin: 'الملخص المالي', mr2BrProfit: 'أرباح الفروع', mr2How: 'طريقة الحساب'
   };
   Object.keys(A).forEach(function (k) { I18N[k] = [A[k]]; });
   if (!VAL['إرجاع']) VAL['إرجاع'] = ['واپسی', 'वापसी', 'ফেরত'];
