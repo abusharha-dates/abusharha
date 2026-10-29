@@ -3042,7 +3042,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 100, APP_DATE = '2026-10-29';
+var APP_BUILD = 101, APP_DATE = '2026-10-29';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -5786,19 +5786,29 @@ function clOcrPick(V, DUP) {
   });
   return best;
 }
+/* ⚡ أداة القراءة تتجهز أول ما تفتح شاشة الإقفال (بالخلفية) وتبقى جاهزة — فالقراءة بعد التصوير تكون سريعة */
+var CL_W = null;
+function clOcrWarm() {
+  if (CL_W) return CL_W;
+  CL_W = (window.Tesseract ? Promise.resolve() : new Promise(function (res, rej) { var s1 = document.createElement('script'); s1.src = TESS_URL; s1.onload = res; s1.onerror = rej; document.head.appendChild(s1); }))
+    .then(function () { return Tesseract.createWorker('eng'); }).then(function (w) { return w.setParameters({ tessedit_char_whitelist: '0123456789.', tessedit_pageseg_mode: '6' }).then(function () { return w; }); })
+    .catch(function (e) { CL_W = null; throw e; });
+  return CL_W;
+}
 function clOcrSys(url, small) {
   var my = ++CL_OCRN; clOcrMsg('<span class="ldot sm"></span> ' + esc(t('clOcrRun')), 'run');
-  var lib = window.Tesseract ? Promise.resolve() : new Promise(function (res, rej) { var s1 = document.createElement('script'); s1.src = TESS_URL; s1.onload = res; s1.onerror = rej; document.head.appendChild(s1); });
+  var lib = clOcrWarm();
   var img = new Image(); var ld = new Promise(function (res, rej) { img.onload = res; img.onerror = function () { if (small && img.src !== small) img.src = small; else rej(); }; img.src = url; });
   var libOk = true; lib = lib.catch(function (e) { libOk = false; throw e; });
-  Promise.all([lib, ld]).then(function () { return Tesseract.createWorker('eng'); }).then(function (w) {
-    var V = {}, DUP = {}, sc0 = Math.min(2.4, Math.max(1, 2400 / Math.max(img.width, 1)));
-    var plan = [[sc0, 2, 'g', '6'], [sc0, 2, 'o', '6'], [sc0, 2, 140, '6'], [sc0, 2, 'g', '11'], [sc0, 0, 'o', '6'], [sc0, 3, 150, '6'], [sc0 / 2, 2, 'g', '6']], i = 0;
+  Promise.all([lib, ld]).then(function (r0) { return r0[0]; }).then(function (w) {
+    /* حجم مناسب للسرعة (عرض ~1600) — ونوقف أول ما نلقى رقم = مجموع رقمين (نقد + شبكة) */
+    var V = {}, DUP = {}, sc0 = Math.min(2, 1600 / Math.max(img.width, 1));
+    var plan = [[sc0, 2, 'g', '6'], [sc0, 2, 140, '6'], [sc0, 2, 'o', '6'], [sc0, 2, 'g', '11'], [sc0, 3, 150, '6']], i = 0;
     var step = function () {
-      if (my !== CL_OCRN) { w.terminate(); return; }
-      var b = clOcrPick(V, DUP); if (i >= plan.length || (b && b.pair && b.votes >= 2)) { w.terminate(); return clOcrDone(b, my); }
-      var p0 = plan[i++];
-      return w.setParameters({ tessedit_char_whitelist: '0123456789.', tessedit_pageseg_mode: p0[3] }).then(function () { return w.recognize(clOcrPrep(img, p0[0], p0[1], p0[2])); }).then(function (r) {
+      if (my !== CL_OCRN) return;
+      var b = clOcrPick(V, DUP); if (i >= plan.length || (b && b.pair) || (b && i >= 3 && b.votes >= 2)) return clOcrDone(b, my);
+      var p0 = plan[i++]; if (i > 1) clOcrMsg('<span class="ldot sm"></span> ' + esc(t('clOcrRun')) + ' (' + i + ')', 'run');
+      return (p0[3] !== '6' ? w.setParameters({ tessedit_pageseg_mode: p0[3] }) : Promise.resolve()).then(function () { return w.recognize(clOcrPrep(img, p0[0], p0[1], p0[2])); }).then(function (r) { if (p0[3] !== '6') return w.setParameters({ tessedit_pageseg_mode: '6' }).then(function () { return r; }); return r; }).then(function (r) {
         var seen = {}; (String(r.data.text || '').match(/\d{1,6}\.\d{2}/g) || []).forEach(function (s2) { var n = Number(s2); if (!seen[n]) { seen[n] = 1; V[n] = (V[n] || 0) + 1; } else if (n >= 1) DUP[n] = (DUP[n] || 0) + 1; }); return step();
       });
     };
@@ -5828,6 +5838,7 @@ function clLogHtml(c) {
 function clPending() { return DB.dailyClose.filter(function (c) { return (c.status || 'معلق') === 'معلق'; }); }
 function clReturnedMine() { return DB.dailyClose.filter(function (c) { return c.status === 'مُعاد' && c.user === ME.name; }); }
 function renderClose() {
+  if (MODE !== 'demo' || window.Tesseract) setTimeout(function () { try { clOcrWarm(); } catch (e) { } }, 1500);
   var mg = isMgr(), keep = $('clLoc').value, cur = CL_EDIT ? DB.dailyClose.find(function (x) { return x.id === CL_EDIT; }) : null;
   var CLL = clLocs().map(function (l) { return l.code; }); if (cur && CLL.indexOf(cur.loc) < 0) CLL.push(cur.loc);
   $('clLoc').innerHTML = CLL.map(function (c) { return '<option value="' + esc(c) + '">' + esc(ln(c)) + (LM[c] && LM[c].active === 'محذوف' ? ' ' + esc(t('mrGone')) : '') + '</option>'; }).join('');
