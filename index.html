@@ -382,6 +382,29 @@ button.chip{cursor:pointer}
 .mrrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.mrper{flex:1;min-width:170px;display:flex;gap:6px;align-items:center}.mrper input,.mrper select{flex:1;min-width:0;height:42px}.mrico{display:flex;gap:6px;align-items:center}.mrvt{display:flex;gap:2px;background:var(--surface2);border-radius:11px;padding:2px}
 .ib{width:42px;height:42px;flex:0 0 42px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:18px;display:grid;place-items:center;padding:0;cursor:pointer;color:var(--ink)}.mrvt .ib{border:0;background:none;width:38px;height:38px;flex-basis:38px}.mrvt .ib.on{background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.15)}.ib.send{background:var(--palm);border-color:var(--palm)}
 .pupackL{grid-column:1/-1}.pupackL select{font-size:17px;font-weight:700;height:48px}.pupackL .selrow button{width:46px}
+.phs{width:100%}.phfile{display:flex;gap:14px;align-items:center;cursor:pointer;border:2px solid var(--gold);border-radius:14px;padding:10px;background:var(--bg);margin-bottom:8px}
+.phstk{position:relative;width:70px;height:90px;flex:0 0 70px}.phstk span{position:absolute;inset:0;border-radius:8px;background:#fff;border:1px solid var(--line);box-shadow:0 2px 6px rgba(0,0,0,.15)}.phstk span:nth-child(1){transform:rotate(-7deg) translate(-6px,2px)}.phstk span:nth-child(2){transform:rotate(5deg) translate(5px,1px)}
+.phstk img,.phstk .phpdf{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:var(--surface2)}
+.phinfo{display:flex;flex-direction:column;min-width:0}.phinfo small{color:var(--muted)}.phcnt{align-self:flex-start;background:var(--gold);color:#1d140b;border-radius:20px;padding:0 10px;font-weight:800;font-size:13px;margin-top:4px}
+.phcam{position:fixed;inset:0;z-index:9000;background:#0f0b08;display:flex;flex-direction:column;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+.pcvf{flex:1;position:relative;overflow:hidden;display:grid;place-items:center}.pcvf video{width:100%;height:100%;object-fit:cover}.pcflash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .25s}
+.pctag{position:absolute;top:12px;inset-inline:12px;display:flex;justify-content:space-between;gap:8px;color:#fff;font-weight:700;font-size:13px}.pctag span{background:rgba(0,0,0,.5);border-radius:20px;padding:2px 12px}
+.pcerr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#fff;text-align:center;padding:20px}
+.pcstrip{display:flex;gap:8px;padding:10px 12px;overflow-x:auto;min-height:86px;background:#1b140e}.pcth{position:relative;flex:0 0 52px;height:66px;border-radius:6px;overflow:hidden;border:2px solid #555}.pcth.first{border-color:#c9952f}.pcth img{width:100%;height:100%;object-fit:cover}
+.pcth button{position:absolute;top:2px;inset-inline-end:2px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.7);color:#fff;font-size:11px;padding:0}.pcth em{position:absolute;bottom:2px;inset-inline-start:3px;font-style:normal;color:#fff;font-size:11px;font-weight:800;text-shadow:0 1px 2px #000}
+.pcctl{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 18px;background:#1b140e}.pcshut{width:70px;height:70px;border-radius:50%;border:5px solid #fff;background:#e9e2d6}.pcshut:disabled{opacity:.35}
+.pcdone{font-weight:800;font-size:15px;background:#23704a;color:#fff;border:0;border-radius:24px;padding:10px 16px;min-width:96px}.pcdone:disabled{opacity:.35}.pcx{background:none;border:0;color:#fff;font-weight:700;font-size:15px;min-width:96px;text-align:start}
+.phgal{position:fixed;inset:0;z-index:9000;background:rgba(10,7,5,.96);color:#fff;display:flex;flex-direction:column;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+.pgh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px}.pgb{flex:1;position:relative;display:grid;place-items:center;padding:0 10px;min-height:0}.pgb img{max-width:100%;max-height:100%;border-radius:8px;object-fit:contain}
+.pgpdf{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:60px}.pgpdf small{font-size:14px}
+.pgnav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.18);color:#fff;font-size:22px}.pgnav.p{right:8px}.pgnav.n{left:8px}
+.pgdots{display:flex;gap:6px;justify-content:center;padding:8px}.pgdots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3)}.pgdots i.on{background:#c9952f}
+.pgf{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:8px 14px 18px}.pgf .btn{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.25)}.pgf .pgdel{background:#7a2219;border-color:#7a2219}.phl{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:thin}.phi{position:relative;flex:0 0 78px;height:100px;border-radius:10px;border:1px solid var(--line);background:var(--surface2);overflow:hidden}.phi.main{border:2px solid var(--gold)}.phi img{width:100%;height:100%;object-fit:cover;cursor:pointer}
+.phpdf{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;font-size:28px;cursor:pointer}.phpdf small{font-size:10px;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.phn{position:absolute;bottom:4px;inset-inline-start:4px;min-width:20px;height:20px;border-radius:10px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;display:grid;place-items:center;padding:0 5px}.phi.main .phn{background:var(--gold);color:#1d140b}
+.phx{position:absolute;top:3px;inset-inline-end:3px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:12px;padding:0;cursor:pointer}
+.phb{display:flex;gap:8px;flex-wrap:wrap}.phh{display:block;margin-top:6px;color:var(--muted);font-size:12.5px}.phh.req{color:var(--bad);font-weight:700}
+.dxbox{flex-basis:100%;width:100%;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}.dxl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px}
 .rjbox{border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px;line-height:1.7}
 .sfcols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}.sfcol{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--surface)}.sfcol.c{border-top:4px solid #2e7d32}.sfcol.b{border-top:4px solid #1565c0}.sfcol h3{margin:0 0 8px;font-size:16px}
 .sfl{display:block;margin:6px 0}.sfl span{display:block;font-size:12.5px;color:var(--muted)}.sfl input{width:100%;box-sizing:border-box}.sfactin{font-size:20px!important;font-weight:800;height:48px}
@@ -1142,7 +1165,7 @@ button.chip{cursor:pointer;border:0;font:inherit}
           <div id="ivSupRes" class="outres" hidden></div><div id="ivSupChip" class="outchip" hidden><span id="ivSupName"></span> <button type="button" class="ghost sm" id="ivSupClr">✕</button> <button class="ghost sm" id="ivSupDel" type="button" hidden>🗑️</button></div></div>
         <label class="wide" id="ivSupNewL" hidden><span data-t="supNew"></span><input id="ivSupNew" data-tph="supNewPh"></label>
         <label><span data-t="supInv"></span><input id="ivSupInv" data-tph="optionalPh"></label>
-        <div class="wide"><span class="lblx" data-t="ivDocLbl"></span><div class="clph" id="ivDocBox"></div></div>
+        <div class="wide"><span class="lblx"><span data-t="ivDocLbl"></span> <b style="color:var(--bad)">*</b></span><div class="clph" id="ivDocBox"></div></div>
       </div>
       <p class="hint" id="ivHint" style="margin:10px 0 0"></p>
     </div>
@@ -2805,6 +2828,27 @@ var I18N = {
   thDark: ['بني (داكن)', 'بھورا (گہرا)', 'भूरा (गहरा)', 'বাদামী (গাঢ়)'],
   thLight: ['بيج (فاتح)', 'بیج (ہلکا)', 'बेज (हल्का)', 'বেইজ (হালকা)'],
   thAuto: ['تلقائي حسب الجوال', 'فون کے مطابق', 'फ़ोन के अनुसार', 'ফোন অনুযায়ী'],
+  dxLbl: ['صور إضافية (اختياري) {0}/{1}', 'مزید تصاویر (اختیاری) {0}/{1}', 'और तस्वीरें (वैकल्पिक) {0}/{1}', 'আরও ছবি (ঐচ্ছিক) {0}/{1}'],
+  dxAdd: ['إضافة صورة', 'تصویر شامل کریں', 'तस्वीर जोड़ें', 'ছবি যোগ করুন'],
+  dxMax: ['الحد {0} صور إضافية', 'زیادہ سے زیادہ {0} اضافی تصاویر', 'अधिकतम {0} अतिरिक्त तस्वीरें', 'সর্বোচ্চ {0}টি অতিরিক্ত ছবি'],
+  dxAll: ['كل صور الفاتورة', 'بل کی تمام تصاویر', 'बिल की सभी तस्वीरें', 'বিলের সব ছবি'],
+  e_ivdocreq: ['صورة الفاتورة الأولى إجبارية — صوّرها أو ارفعها', 'بل کی پہلی تصویر ضروری ہے', 'बिल की पहली तस्वीर ज़रूरी है', 'বিলের প্রথম ছবি বাধ্যতামূলক'],
+  phFile: ['الفاتورة', 'بل', 'बिल', 'বিল'],
+  phTap: ['اضغط لعرض الصفحات أو تعديلها', 'صفحات دیکھنے یا بدلنے کے لیے دبائیں', 'पन्ने देखने या बदलने के लिए दबाएँ', 'পাতা দেখতে বা বদলাতে চাপুন'],
+  phPage1: ['صفحة وحدة', '1 صفحہ', '1 पन्ना', '১টি পাতা'],
+  phPages: ['{0} صفحات', '{0} صفحات', '{0} पन्ने', '{0}টি পাতা'],
+  phAddPage: ['أضف صفحة', 'صفحہ شامل کریں', 'पन्ना जोड़ें', 'পাতা যোগ করুন'],
+  phAim: ['وجّه الكاميرا على الصفحة', 'کیمرہ صفحے کی طرف کریں', 'कैमरा पन्ने पर रखें', 'ক্যামেরা পাতার দিকে ধরুন'],
+  phCamErr: ['ما قدرنا نفتح الكاميرا هنا — صوّر بكاميرا الجوال', 'یہاں کیمرہ نہیں کھلا — موبائل کیمرہ استعمال کریں', 'यहाँ कैमरा नहीं खुला — फ़ोन का कैमरा इस्तेमाल करें', 'এখানে ক্যামেরা খোলেনি — ফোনের ক্যামেরা ব্যবহার করুন'],
+  phCamPhone: ['كاميرا الجوال', 'موبائل کیمرہ', 'फ़ोन कैमरा', 'ফোনের ক্যামেরা'],
+  phDone: ['تم', 'ہو گیا', 'हो गया', 'হয়েছে'],
+  phDelPage: ['حذف هذي الصفحة', 'یہ صفحہ حذف کریں', 'यह पन्ना हटाएँ', 'এই পাতা মুছুন'],
+  phPageOf: ['صفحة {0} من {1}', 'صفحہ {0} از {1}', 'पन्ना {0} / {1}', 'পাতা {0} / {1}'],
+  phOpen: ['فتح', 'کھولیں', 'खोलें', 'খুলুন'],
+  phMore: ['صورة {0}', 'تصویر {0}', 'तस्वीर {0}', 'ছবি {0}'],
+  phCnt: ['{0} من {1} صور — الأولى أساسية والباقي اختياري', '{1} میں سے {0} تصاویر — پہلی ضروری، باقی اختیاری', '{1} में से {0} तस्वीरें — पहली ज़रूरी, बाकी वैकल्पिक', '{1}টির মধ্যে {0}টি ছবি — প্রথমটি জরুরি, বাকি ঐচ্ছিক'],
+  phFirst: ['صوّر الفاتورة — الصورة الأولى إجبارية، وتقدر تضيف لين 5', 'بل کی تصویر لیں — پہلی ضروری ہے، 5 تک لگا سکتے ہیں', 'बिल की तस्वीर लें — पहली ज़रूरी, 5 तक जोड़ सकते हैं', 'বিলের ছবি তুলুন — প্রথমটি জরুরি, ৫টি পর্যন্ত দিতে পারেন'],
+  phPdfFirst: ['ملف PDF يكون هو الأول بس — الباقي صور', 'PDF صرف پہلی فائل ہو سکتی ہے', 'PDF सिर्फ़ पहली फ़ाइल हो सकती है', 'PDF শুধু প্রথম ফাইল হতে পারে'],
   shOnTime: ['👍 في الوقت', '👍 وقت پر', '👍 समय पर', '👍 সময়মতো'],
   shLate: ['⏰ متأخر {0}', '⏰ {0} دیر', '⏰ {0} देर', '⏰ {0} দেরি'],
   shBefore: ['👍 وصلت قبل الدوام بـ {0}', '👍 ڈیوٹی سے {0} پہلے', '👍 ड्यूटी से {0} पहले', '👍 ডিউটির {0} আগে'],
@@ -3180,7 +3224,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 110, APP_DATE = '2026-11-01';
+var APP_BUILD = 113, APP_DATE = '2026-11-04';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -3489,6 +3533,8 @@ var Demo = (function () {
   /* تنبيه لأسماء مستخدمين محددين (يُستبعد صاحب العملية والموقوفين والمكرر) */
   function ntf(to, text, except) { var seen = {}; to = (to || []).filter(function (n) { if (!n || n === except || seen[n]) return false; seen[n] = 1; return D.workers.some(function (x) { return x.name === n && x.active !== 'موقوف'; }); }); if (to.length && __OUT.length < 200) __OUT.push({ to: to, text: String(text) }); }
   /* فواتير الفروع (مبلغ فقط) لها ترقيم تسلسلي خاص: ف-0001، ف-0002 ... */
+  /* صور الفاتورة الإضافية (اختيارية، لين 4): الموجودة {keep} + الجديدة {url} */
+  function dxList(x, cur) { if (!x || !Array.isArray(x.ex)) return cur || []; return x.ex.map(function (e) { return e && (e.keep || e.url); }).filter(function (v) { return typeof v === 'string' && v; }).slice(0, 4); }
   function brNext() { var m = 0; D.invoices.forEach(function (v) { if (v.invType === BR_TYPE) m = Math.max(m, Number(v.brNo) || 0); }); return m + 1; }
   function whoCan(p) { return D.workers.filter(function (x) { return x.active !== 'موقوف' && userCan(x, p); }).map(function (x) { return x.name; }); }
   function mgrsN() { return D.workers.filter(function (x) { return x.active !== 'موقوف' && x.role === MANAGER_ROLE; }).map(function (x) { return x.name; }); }
@@ -3561,7 +3607,7 @@ var Demo = (function () {
     var isM = w.role === MANAGER_ROLE, can = function (p) { return userCan(w, p); };
     /* المختص (صلاحية «الأرباح» بدون أن يكون مديراً): يحتاج بيانات الأرباح والتكاليف فقط */
     var pfSrc = !isM && can('profit') ? JSON.parse(JSON.stringify({ pfTransfers: D.pfTransfers || [], dailyClose: D.dailyClose, uploads: D.uploads || [], dayCost: D.dayCost || [], hrPayroll: D.hrPayroll || [], obligations: D.obligations || [], oblBills: D.oblBills || [], expenses: (D.expenses || []).filter(function (e) { return e.kind === 'مصروف' || !e.kind; }), purchases: D.purchases || [], sales: [], invoices: [], invPays: [], moves: [] })) : null;
-    o.myRej = invRejMine(D.invoices, w.name).map(function (h) { return { id: h.id, invType: h.invType, supplier: h.supplier, total: h.total, loc: h.loc, date: h.date, payType: h.payType, supInv: h.supInv || '', reason: h.rejReason || String(h.status).replace(/^مرفوضة — /, ''), by: h.apprBy || '', at: h.apprAt || '', doc: h.doc || '', docPdf: !!h.docPdf, docName: h.docName || '' }; });
+    o.myRej = invRejMine(D.invoices, w.name).map(function (h) { return { id: h.id, invType: h.invType, supplier: h.supplier, total: h.total, loc: h.loc, date: h.date, payType: h.payType, supInv: h.supInv || '', reason: h.rejReason || String(h.status).replace(/^مرفوضة — /, ''), by: h.apprBy || '', at: h.apprAt || '', doc: h.doc || '', docsEx: h.docsEx || [], docPdf: !!h.docPdf, docName: h.docName || '' }; });
     if (!isM && !can('invoices')) { o.invoices = []; o.invLines = []; o.invPays = []; }
     if (!isM) o.dailyClose = o.dailyClose.filter(function (c) { return c.user === w.name; }).slice(-60);
     o.moves = o.moves.slice(-3000); o.audit = isM || can('audit') ? o.audit.slice(-2000) : []; o.attendance = isM || can('att') ? (o.attendance || []) : []; o.attDaily = isM || can('att') ? (D.attDaily || []) : []; o.sales = o.sales.slice(-2000);
@@ -4675,7 +4721,7 @@ var Demo = (function () {
         var old0 = lname(h.loc) + ' ' + h.supplier + ' ' + h.total, rs0 = h.rejReason || String(h.status).replace(/^مرفوضة — /, '');
         h.rejHist = (h.rejHist || []).concat([{ reason: rs0, by: h.apprBy || '', at: h.apprAt || '' }]);
         h.loc = loc; h.supplier = sup; h.total = amt; h.date = date; h.payType = pay; h.supInv = String(x.supInv || '').trim(); h.edited = now() + ' — ' + w.name;
-        if (x.doc && x.doc.url) { h.doc = x.doc.url; h.docPdf = !!x.doc.pdf; h.docName = String(x.doc.name || ''); }
+        if (x.doc && x.doc.url) { h.doc = x.doc.url; h.docPdf = !!x.doc.pdf; h.docName = String(x.doc.name || ''); } h.docsEx = dxList(x, h.docsEx || []);
         if (!h.doc) throw new Error('e_bfdoc');
         h.status = w.role === MANAGER_ROLE ? '' : 'بانتظار التعميد'; h.rejReason = ''; h.rejAck = ''; h.apprBy = ''; h.apprAt = '';
         invSup(sup, w.name); ntf(mgrsN(), '🔁 فاتورة فرع مصحّحة بانتظار التعميد — رقم ' + h.id + '\n' + lname(loc) + ' — ' + sup + ' — ' + rl(amt) + ' ' + pay + '\nصحّحها: ' + w.name + '\nسبب الرفض السابق: ' + rs0, w.name);
@@ -4686,13 +4732,13 @@ var Demo = (function () {
       if (h) {
         var old = lname(h.loc) + ' ' + h.supplier + ' ' + h.total;
         h.loc = loc; h.supplier = sup; h.total = amt; h.date = date; h.payType = pay; h.supInv = String(x.supInv || '').trim(); h.edited = now() + ' — ' + w.name;
-        if (x.doc && x.doc.url) { h.doc = x.doc.url; h.docPdf = !!x.doc.pdf; h.docName = String(x.doc.name || ''); }
+        if (x.doc && x.doc.url) { h.doc = x.doc.url; h.docPdf = !!x.doc.pdf; h.docName = String(x.doc.name || ''); } h.docsEx = dxList(x, h.docsEx || []);
         invSup(sup, w.name); aud(w.name, 'تعديل فاتورة فرع', 'رقم ' + h.id + ': من ' + old + ' إلى ' + lname(loc) + ' ' + sup + ' ' + amt); save(); return allFor(w);
       }
       var dpb = dupN(D.invoices, x.nonce); if (dpb) { var ob = allFor(w); ob.lastInvoice = dpb.id; ob.lastInvPend = dpb.status === 'بانتظار التعميد'; return ob; }
       var id = 1; D.invoices.forEach(function (v) { id = Math.max(id, Number(v.id) + 1); });
       var pend = w.role !== MANAGER_ROLE; // فاتورة الفرع من المستخدمين تحتاج تعميد المدير
-      D.invoices.push({ pendN: '', id: id, brNo: brNext(), date: date, created: now(), user: w.name, invType: BR_TYPE, payType: pay, supplier: sup, supInv: String(x.supInv || '').trim(), total: amt, count: 0, status: pend ? 'بانتظار التعميد' : '', edited: '', loc: loc, doc: x.doc.url, docPdf: !!x.doc.pdf, docName: String(x.doc.name || '') });
+      D.invoices.push({ docsEx: dxList(x, []), pendN: '', id: id, brNo: brNext(), date: date, created: now(), user: w.name, invType: BR_TYPE, payType: pay, supplier: sup, supInv: String(x.supInv || '').trim(), total: amt, count: 0, status: pend ? 'بانتظار التعميد' : '', edited: '', loc: loc, doc: x.doc.url, docPdf: !!x.doc.pdf, docName: String(x.doc.name || '') });
       setN(D.invoices, x.nonce); invSup(sup, w.name); if (pend) ntf(mgrsN(), '🧾 فاتورة فرع بانتظار التعميد — رقم ' + id + '\n' + lname(loc) + ' — ' + sup + ' — ' + rl(amt) + ' ' + pay + '\nأدخلها: ' + w.name, w.name); aud(w.name, pend ? 'فاتورة فرع بانتظار التعميد' : 'فاتورة فرع', 'رقم ' + id + ' — ' + lname(loc) + ' — ' + sup + ' — ' + amt + ' ريال ' + pay);
       save(); var o = allFor(w); o.lastInvoice = id; o.lastInvPend = pend; return o;
     },
@@ -4772,13 +4818,13 @@ var Demo = (function () {
     },
     saveInvoice: function (tok, x) {
       var w = wuser(tok); needP(w, 'recv');
-      var dp = dupN(D.invoices, x && x.nonce); if (dp) { var od = allFor(w); od.lastInvoice = dp.id; od.lastInvPend = dp.status === 'بانتظار التعميد'; return od; } var n = invNormalize(x, function (c) { return D.items.some(function (i) { return String(i.code) === c; }); }, function (c) { return D.items.find(function (i) { return String(i.code) === c; }); }), loc = invLocD(n.loc), E = invEffect(n.invType, n.lines); n.loc = loc;
+      var dp = dupN(D.invoices, x && x.nonce); if (!dp && !(x && x.doc && x.doc.url)) throw new Error('e_ivdocreq'); if (dp) { var od = allFor(w); od.lastInvoice = dp.id; od.lastInvPend = dp.status === 'بانتظار التعميد'; return od; } var n = invNormalize(x, function (c) { return D.items.some(function (i) { return String(i.code) === c; }); }, function (c) { return D.items.find(function (i) { return String(i.code) === c; }); }), loc = invLocD(n.loc), E = invEffect(n.invType, n.lines); n.loc = loc;
       supChk(n.supplier, w); invStock(E, loc);
       var id = 1; D.invoices.forEach(function (v) { id = Math.max(id, Number(v.id) + 1); });
       var pend = w.role !== MANAGER_ROLE;
       if (!pend) { Object.keys(E).forEach(function (it) { delta(it, loc, E[it]); }); invMv(id, n, loc, w.name); }
       invLn(id, n);
-      D.invoices.push({ pendN: pend ? JSON.stringify(n) : '', id: id, date: n.date, created: now(), user: w.name, invType: n.invType, payType: n.payType, supplier: n.supplier, supInv: n.supInv, total: n.total, count: n.lines.length, status: pend ? 'بانتظار التعميد' : '', edited: '', loc: loc, doc: x.doc && x.doc.url ? x.doc.url : '', docPdf: !!(x.doc && x.doc.pdf), docName: x.doc ? String(x.doc.name || '') : '' });
+      D.invoices.push({ pendN: pend ? JSON.stringify(n) : '', id: id, date: n.date, created: now(), user: w.name, invType: n.invType, payType: n.payType, supplier: n.supplier, supInv: n.supInv, total: n.total, count: n.lines.length, status: pend ? 'بانتظار التعميد' : '', edited: '', loc: loc, docsEx: dxList(x, []), doc: x.doc && x.doc.url ? x.doc.url : '', docPdf: !!(x.doc && x.doc.pdf), docName: x.doc ? String(x.doc.name || '') : '' });
       setN(D.invoices, x.nonce); invSup(n.supplier, w.name); if (!pend) invCost(n); else { aud(w.name, 'إدخال فاتورة بانتظار التعميد', 'فاتورة ' + id + ' — ' + n.supplier + ' — ' + n.total + ' ريال'); ntf(mgrsN(), '🧾 فاتورة مشتريات بانتظار التعميد — رقم ' + id + '\n' + n.supplier + ' — ' + rl(n.total) + '\nالموقع: ' + lname(loc) + '\nأدخلها: ' + w.name, w.name); } save(); var o = allFor(w); o.lastInvoice = id; o.lastInvPend = pend; return o;
     },
     editInvoice: function (tok, id, x, reason) {
@@ -4787,7 +4833,7 @@ var Demo = (function () {
       var old = D.invLines.filter(function (L) { return String(L.invId) === String(id); }), oldLoc = invLocD(h.loc);
       var n = invNormalize(x, function (c) { return D.items.some(function (i) { return String(i.code) === c; }); }, function (c) { return D.items.find(function (i) { return String(i.code) === c; }); }), loc = invLocD(n.loc); n.loc = loc; h.loc = oldLoc;
       supChk(n.supplier, w); var paid = invPaid(id, D.invPays); if (paid > 0 && (n.payType !== 'آجل' || n.total < paid - 0.001)) throw new Error('e_invpaid|' + paid);
-      var ch = invChanges(h, old, n, nm, lname); if (x.doc && x.doc.url) ch.push('إرفاق صورة/ملف الفاتورة'); else if (x.docDel && h.doc) ch.push('حذف صورة/ملف الفاتورة'); if (!ch.length) throw new Error('e_nochange');
+      var ch = invChanges(h, old, n, nm, lname); if (x.doc && x.doc.url) ch.push('إرفاق صورة/ملف الفاتورة'); else if (x.docDel && h.doc) ch.push('حذف صورة/ملف الفاتورة'); var dxN = dxList(x, h.docsEx || []); if (JSON.stringify(dxN) !== JSON.stringify(h.docsEx || [])) ch.push('تعديل الصور الإضافية (' + dxN.length + ')'); if (!ch.length) throw new Error('e_nochange');
       if (loc === oldLoc) { var Dl = invDelta(invEffect(h.invType, old), invEffect(n.invType, n.lines)); invStock(Dl, loc); Object.keys(Dl).forEach(function (it) { delta(it, loc, Dl[it]); }); }
       else { var D1 = invDelta(invEffect(h.invType, old), {}), D2 = invEffect(n.invType, n.lines); invStock(D1, oldLoc); invStock(D2, loc); Object.keys(D1).forEach(function (it) { delta(it, oldLoc, D1[it]); }); Object.keys(D2).forEach(function (it) { delta(it, loc, D2[it]); }); }
       D.moves.forEach(function (m) { if ((String(m.note) + ' ').indexOf('فاتورة رقم ' + id + ' ') === 0 && !m.status) m.status = 'معدّلة — ' + reason; });
@@ -4795,6 +4841,7 @@ var Demo = (function () {
       D.invLines = D.invLines.filter(function (L) { return String(L.invId) !== String(id); }); invLn(id, n);
       var oldTotal = h.total;
       if (x.doc && x.doc.url) { h.doc = x.doc.url; h.docPdf = !!x.doc.pdf; h.docName = String(x.doc.name || ''); } else if (x.docDel && h.doc) { h.doc = ''; h.docPdf = false; h.docName = ''; }
+      h.docsEx = dxN;
       h.date = n.date; h.invType = n.invType; h.payType = n.payType; h.supplier = n.supplier; h.supInv = n.supInv; h.total = n.total; h.count = n.lines.length; h.loc = loc; h.edited = now() + ' — ' + w.name;
       invSup(n.supplier, w.name); invCost(n);
       aud(w.name, 'تعديل فاتورة', 'فاتورة رقم ' + id + ' (أدخلها ' + h.user + '): ' + ch.join(' | ') + ' — الإجمالي من ' + oldTotal + ' إلى ' + n.total + ' — السبب: ' + reason);
@@ -5614,7 +5661,100 @@ function ivDocBox() {
   if (d) h += (d.pdf ? '<button type="button" class="chip" onclick="ivDocOpen(' + q(d.url) + ')">📄 ' + esc(d.name || 'PDF') + '</button>' : '<img src="' + esc(d.existing ? photoSrc(d.url) : d.url) + '" alt="" onclick="ivDocOpen(' + q(d.url) + ')">') + '<button type="button" class="ghost sm" onclick="RV.doc=null;RV.docDel=true;ivDocRender()">✕</button>';
   return h;
 }
-function ivDocRender() { if ($('ivDocBox')) $('ivDocBox').innerHTML = ivDocBox(); }
+function ivDocRender() { if ($('ivDocBox')) $('ivDocBox').innerHTML = phStrip('iv'); }
+/* 📷 مربع واحد لصور الفاتورة: الأولى إجبارية والباقي (لين 5) تنضاف بعدها في نفس الشريط */
+var PH_MAX = 5;
+function docPayload(d) { if (!d) return null; if (d.keepId) return { url: d.url, pdf: !!d.pdf, name: d.name || '' }; if (d.existing) return null; return MODE === 'demo' ? { url: d.url, pdf: !!d.pdf, name: d.name || '' } : { data: d.data, mime: d.mime, name: d.name || '' }; }
+function phList(S) { return (S && S.doc ? [S.doc] : []).concat(((S && S.ex) || []).map(function (p) { return p.keep ? { url: p.keep, existing: true } : p; })); }
+function phStrip(k) {
+  var S = dxS(k); if (!S) return ''; var L = phList(S), n = L.length, a = '\'' + k + '\'';
+  var h = '<div class="phs">';
+  if (n) { var c = L[0], cov = c.pdf ? '<span class="phpdf">📄<small>' + esc(c.name || 'PDF') + '</small></span>' : '<img src="' + esc(c.existing ? photoSrc(c.url) : c.url) + '" alt="">';
+    h += '<div class="phfile" role="button" tabindex="0" onclick="phGal(' + a + ',0)"><div class="phstk">' + (n > 2 ? '<span></span>' : '') + (n > 1 ? '<span></span>' : '') + cov + '</div><div class="phinfo"><b>🧾 ' + esc(t('phFile')) + '</b><small>' + esc(t('phTap')) + '</small><span class="phcnt">' + esc(t(n === 1 ? 'phPage1' : 'phPages', n)) + '</span></div></div>'; }
+  if (n < PH_MAX) h += '<div class="phb"><button type="button" class="btn photoBtn" onclick="phCam(' + a + ')">📷 ' + esc(n ? t('phAddPage') : t('ivDocCam')) + '</button><label class="btn photoBtn"><span>📎 ' + esc(t('ivDocUp')) + '</span><input type="file" accept="' + (n ? 'image/*' : 'image/*,.pdf,application/pdf') + '" multiple hidden onchange="phPick(' + a + ',this)"></label></div>';
+  h += '<small class="phh' + (n ? '' : ' req') + '">' + esc(n ? t('phCnt', n, PH_MAX) : t('phFirst')) + '</small></div>';
+  return h;
+}
+/* 📷 كاميرا داخل النظام: تصوير صفحات ورا بعض، شريط بالصور مع ✕، و«تم» */
+var PCAM = null;
+function phCamStop() { try { if (PCAM && PCAM.stream) PCAM.stream.getTracks().forEach(function (tr) { tr.stop(); }); } catch (e) { } var o = $('phCamO'); if (o) o.remove(); PCAM = null; }
+function phCam(k) {
+  var S = dxS(k), room = PH_MAX - phList(S).length; if (room <= 0) return toast('⚠️ ' + t('dxMax', PH_MAX), true);
+  phCamStop(); PCAM = { k: k, shots: [], room: room };
+  var o = document.createElement('div'); o.id = 'phCamO'; o.className = 'phcam';
+  o.innerHTML = '<div class="pcvf"><video id="pcVid" playsinline autoplay muted></video><div class="pcflash" id="pcFlash"></div><div class="pctag"><span id="pcCnt"></span><span>' + esc(t('phAim')) + '</span></div>' +
+    '<div class="pcerr" id="pcamErr" hidden><p>' + esc(t('phCamErr')) + '</p><label class="btn"><span>📷 ' + esc(t('phCamPhone')) + '</span><input type="file" accept="image/*" capture="environment" hidden onchange="phCamFiles(this)"></label></div></div>' +
+    '<div class="pcstrip" id="pcStrip"></div><div class="pcctl"><button type="button" class="pcx" onclick="phCamStop()">' + esc(t('cancel')) + '</button><button type="button" class="pcshut" id="pcShut" aria-label="shot" onclick="phShot()"></button><button type="button" class="pcdone" id="pcDone" onclick="phCamDone()" disabled>✅</button></div>';
+  document.body.appendChild(o); phCamRender();
+  var fail = function () { if (!PCAM) return; $('pcamErr').hidden = false; $('pcShut').disabled = true; };
+  if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) return fail();
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1440 } }, audio: false }).then(function (st) {
+    if (!PCAM) { st.getTracks().forEach(function (tr) { tr.stop(); }); return; } PCAM.stream = st; var v = $('pcVid'); v.srcObject = st; try { v.play(); } catch (e) { }
+  }).catch(fail);
+}
+function phCamRender() {
+  if (!PCAM) return; var L = PCAM.shots, S = dxS(PCAM.k), base = phList(S).length;
+  $('pcStrip').innerHTML = L.map(function (p, i) { return '<span class="pcth' + (base + i === 0 ? ' first' : '') + '"><img src="' + esc(p.url) + '" alt=""><em>' + (base + i + 1) + '</em><button type="button" onclick="PCAM.shots.splice(' + i + ',1);phCamRender()">✕</button></span>'; }).join('');
+  $('pcCnt').textContent = (base + L.length) + ' / ' + PH_MAX; $('pcDone').disabled = !L.length; $('pcDone').textContent = '✅ ' + t('phDone') + (L.length ? ' (' + L.length + ')' : '');
+  if ($('pcamErr').hidden) $('pcShut').disabled = L.length >= PCAM.room; $('pcStrip').scrollLeft = -99999;
+}
+function phShot() {
+  if (!PCAM || PCAM.shots.length >= PCAM.room) return; var v = $('pcVid'); if (!v || !v.videoWidth) return;
+  var w = v.videoWidth, h = v.videoHeight, sc = Math.min(1, 1600 / Math.max(w, h)), cv = document.createElement('canvas'); cv.width = Math.round(w * sc); cv.height = Math.round(h * sc); cv.getContext('2d').drawImage(v, 0, 0, cv.width, cv.height);
+  var url = cv.toDataURL('image/jpeg', MODE === 'demo' ? 0.5 : 0.78); PCAM.shots.push({ url: url, data: url.split(',')[1], mime: 'image/jpeg' });
+  var f = $('pcFlash'); if (f) { f.style.opacity = '.8'; setTimeout(function () { f.style.opacity = '0'; }, 120); } try { navigator.vibrate && navigator.vibrate(30); } catch (e) { }
+  phCamRender();
+}
+function phCamFiles(el) { var F = Array.prototype.slice.call(el.files || []); el.value = ''; F.forEach(function (f) { resizePhoto(f, function (p) { if (PCAM && PCAM.shots.length < PCAM.room) { PCAM.shots.push({ url: p.url, data: p.data, mime: p.mime }); phCamRender(); } }); }); }
+function phCamDone() {
+  if (!PCAM) return; var k = PCAM.k, S = dxS(k), L = PCAM.shots.slice(); phCamStop();
+  L.forEach(function (p) { if (!S.doc) { S.doc = p; S.docDel = false; } else (S.ex = S.ex || []).push(p); }); dxRe(k);
+}
+/* عارض صفحات الفاتورة داخل الفورم: تقليب + حذف صفحة + إضافة صفحة */
+var PGAL = null;
+function phGal(k, i) { PGAL = { k: k, i: i || 0 }; phGalRender(); }
+function phGalClose() { var o = $('phGalO'); if (o) o.remove(); PGAL = null; }
+function phGalRender() {
+  if (!PGAL) return; var k = PGAL.k, L = phList(dxS(k)), n = L.length; if (!n) return phGalClose();
+  var i = PGAL.i = Math.max(0, Math.min(PGAL.i, n - 1)), p = L[i], o = $('phGalO');
+  if (!o) { o = document.createElement('div'); o.id = 'phGalO'; o.className = 'phgal'; document.body.appendChild(o); }
+  var a = '\'' + k + '\'';
+  o.innerHTML = '<div class="pgh"><b>🧾 ' + esc(t('phPageOf', i + 1, n)) + '</b><button type="button" class="btn sm" onclick="phGalClose()">✕</button></div>' +
+    '<div class="pgb">' + (p.pdf ? '<div class="pgpdf">📄<small>' + esc(p.name || 'PDF') + '</small><button type="button" class="btn" onclick="ivDocOpen(' + esc(q(p.url)) + ')">' + esc(t('phOpen')) + '</button></div>' : '<img src="' + esc(p.existing ? photoSrc(p.url) : p.url) + '" alt="">') +
+    (n > 1 ? '<button type="button" class="pgnav p" onclick="PGAL.i=(PGAL.i-1+' + n + ')%' + n + ';phGalRender()">›</button><button type="button" class="pgnav n" onclick="PGAL.i=(PGAL.i+1)%' + n + ';phGalRender()">‹</button>' : '') + '</div>' +
+    '<div class="pgdots">' + L.map(function (z, j) { return '<i class="' + (j === i ? 'on' : '') + '"></i>'; }).join('') + '</div>' +
+    '<div class="pgf"><button type="button" class="btn pgdel" onclick="phDel(' + a + ',PGAL.i);phGalRender()">🗑️ ' + esc(t('phDelPage')) + '</button>' + (n < PH_MAX ? '<button type="button" class="btn" onclick="phGalClose();phCam(' + a + ')">📷 ' + esc(t('phAddPage')) + '</button>' : '') + '</div>';
+}
+function phPick(k, el) {
+  var S = dxS(k), F = Array.prototype.slice.call(el.files || []); el.value = '';
+  F.forEach(function (f) {
+    if (/\.pdf$/i.test(f.name) || f.type === 'application/pdf') {
+      if (S.doc) return toast('⚠️ ' + t('phPdfFirst'), true); if (f.size > 8 * 1024 * 1024) return toast('⚠️ ' + t('e_ivdocbig'), true);
+      var rd = new FileReader(); rd.onload = function (e) { var url = String(e.target.result); S.doc = { url: url, data: url.split(',')[1], mime: 'application/pdf', pdf: true, name: f.name }; S.docDel = false; dxRe(k); }; rd.readAsDataURL(f); return;
+    }
+    resizePhoto(f, function (p) { if (!S.doc) { S.doc = { url: p.url, data: p.data, mime: p.mime }; S.docDel = false; } else if (phList(S).length < PH_MAX) (S.ex = S.ex || []).push({ url: p.url, data: p.data, mime: p.mime }); else return toast('⚠️ ' + t('dxMax', PH_MAX), true); dxRe(k); });
+  });
+}
+/* حذف صورة: لو حذفت الأولى، اللي بعدها تصير هي الأساسية */
+function phDel(k, i) {
+  var S = dxS(k); S.ex = S.ex || [];
+  if (i > 0) S.ex.splice(i - 1, 1);
+  else if (S.ex.length) { var nx = S.ex.shift(); S.doc = nx.keep ? { url: nx.keep, keepId: true } : nx; S.docDel = false; }
+  else { S.doc = null; S.docDel = true; }
+  dxRe(k);
+}
+/* 📎 صور إضافية للفاتورة (اختيارية، لين 4) — الصورة الأولى إجبارية */
+var DOCX_MAX = 4;
+function dxS(k) { return k === 'bf' ? BF : RV; }
+function dxRe(k) { if (k === 'bf') bfDocRender(); else { ivDocRender(); try { rvSave(); } catch (e) { } } }
+function dxBox(k) {
+  var S = dxS(k); if (!S) return ''; var L = S.ex = S.ex || [];
+  return '<div class="dxbox"><small class="muted">📎 ' + esc(t('dxLbl', L.length, DOCX_MAX)) + '</small><div class="dxl">' + L.map(function (p, i) { var u = p.keep || p.url; return '<span class="clexi"><img src="' + esc(p.keep ? photoSrc(p.keep) : p.url) + '" alt="" onclick="showPhoto(' + esc(q(u)) + ')"><button type="button" class="ghost sm" onclick="dxS(\'' + k + '\').ex.splice(' + i + ',1);dxRe(\'' + k + '\')">✕</button></span>'; }).join('') +
+    (L.length < DOCX_MAX ? '<label class="btn photoBtn"><span>➕ ' + esc(t('dxAdd')) + '</span><input type="file" accept="image/*" multiple hidden onchange="dxPick(\'' + k + '\',this)"></label>' : '') + '</div></div>';
+}
+function dxPick(k, el) { var S = dxS(k), F = Array.prototype.slice.call(el.files || []), room = DOCX_MAX - (S.ex || []).length; F.slice(0, Math.max(0, room)).forEach(function (f) { resizePhoto(f, function (p) { (S.ex = S.ex || []).push({ url: p.url, data: p.data, mime: p.mime }); dxRe(k); }); }); if (F.length > room) toast('⚠️ ' + t('dxMax', DOCX_MAX), true); }
+function dxPayload(S) { return ((S && S.ex) || []).map(function (p) { return p.keep ? { keep: p.keep } : MODE === 'demo' ? { url: p.url } : { data: p.data, mime: p.mime }; }); }
+function ivPhBtn(x) { var ex = x.docsEx || []; if (!ex.length) return ''; var L = (x.doc && !x.docPdf ? [x.doc] : []).concat(ex); return '<button class="btn sm" title="' + esc(t('dxAll')) + '" onclick="showPhotos(' + esc(JSON.stringify(L)) + ',0)">🧾 ' + (ex.length + (x.doc ? 1 : 0)) + '</button>'; }
 function ivDocPick(el) {
   var f = el.files && el.files[0]; if (!f) return;
   if (/\.pdf$/i.test(f.name) || f.type === 'application/pdf') {
@@ -5633,7 +5773,8 @@ function rvSubmit() {
   rvHeadSave(); var H = RV.head, sup = String(H.supplier || '').trim();
   if (!H.payType) { toast('⚠️ ' + t('e_invpay'), true); $('ivPay').focus(); return; }
   if (!sup) { toast('⚠️ ' + t('e_invsup'), true); $('ivSupQ').focus(); return; }
-  var x = { doc: RV.doc && !RV.doc.existing ? (MODE === 'demo' ? { url: RV.doc.url, pdf: !!RV.doc.pdf, name: RV.doc.name || '' } : { data: RV.doc.data, mime: RV.doc.mime, name: RV.doc.name || '' }) : null, docDel: !!RV.docDel && !RV.doc, invType: H.invType, payType: H.payType, date: H.date, supplier: sup, supInv: H.supInv, loc: H.loc || MAINLOC, lines: RV.lines.map(function (L) { return { item: L.item, qty: L.qty, price: L.price, uom: L.uom || '', per: L.per || '' }; }) };
+  if (!RV.edit && !RV.doc) { toast('⚠️ ' + t('e_ivdocreq'), true); var db0 = $('ivDocBox'); if (db0) db0.scrollIntoView({ block: 'center' }); return; }
+  var x = { ex: dxPayload(RV), doc: docPayload(RV.doc), docDel: !!RV.docDel && !RV.doc, invType: H.invType, payType: H.payType, date: H.date, supplier: sup, supInv: H.supInv, loc: H.loc || MAINLOC, lines: RV.lines.map(function (L) { return { item: L.item, qty: L.qty, price: L.price, uom: L.uom || '', per: L.per || '' }; }) };
   try { invNormalize(x, function (c) { return !!IM[c]; }, function (c) { return IM[c]; }); } catch (e) {
     var m = String(e.message).match(/\|(\d+)$/); toast('⚠️ ' + tErr(e), true);
     if (m) { var r = document.querySelector('#ivBody tr[data-i="' + (+m[1] - 1) + '"]'); if (r) { r.classList.add('err'); r.scrollIntoView({ block: 'center' }); setTimeout(function () { r.classList.remove('err'); }, 2500); } }
@@ -5652,7 +5793,7 @@ function invEdit(id) {
   var h = DB.invoices.find(function (x) { return String(x.id) === String(id); }); if (!h) return;
   RV = { edit: h.id, head: { payType: h.payType, invType: h.invType, date: String(h.date).slice(0, 10), supplier: h.supplier, supNew: '', supInv: h.supInv || '', loc: h.loc || MAINLOC },
     lines: DB.invLines.filter(function (L) { return String(L.invId) === String(id); }).map(function (L) { return { item: L.item, qty: String(L.qty), price: String(L.price), total: '', tm: false, uom: L.uom === 'كرتون' ? 'كرتون' : '', per: L.uom === 'كرتون' ? String(L.per) : '' }; }) };
-  if (h.doc) RV.doc = { url: h.doc, pdf: !!h.docPdf, name: h.docName || '', existing: true };
+  if (h.doc) RV.doc = { url: h.doc, pdf: !!h.docPdf, name: h.docName || '', existing: true }; RV.ex = (h.docsEx || []).map(function (u) { return { keep: u }; });
   IV_EDIT_OPEN = true; ivModeSet('wh'); show('recv');
 }
 function invCancel(id) { ask({ title: t('ivCancelQ', id), msg: t('ivCancelMsg'), reason: true, danger: true, ok: t('ivCancelBtn') }).then(function (r) { if (r) run('cancelInvoice', [id, r], t('ivCancelled', id)); }); }
@@ -5788,7 +5929,7 @@ function renderInvoices() {
     var pnd = x.status === 'بانتظار التعميد';
     var row = '<tr class="' + (pnd ? 'pendrow' : x.status ? 'cxl' : '') + '"><td class="n">' + (br && x.brNo ? '<b>' + esc(brLbl(x)) + '</b><small class="sub2">#' + esc(x.id) + '</small>' : '<b>' + esc(x.id) + '</b>') + '</td><td>' + esc(String(x.date).slice(0, 10)) + '</td><td><span class="st ' + (ret0 ? 'warn' : ob || br ? 'info' : 'ok') + '">' + (ob ? '📌 ' : br ? '🏪 ' : '') + esc(v(x.invType)) + '</span>' + (ob && x.note ? '<small class="sub2">' + esc(x.note) + '</small>' : '') + '</td><td>' + esc(ln(x.loc || MAINLOC)) + '</td><td class="wrap">' + nmH(x.supplier) + '</td><td>' + esc(x.supInv || '—') + '</td><td>' + payBadge(x.payType) + '</td><td><bdi>' + esc(nmT(x.user)) + '</bdi></td><td class="n">' + (ob || br ? '—' : lines.length) + '</td><td class="n"><b>' + num(x.total) + '</b></td>' +
       '<td class="wrap">' + (isCredit(x) ? crBadge(x) + ' ' : '') + (pnd ? '<span class="st warn">⏳ ' + esc(t('ivPendTag')) + '</span>' + (isMgr() && !ME.readonly ? '<div style="display:flex;gap:6px;margin-top:6px"><button class="primary sm" onclick="invAppr(' + q(x.id) + ',true)">✅ ' + esc(t('ivApprBtn')) + '</button><button class="ghost sm" onclick="invAppr(' + q(x.id) + ',false)">✕ ' + esc(t('ivRejBtn')) + '</button></div>' : '') : x.status ? '<span class="st bad">' + esc(x.status) + '</span>' : (x.apprBy ? '<span class="st ok">' + esc(t('ivApprTag', x.apprBy)) + '</span> ' : '') + x.edited ? '<span class="st warn">' + esc(t('ivEditedTag')) + '</span><small class="muted"> ' + esc(String(x.edited)) + '</small>' : '<span class="st ok">' + esc(t('ivOk')) + '</span>') + (x.invType !== OB_TYPE && !x.status ? postChip('inv', x.id, x.posted) : '') + '</td>' +
-      '<td class="ivact"><button class="btn sm" onclick="invToggle(' + q(x.id) + ')">' + (open ? '▲' : '👁') + '</button>' + (x.doc ? '<button class="btn sm" title="' + esc(t('ivDocLbl')) + '" onclick="ivDocOpen(' + q(x.doc) + ')">' + (x.docPdf ? '📄' : '🖼️') + '</button>' : '') + (isCredit(x) && creditInfo(x).rem > 0.001 ? '<button class="primary sm" onclick="invPay(' + q(x.id) + ')">💵 ' + esc(t('pyBtn')) + '</button>' : '') + (pnd || x.status ? '' : '<button class="btn sm" onclick="' + (ob ? 'obEdit' : br ? 'bfEdit' : 'invEdit') + '(' + q(x.id) + ')">✏️ ' + esc(t('ivEditBtn')) + '</button><button class="ghost sm" onclick="invCancel(' + q(x.id) + ')">✕</button>') + '</td></tr>';
+      '<td class="ivact"><button class="btn sm" onclick="invToggle(' + q(x.id) + ')">' + (open ? '▲' : '👁') + '</button>' + (x.doc && (x.docPdf || !(x.docsEx || []).length) ? '<button class="btn sm" title="' + esc(t('ivDocLbl')) + '" onclick="ivDocOpen(' + q(x.doc) + ')">' + (x.docPdf ? '📄' : '🖼️') + '</button>' : '') + ivPhBtn(x) + (isCredit(x) && creditInfo(x).rem > 0.001 ? '<button class="primary sm" onclick="invPay(' + q(x.id) + ')">💵 ' + esc(t('pyBtn')) + '</button>' : '') + (pnd || x.status ? '' : '<button class="btn sm" onclick="' + (ob ? 'obEdit' : br ? 'bfEdit' : 'invEdit') + '(' + q(x.id) + ')">✏️ ' + esc(t('ivEditBtn')) + '</button><button class="ghost sm" onclick="invCancel(' + q(x.id) + ')">✕</button>') + '</td></tr>';
     if (open && (ob || br)) row += '<tr class="ivdet"><td colspan="12">' + (br ? '<p class="muted" style="margin:0 0 6px">' + esc(t('bfNoItems')) + '</p>' : '') + (x.payType === 'آجل' ? payHist(x) : '') + '</td></tr>';
     else if (open) row += '<tr class="ivdet"><td colspan="12">' + xlBox('iv' + x.id, '📦 ' + esc(t('ivItemsT')), lines.length, '<table class="sub"><thead><tr><th>' + esc(t('itCodeCol')) + '</th><th>' + esc(t('itNameCol')) + '</th><th>' + esc(t('unit')) + '</th><th>' + esc(t('qty')) + '</th><th>' + esc(t('ivPrice')) + '</th><th>' + esc(t('total')) + '</th></tr></thead><tbody>' + lines.map(function (l) {
       return '<tr><td>' + esc(l.item) + '</td><td class="wrap"><bdi>' + esc(l.itemName) + '</bdi></td><td>' + (l.uom === 'كرتون' ? esc(unitT('كرتون')) + ' <small class="muted">(' + num(l.per) + ' ' + esc(unitT(l.unit)) + ' = ' + num(l.baseQty) + ')</small>' : esc(unitT(l.unit))) + '</td><td class="n">' + num(l.qty) + '</td><td class="n">' + num(l.price) + '</td><td class="n">' + num(l.total) + '</td></tr>';
@@ -5846,12 +5987,7 @@ function bfFill() {
   $('bfTitle').textContent = BF.id ? t(BF.rej !== undefined && BF.rej !== '' ? 'bfFixT' : 'bfEditT', BF.id) : t('ivModeBr'); $('bfCancel').hidden = !BF.id; bfDocRender();
   var rn = $('bfRejNote'); if (!rn) { rn = document.createElement('p'); rn.id = 'bfRejNote'; rn.className = 'mr2warn'; $('bfTitle').insertAdjacentElement('afterend', rn); } rn.hidden = !BF.rej; rn.textContent = BF.rej ? '❌ ' + t('rjWhy') + ': ' + BF.rej : '';
 }
-function bfDocRender() {
-  var d = BF.doc, h = '<label class="btn photoBtn"><span>📷 ' + esc(t('ivDocCam')) + '</span><input type="file" accept="image/*" capture="environment" hidden onchange="bfDocPick(this)"></label>' +
-    '<label class="btn photoBtn"><span>📎 ' + esc(t('ivDocUp')) + '</span><input type="file" accept="image/*,.pdf,application/pdf" hidden onchange="bfDocPick(this)"></label>';
-  if (d) h += (d.pdf ? '<button type="button" class="chip" onclick="ivDocOpen(' + q(d.url) + ')">📄 ' + esc(d.name || 'PDF') + '</button>' : '<img src="' + esc(d.existing ? photoSrc(d.url) : d.url) + '" alt="" onclick="ivDocOpen(' + q(d.url) + ')">') + '<button type="button" class="ghost sm" onclick="BF.doc=null;bfDocRender()">✕</button>';
-  $('bfDocBox').innerHTML = h;
-}
+function bfDocRender() { $('bfDocBox').innerHTML = phStrip('bf'); }
 function bfDocPick(el) {
   var f = el.files && el.files[0]; if (!f) return;
   if (/\.pdf$/i.test(f.name) || f.type === 'application/pdf') {
@@ -5860,10 +5996,10 @@ function bfDocPick(el) {
   } else resizePhoto(f, function (p) { BF.doc = { url: p.url, data: p.data, mime: p.mime }; bfDocRender(); });
 }
 function brLbl(x) { return 'ف-' + ('000' + x.brNo).slice(-4); }
-function bfReset() { BF = { id: null, doc: null }; $('bfAmt').value = ''; $('bfSup').value = ''; $('bfSupSel').value = ''; $('bfSupInv').value = ''; $('bfDate').value = todayS(); bfFill(); }
+function bfReset() { BF = { id: null, doc: null, ex: [] }; $('bfAmt').value = ''; $('bfSup').value = ''; $('bfSupSel').value = ''; $('bfSupInv').value = ''; $('bfDate').value = todayS(); bfFill(); }
 function bfEdit(id) {
   var rj = (DB.myRej || []).find(function (x) { return String(x.id) === String(id); }), h = rj || DB.invoices.find(function (x) { return String(x.id) === String(id); }); if (!h) return;
-  show('recv'); ivModeSet('br'); BF = { id: h.id, rej: rj ? rj.reason : '', doc: h.doc ? { url: h.doc, pdf: !!h.docPdf, name: h.docName || '', existing: true } : null };
+  show('recv'); ivModeSet('br'); BF = { id: h.id, ex: (h.docsEx || []).map(function (u) { return { keep: u }; }), rej: rj ? rj.reason : '', doc: h.doc ? { url: h.doc, pdf: !!h.docPdf, name: h.docName || '', existing: true } : null };
   bfFill(); $('bfLoc').value = h.loc; $('bfDate').value = String(h.date).slice(0, 10); $('bfSupSel').value = h.supplier; $('bfAmt').value = String(h.total); $('bfPay').value = h.payType; $('bfSupInv').value = h.supInv || ''; bfFill();
 }
 /* ❌ الفواتير المرفوضة: صاحبها يشوف السبب، يصحّح فاتورة الفرع ويرسلها، أو يأكد إنه اطّلع */
@@ -5872,7 +6008,7 @@ function rejInvOpen(id) {
   var br = h.invType === BR_TYPE && can('recvBr'), hasDoc = !!h.doc;
   var html = '<div class="rjbox"><div><b>' + esc(t('rjWhy')) + ':</b> <span class="amt-neg">' + esc(h.reason) + '</span></div><div class="muted">' + esc(t('rjBy', nmT(h.by), shortDate(h.at))) + '</div>' +
     '<div style="margin-top:6px">' + esc(ln(h.loc)) + ' — <bdi>' + esc(nmO(h.supplier)) + '</bdi> — <b>' + num(h.total) + '</b> ' + esc(v(h.payType)) + ' — ' + esc(String(h.date).slice(0, 10)) + '</div>' +
-    (hasDoc ? '<div style="margin-top:6px"><button type="button" class="chip" onclick="ivDocOpen(' + q(h.doc) + ')">🖼️ ' + esc(t('rjDoc')) + '</button></div>' : '') + '</div>';
+    (hasDoc ? '<div style="margin-top:6px"><button type="button" class="chip" onclick="' + ((h.docsEx || []).length && !h.docPdf ? 'showPhotos(' + esc(JSON.stringify([h.doc].concat(h.docsEx))) + ',0)' : 'ivDocOpen(' + q(h.doc) + ')') + '">🖼️ ' + esc(t('rjDoc')) + ((h.docsEx || []).length ? ' (' + (h.docsEx.length + 1) + ')' : '') + '</button></div>' : '') + '</div>';
   ask({ title: t('rjT', h.id), html: html, pick: br ? [['fix', '✏️ ' + t('rjFix')], ['ack', '👍 ' + t('rjAck')]] : [['ack', '👍 ' + t('rjAckFull')]], ok: t('confirmBtn') }).then(function (r) {
     if (!r) return;
     if (r.v === 'fix') return bfEdit(h.id);
@@ -5880,7 +6016,7 @@ function rejInvOpen(id) {
   });
 }
 function bfSave() {
-  var d = BF.doc, x = { id: BF.id, loc: $('bfLoc').value, date: $('bfDate').value, supplier: $('bfSupSel').value === '__new' ? $('bfSup').value.trim() : $('bfSupSel').value, amount: Number($('bfAmt').value), payType: $('bfPay').value, supInv: $('bfSupInv').value.trim(), doc: d && !d.existing ? (MODE === 'demo' ? { url: d.url, pdf: !!d.pdf, name: d.name || '' } : { data: d.data, mime: d.mime, name: d.name || '' }) : null };
+  var d = BF.doc, x = { ex: dxPayload(BF), id: BF.id, loc: $('bfLoc').value, date: $('bfDate').value, supplier: $('bfSupSel').value === '__new' ? $('bfSup').value.trim() : $('bfSupSel').value, amount: Number($('bfAmt').value), payType: $('bfPay').value, supInv: $('bfSupInv').value.trim(), doc: docPayload(d) };
   if (!x.loc) return toast('⚠️ ' + t('e_bfloc'), true); if (!x.supplier) return toast('⚠️ ' + t('e_invsup'), true); if (!(x.amount > 0)) return toast('⚠️ ' + t('e_amount'), true); if (!d) return toast('⚠️ ' + t('e_bfdoc'), true);
   var go = function () { run('saveBranchInv', [x], x.id && BF.rej ? t('bfResent', x.id) : x.id ? t('bfEdited', ln(x.loc)) : isMgr() ? t('bfSaved', ln(x.loc), num(x.amount)) : t('bfSavedPend', ln(x.loc), num(x.amount)), function () { bfReset(); }); };
   if (x.id) ask({ title: t('bfEditT', x.id), msg: ln(x.loc) + ' — ' + x.supplier + ' — ' + num(x.amount), ok: t('save') }).then(function (ok) { if (ok) go(); }); else go();
