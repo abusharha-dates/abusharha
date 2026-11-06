@@ -3264,7 +3264,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 127, APP_DATE = '2026-11-06';
+var APP_BUILD = 128, APP_DATE = '2026-11-06';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -6442,8 +6442,8 @@ function renderClose() {
   var CLL = clLocs().map(function (l) { return l.code; }); if (cur && CLL.indexOf(cur.loc) < 0) CLL.push(cur.loc);
   $('clLoc').innerHTML = CLL.map(function (c) { return '<option value="' + esc(c) + '">' + esc(ln(c)) + (LM[c] && LM[c].active === 'محذوف' ? ' ' + esc(t('mrGone')) : '') + '</option>'; }).join('');
   $('clLoc').disabled = !mg && myLocs().length === 1; // الموظف المخصص لفرع واحد: الفرع ثابت
-  var sLoc = clSchedLoc(), manL = CL_LOCM && Date.now() - CL_LOCM.at < 3 * 3600e3 ? CL_LOCM.v : '';
-  if (CL_EDIT_LOC) { $('clLoc').value = CL_EDIT_LOC; CL_EDIT_LOC = ''; } else if (cur) $('clLoc').value = cur.loc; else if (manL && CLL.indexOf(manL) > -1) $('clLoc').value = manL; else if (sLoc && CLL.indexOf(sLoc) > -1) $('clLoc').value = sLoc; else if (keep && CLL.indexOf(keep) > -1) $('clLoc').value = keep;
+  var sLoc = clSchedLoc(), manL = CL_LOCM && Date.now() - CL_LOCM.at < 3 * 3600e3 && (CL_LOCM.ed || '') === (CL_EDIT || '') ? CL_LOCM.v : '';
+  if (CL_EDIT_LOC) { $('clLoc').value = CL_EDIT_LOC; CL_EDIT_LOC = ''; } else if (manL && CLL.indexOf(manL) > -1) $('clLoc').value = manL; else if (cur) $('clLoc').value = cur.loc; else if (sLoc && CLL.indexOf(sLoc) > -1) $('clLoc').value = sLoc; else if (keep && CLL.indexOf(keep) > -1) $('clLoc').value = keep;
   if (!$('clDate').value) $('clDate').value = clDay();
   $('clCashier').textContent = cur ? (cur.cashier || cur.user) : ME.name;
   clPhRender();
@@ -8232,7 +8232,7 @@ function bind() {
   $('exPhoto').onchange = function () { pickPhoto(this.files && this.files[0]); };
   $('attPhotoIn').onchange = function () { var id = ATT_ID; resizePhoto(this.files && this.files[0], function (p) { run('attachExpensePhoto', [id, MODE === 'demo' ? p : { data: p.data, mime: p.mime }], t('photoAttached')); }); };
   $('pwSave').onclick = pwSave;
-  CLF.forEach(function (f) { $(f[0]).oninput = clTot; }); $('clLoc').onchange = function () { CL_LOCM = { v: this.value, at: Date.now() }; renderClose(); }; $('clSave').onclick = clSave; $('clCancelEdit').onclick = clClear;
+  CLF.forEach(function (f) { $(f[0]).oninput = clTot; }); $('clLoc').onchange = function () { CL_LOCM = { v: this.value, at: Date.now(), ed: CL_EDIT || '' }; renderClose(); }; $('clSave').onclick = clSave; $('clCancelEdit').onclick = clClear;
   $('clfPeriod').onchange = $('clfLoc').onchange = $('clfSt').onchange = renderClose;
   $('passOffChk').onchange = function () { var on = this.checked; run('setPassOff', [on], t(on ? 'passOffOn' : 'passOffOff')); };
   $('usrAddBtn').onclick = function () { usrOpen(null); }; $('usrCancel').onclick = function () { $('usrForm').hidden = true; USR_EDIT = null; }; $('usrSave').onclick = usrSave;
