@@ -333,6 +333,7 @@ button.chip{cursor:pointer}
 .attTabs button.on{border-color:var(--palm);background:var(--okbg);color:var(--palm);box-shadow:0 2px 0 var(--palm)}
 .attTabs .nb{background:#c0392b;color:#fff;border-radius:999px;font-size:11px;min-width:18px;padding:1px 6px}
 .atoff{display:none!important}
+#ctBody .stk td.wrap{display:flex;flex-direction:column;align-items:flex-start}#ctBody .stk td.wrap>b{display:block;width:100%}#ctBody .stk td.wrap>small{display:block}.ctcp{display:inline-flex;gap:6px;flex-wrap:wrap}.ctcp label{display:inline-flex;flex-direction:column;align-items:center;gap:2px}.ctcp input{width:74px;text-align:center}.ctcp small{font-size:11.5px;color:var(--muted)}
 .cambtn{flex:0 0 auto;width:44px;min-height:40px;border-radius:10px;border:0;background:#d8a23c;color:#2a2019;font-size:19px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}.camrow{display:flex!important;align-items:stretch;gap:6px;width:100%}.camrow>input{flex:1 1 auto!important;width:auto!important;min-width:0!important;margin:0}.filters .camrow{flex:1 1 220px;width:auto}
 .scanov{position:fixed;inset:0;background:#000;z-index:9500;display:flex;flex-direction:column;align-items:center;justify-content:center}.scanov video{width:100%;max-width:640px;max-height:70vh;object-fit:cover}.scant{color:#fff;font-weight:800;font-size:16px;margin:10px}.scanf{position:absolute;left:50%;top:50%;width:72%;max-width:420px;height:150px;transform:translate(-50%,-50%);border:3px solid #d8a23c;border-radius:16px;pointer-events:none}.scanf i{position:absolute;left:6%;right:6%;top:50%;height:2px;background:#e9573f;box-shadow:0 0 10px #e9573f}
 .scanb{position:absolute;bottom:28px;left:0;right:0;display:flex;justify-content:center;gap:12px}.scanb button,.scanb label{background:#2a2019;color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:800;font-size:15px;cursor:pointer}
@@ -3825,6 +3826,8 @@ var I18N = {
   bcNoItem: ['اختر الصنف', 'آئٹم منتخب کریں', 'आइटम चुनें', 'আইটেম বাছুন'],
   bcGotIt: ['تمام', 'ٹھیک ہے', 'ठीक है', 'ঠিক আছে'],
   e_bcused: ['الباركود هذا مربوط بصنف ثاني', 'یہ بارکوڈ کسی اور آئٹم سے جڑا ہے', 'यह बारकोड किसी और आइटम से जुड़ा है', 'এই বারকোড অন্য আইটেমের সাথে যুক্ত'],
+  ctOver: ['زيادة', 'زیادہ', 'ज़्यादा', 'বেশি'],
+  ctShort: ['ناقص', 'کم', 'कम', 'কম'],
   e_pfdone: ['الفترة هذي متعدّلة قبل — تراجع عنها أول', 'یہ وقفہ پہلے ہی درست ہو چکا ہے', 'यह शिफ्ट पहले ही ठीक हो चुकी है', 'এই শিফট আগেই ঠিক করা হয়েছে'],
   e_attoverlap: ['الوقت يتداخل مع بصمة موجودة — عدّل الوقت', 'وقت موجودہ حاضری سے ٹکراتا ہے', 'समय मौजूदा हाज़िरी से टकराता है', 'সময় বিদ্যমান হাজিরার সাথে মিলে যাচ্ছে'],
   e_bcval: ['اكتب قيمة كل سطر ضيافة', 'ہر مہمان نوازی لائن کی قیمت لکھیں', 'हर मेहमानी लाइन की कीमत लिखें', 'প্রতিটি আপ্যায়ন লাইনের মূল্য লিখুন'],
@@ -4215,7 +4218,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 139, APP_DATE = '2026-11-07';
+var APP_BUILD = 140, APP_DATE = '2026-11-07';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -4233,7 +4236,9 @@ var STKEY = { 'جديدة': 'st_new', 'منجزة': 'st_done', 'ملغاة': 'st
 var AULEVEL = { au_fail: 'high', au_salesdel: 'high', au_salesrevert: 'high', au_sheetrevert: 'high', au_sheet: 'mid', au_salesedit: 'mid', au_undo: 'mid', au_countdiff: 'mid', au_taskcancel: 'mid', au_pwchange: 'mid', au_pwreset: 'mid', au_rename: 'mid', au_invedit: 'mid', au_invcancel: 'high', au_supdel: 'mid', au_packdel: 'mid', au_packedit: 'mid', au_paydel: 'high', au_useradd: 'mid', au_useredit: 'mid', au_userstop: 'mid', au_useron: 'mid', au_locedit: 'mid', au_locdel: 'mid', au_passoff: 'high', au_passon: 'mid', au_closeedit: 'mid', au_closedel: 'high', au_closeret: 'mid', au_closeresend: 'mid', au_fundedit: 'mid', au_funddel: 'high' };
 var AUKEY = { 'تسجيل دخول': 'au_login', 'تسجيل خروج': 'au_logout', 'محاولة دخول فاشلة': 'au_fail', 'إسناد مهمة': 'au_task', 'تنفيذ مهمة': 'au_taskdone', 'إلغاء مهمة': 'au_taskcancel', 'جرد': 'au_count', 'إضافة صنف': 'au_item', 'تعديل مباشر في الشيت': 'au_sheet', 'بدء الاستخدام الفعلي': 'au_reset', 'تسجيل مبيعات': 'au_sales', 'حذف مبيعات': 'au_salesdel', 'تراجع عن حركة': 'au_undo', 'تعديل مبيعات': 'au_salesedit', 'تراجع عن تعديل مبيعات': 'au_salesrevert', 'تعديل في الشيت ثم تراجع': 'au_sheetrevert', 'جرد بفروقات': 'au_countdiff', 'تغيير كلمة السر': 'au_pwchange', 'تعيين كلمة سر': 'au_pwreset', 'تعديل اسم صنف': 'au_rename', 'إرفاق صورة فاتورة': 'au_photo', 'تعديل فاتورة': 'au_invedit', 'إلغاء فاتورة': 'au_invcancel', 'حذف مورد': 'au_supdel', 'حذف نوع عبوة': 'au_packdel', 'تعديل نوع عبوة': 'au_packedit', 'سداد آجل': 'au_pay', 'حذف دفعة آجل': 'au_paydel', 'إضافة مستخدم': 'au_useradd', 'تعديل مستخدم': 'au_useredit', 'إيقاف مستخدم': 'au_userstop', 'تفعيل مستخدم': 'au_useron', 'إضافة مخزن': 'au_locadd', 'تعديل مخزن': 'au_locedit', 'حذف مخزن': 'au_locdel', 'إضافة مهنة': 'au_roleadd', 'تعديل مبلغ عهدة': 'au_fundedit', 'إلغاء مبلغ عهدة': 'au_funddel', 'حذف مهنة': 'au_roledel', 'إيقاف كلمات السر مؤقتاً': 'au_passoff', 'تفعيل كلمات السر': 'au_passon', 'تعديل إقفال': 'au_closeedit', 'حذف إقفال': 'au_closedel', 'اعتماد إقفال': 'au_closeok', 'إعادة إقفال للتعديل': 'au_closeret', 'إعادة إرسال إقفال': 'au_closeresend' };
 var IORD = {};
-function newestFirst(a, b) { return (IORD[b] || 0) - (IORD[a] || 0); }
+/* ترتيب الأصناف في كل النوافذ: بالرقم التسلسلي 10001 ← … ← 90001 ← … (الاسم القديم للدالة باقي عشان كل القوائم تمشي عليه) */
+function codeCmp(a, b) { a = String(a); b = String(b); var na = /^\d+$/.test(a), nb = /^\d+$/.test(b); if (na && nb) return Number(a) - Number(b) || (a < b ? -1 : a > b ? 1 : 0); if (na !== nb) return na ? -1 : 1; return a < b ? -1 : a > b ? 1 : 0; }
+function newestFirst(a, b) { return codeCmp(a, b); }
 function stockUpd(code, loc) { var s = DB.stock.find(function (r) { return r.item === code && r.loc === loc; }); return s ? String(s.updated || '') : ''; }
 var SALES_ON = false, BRANCHES = [], MAINLOC = '', TKK = 'نقل', OPT = 'صيانة', PHOTO = null;
 var VIEWS = [['purch', '🛒'], ['home', '🏠'], ['dash', '📊', 1], ['reports', '📈', 1], ['convert', '📦'], ['expenses', '💸'], ['maint', '🔧'], ['where', '📍'], ['move', '🔁'], ['tasks', '📋'], ['count', '🧮'], ['log', '🧾'], ['items', '📦', 1], ['att', '🕘', 1], ['audit', '🛡️', 1], ['pass', '🔑'], ['recv', '📥'], ['invoices', '🧾', 1]];
@@ -6685,7 +6690,7 @@ var STCLS = { bad: 'bad', reorder: 'bad', refill: 'warn', exp: 'warn', ok: 'ok' 
 /* ---------- القوائم المنسدلة ---------- */
 function fillItems(sel, filter) {
   var keep = sel.value, f = (filter || '').trim().toLowerCase(), cats = {}, order = [], count = 0, only = '';
-  DB.items.forEach(function (i) {
+  DB.items.slice().sort(function (a, b) { return codeCmp(a.code, b.code); }).forEach(function (i) {
     if (f && [i.name, i.code, i.name_ur, i.name_hi, i.name_bn].join(' ').toLowerCase().indexOf(f) < 0) return;
     if (!cats[i.cat]) { cats[i.cat] = []; order.push(i.cat); }
     cats[i.cat].push(i); count++; only = i.code;
@@ -8276,7 +8281,7 @@ function renderWhere() {
   $('wtags').innerHTML = '<button class="' + (!WTAG ? 'on' : '') + '" onclick="WTAG=\'\';renderWhere()">' + esc(t('f_all')) + ' <b class="cnt n0">' + rows.length + '</b></button>' + keys.map(function (k) {
     return '<button class="tg-' + TAGCLS[k] + (WTAG === k ? ' on' : '') + '" onclick="WTAG=\'' + k + '\';renderWhere()">' + esc(t(TAGLBL[k])) + ' <b class="cnt ' + (cnt[k] ? '' : 'n0') + '">' + cnt[k] + '</b></button>';
   }).join('');
-  var L = rows.filter(function (r) { return !WTAG || r.tags.indexOf(WTAG) > -1; }).sort(function (a, b) { var ua = stockUpd(a.it.code, WLOC), ub = stockUpd(b.it.code, WLOC); return ua === ub ? newestFirst(a.it.code, b.it.code) : (ua < ub ? 1 : -1); });
+  var L = rows.filter(function (r) { return !WTAG || r.tags.indexOf(WTAG) > -1; }).sort(function (a, b) { var ua = stockUpd(a.it.code, WLOC), ub = stockUpd(b.it.code, WLOC); return codeCmp(a.it.code, b.it.code); });
   var tv = 0;
   $('wtable').innerHTML = L.length ? '<div class="tbl xlt" data-xk="wh" data-xt="' + esc(t('whListT')) + '"><table><thead><tr><th>' + esc(t('itCodeCol')) + '</th><th>' + esc(t('item')) + '</th><th>' + esc(t('qty')) + '</th><th>' + esc(t('status')) + '</th>' + (sale ? '<th>' + esc(t('shopMinCol')) + '</th>' : '') + '<th>' + esc(t('nearestExp')) + '</th><th>' + esc(t('unit')) + '</th>' + (isMgr() ? '<th></th>' : '') + '</tr></thead><tbody>' + L.map(function (r) {
     var it = r.it, s = DB.stock.find(function (x) { return x.item === it.code && x.loc === WLOC && x.qty > 0; }), dd = s ? daysTo(s.expiry) : null; tv += r.q * it.cost;
@@ -8336,7 +8341,7 @@ function whereAll() {
   $('wtags').innerHTML = [['stock', 'wAllStock'], ['all', 'wAllItems']].map(function (x) { return '<button class="' + (WALLF === x[0] ? 'on' : '') + '" onclick="WALLF=\'' + x[0] + '\';renderWhere()">' + esc(t(x[1])) + '</button>'; }).join('');
   var locs = DB.locations.map(function (l) { return l.code; }), Q = {};
   DB.stock.forEach(function (s0) { if (s0.qty > 0) { (Q[s0.item] = Q[s0.item] || {})[s0.loc] = (Q[s0.item][s0.loc] || 0) + Number(s0.qty); } });
-  var items = DB.items.filter(function (it) { return (!WCAT || it.cat === WCAT) && (WALLF === 'all' || Q[it.code]); }).slice().sort(function (a, b) { var ta = 0, tb = 0; locs.forEach(function (l) { ta += (Q[a.code] || {})[l] || 0; tb += (Q[b.code] || {})[l] || 0; }); return tb - ta || newestFirst(a.code, b.code); });
+  var items = DB.items.filter(function (it) { return (!WCAT || it.cat === WCAT) && (WALLF === 'all' || Q[it.code]); }).slice().sort(function (a, b) { var ta = 0, tb = 0; locs.forEach(function (l) { ta += (Q[a.code] || {})[l] || 0; tb += (Q[b.code] || {})[l] || 0; }); return codeCmp(a.code, b.code); });
   var TL = {}, GT = 0;
   var h = items.length ? '<div class="tbl xlt" data-xk="wa" data-xt="' + esc(t('whListT')) + '"><table class="wall"><thead><tr><th>' + esc(t('itCodeCol')) + '</th><th>' + esc(t('item')) + '</th>' + locs.map(function (l) { return '<th>' + esc(ln(l)) + '</th>'; }).join('') + '<th>' + esc(t('total')) + '</th><th>' + esc(t('unit')) + '</th></tr></thead><tbody>' + items.map(function (it) {
     var tot = 0, cells = locs.map(function (l) { var q0 = (Q[it.code] || {})[l] || 0; tot += q0; TL[l] = (TL[l] || 0) + q0; return '<td class="n' + (q0 ? '' : ' muted') + '">' + (q0 ? qCP(it, q0, 1) : '—') + '</td>'; }).join('');
@@ -8672,9 +8677,12 @@ function renderCount() {
   codes.sort(newestFirst);
   $('ctBody').innerHTML = codes.length ? '<div class="tbl"><table><thead><tr><th>' + esc(t('item')) + '</th>' + (blind ? '' : '<th>' + esc(t('inSystem')) + '</th>') + '<th>' + esc(t('actual')) + '</th>' + (blind ? '' : '<th>' + esc(t('diff')) + '</th>') + '</tr></thead><tbody>' + codes.map(function (c) {
     var sys = qtyAt(c, loc), val = vals[c] === undefined ? '' : vals[c];
-    return '<tr data-s="' + esc(ctKey(c)) + '"><td class="wrap"><b>' + ihtml(c) + '</b><small class="sub2"><bdi dir="ltr">#' + esc(c) + '</bdi> · ' + esc(unit(c)) + '</small></td>' + (blind ? '' : '<td class="n">' + num(sys) + '</td>') + '<td><input type="number" min="0" step="any" inputmode="decimal" data-c="' + esc(c) + '" value="' + esc(val) + '" oninput="ctInput(this)"></td>' + (blind ? '' : '<td class="n" id="ctd-' + esc(c) + '">' + diffHTML(val, sys, blind) + '</td>') + '</tr>';
+    var it = IM[c] || {}, per = Number(it.perCtn) || 0, inp;
+    if (per > 1) { var tv = val === '' ? null : Number(val) || 0, cc = tv === null ? '' : Math.floor(tv / per), pp = tv === null ? '' : Math.round((tv - cc * per) * 1000) / 1000; inp = '<span class="ctcp"><label><input type="number" min="0" step="1" inputmode="numeric" class="ctC" data-c="' + esc(c) + '" value="' + (tv === null ? '' : cc) + '" oninput="ctInput2(this)"><small>' + esc(bigUT(it)) + ' (' + num(per) + ')</small></label><label><input type="number" min="0" step="any" inputmode="decimal" class="ctP" data-c="' + esc(c) + '" value="' + (tv === null ? '' : pp) + '" oninput="ctInput2(this)"><small>' + esc(unitT(it.unit)) + '</small></label></span>'; }
+    else inp = '<input type="number" min="0" step="any" inputmode="decimal" data-c="' + esc(c) + '" value="' + esc(val) + '" oninput="ctInput(this)">';
+    return '<tr data-s="' + esc(ctKey(c)) + '"><td class="wrap"><b>' + ihtml(c) + '</b><small class="sub2"><bdi dir="ltr">#' + esc(c) + '</bdi> · ' + unitBoth(it) + '</small></td>' + (blind ? '' : '<td class="n">' + qCP(it, sys) + '</td>') + '<td>' + inp + '</td>' + (blind ? '' : '<td class="n" id="ctd-' + esc(c) + '">' + diffHTML(val, sys, blind, c) + '</td>') + '</tr>';
   }).join('') + '</tbody></table></div><p class="muted" style="margin:8px 0 0">' + esc(t('leaveEmpty')) + '</p>' : '<p class="empty">' + esc(t('emptyCountLoc')) + '</p>';
-  ctFilter();
+  stackTables($('ctBody')); ctFilter();
 }
 /* 🔎 البحث في الجرد برقم الصنف أو اسمه */
 function ctNorm(x) { return String(x || '').replace(/[٠-٩]/g, function (d) { return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); }).replace(/[۰-۹]/g, function (d) { return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d); }).toLowerCase().trim(); }
@@ -8694,14 +8702,22 @@ function ctFilter() {
 }
 function ctFindGo() { var r = ctFilter(); if (r) { var i = r.querySelector('input'); if (i) { i.focus(); i.select(); } } }
 function ctFindAdd(c) { var loc = $('ctLoc').value; if (!loc) return; var L = CTX[loc] = CTX[loc] || []; if (L.indexOf(c) < 0) L.push(c); renderCount(); ctFindGo(); }
-function diffHTML(val, sys, blind) {
+function diffHTML(val, sys, blind, c) {
   if (val === '' || blind) return '—';
-  var d = Number(val) - sys;
-  return d === 0 ? '<span class="pos">' + esc(t('match')) + '</span>' : '<span class="' + (d > 0 ? 'pos' : 'neg') + '">' + (d > 0 ? '+' : '') + num(d) + '</span>';
+  var d = Math.round((Number(val) - sys) * 1000) / 1000, per = c && IM[c] ? Number(IM[c].perCtn) || 0 : 0;
+  if (d === 0) return '<span class="pos">✅ ' + esc(t('match')) + '</span>';
+  if (per > 1) return '<span class="' + (d > 0 ? 'pos' : 'neg') + '">' + (d > 0 ? '🟢 ' + esc(t('ctOver')) : '🔴 ' + esc(t('ctShort'))) + ' ' + esc(qCPtxt(c, Math.abs(d))) + '</span>';
+  return '<span class="' + (d > 0 ? 'pos' : 'neg') + '">' + (d > 0 ? '+' : '') + num(d) + '</span>';
+}
+/* الجرد بالكرتون + الحبة: النظام يحسب الإجمالي ويقارن */
+function ctInput2(el) {
+  var loc = $('ctLoc').value, c = el.dataset.c, td = el.closest('td'), per = Number((IM[c] || {}).perCtn) || 1, cv = td.querySelector('.ctC').value, pv = td.querySelector('.ctP').value;
+  var tot = cv === '' && pv === '' ? '' : String(Math.round(((Number(cv) || 0) * per + (Number(pv) || 0)) * 1000) / 1000); (CTV[loc] = CTV[loc] || {})[c] = tot;
+  var cell = document.getElementById('ctd-' + c); if (cell) cell.innerHTML = diffHTML(tot, qtyAt(c, loc), !isMgr(), c);
 }
 function ctInput(el) {
   var loc = $('ctLoc').value, c = el.dataset.c; (CTV[loc] = CTV[loc] || {})[c] = el.value;
-  var cell = document.getElementById('ctd-' + c); if (cell) cell.innerHTML = diffHTML(el.value, qtyAt(c, loc), !isMgr());
+  var cell = document.getElementById('ctd-' + c); if (cell) cell.innerHTML = diffHTML(el.value, qtyAt(c, loc), !isMgr(), c);
 }
 /* ---------- اعتماد الجرد ---------- */
 var CT_OPEN = {};
@@ -8710,7 +8726,7 @@ function ctStatus(k) { var m = { 'معلق': ['warn', 'ctS_pend'], 'معتمد':
 function ctSesTable(k) {
   var sh = 0, ov = 0; k.lines.forEach(function (l) { if (l.diff < 0) sh++; else if (l.diff > 0) ov++; });
   return '<div class="tbl"><table><thead><tr><th>' + esc(t('item')) + '</th><th>' + esc(t('inSystem')) + '</th><th>' + esc(t('actual')) + '</th><th>' + esc(t('diff')) + '</th></tr></thead><tbody>' + k.lines.map(function (l) {
-    var d = Number(l.diff); return '<tr><td class="wrap">' + ihtml(l.item, l.itemName) + '</td><td class="n">' + num(l.system) + '</td><td class="n">' + num(l.actual) + '</td><td class="n ' + (d > 0 ? 'pos' : d < 0 ? 'neg' : '') + '">' + (d === 0 ? esc(t('match')) : '<bdi dir="ltr">' + (d > 0 ? '+' : '') + num(d) + '</bdi>') + '</td></tr>';
+    var d = Number(l.diff); return '<tr><td class="wrap">' + ihtml(l.item, l.itemName) + '</td><td class="n">' + qCP(IM[l.item] || {}, l.system) + '</td><td class="n">' + qCP(IM[l.item] || {}, l.actual) + '</td><td class="n ' + (d > 0 ? 'pos' : d < 0 ? 'neg' : '') + '">' + (d === 0 ? esc(t('match')) : (IM[l.item] && Number(IM[l.item].perCtn) > 1 ? (d > 0 ? '🟢 ' + esc(t('ctOver')) : '🔴 ' + esc(t('ctShort'))) + ' ' + esc(qCPtxt(l.item, Math.abs(d))) : '<bdi dir="ltr">' + (d > 0 ? '+' : '') + num(d) + '</bdi>')) + '</td></tr>';
   }).join('') + '</tbody></table></div><p class="muted" style="margin:6px 0 0">' + esc(t('ctSum', k.lines.length, sh, ov)) + '</p>';
 }
 function renderCtApprove() {
@@ -8841,7 +8857,7 @@ function renderItems() {
   var sel = $('itStF'), sv = sel.value;
   sel.innerHTML = '<option value="">' + esc(t('allStatus')) + ' (' + base.length + ')</option>' + [['bad', 's_out'], ['reorder', 's_reorder'], ['exp', 's_exp'], ['ok', 's_ok']].map(function (x) { return '<option value="' + x[0] + '">' + esc(t(x[1])) + ' (' + cnt[x[0]] + ')</option>'; }).join(''); sel.value = sv;
   var L = base.filter(function (i) { return !sf || itemStatus(i, C)[0] === sf; }).sort(function (a, b) { return newestFirst(a.code, b.code); });
-  $('itBody').innerHTML = L.length ? '<div class="tbl"><table><thead><tr><th>' + esc(t('itCodeCol')) + '</th><th>' + esc(t('itNameCol')) + '</th><th>' + esc(t('cat')) + '</th><th>' + esc(t('mainQty')) + '</th><th>' + esc(t('unit')) + '</th><th>' + esc(t('status')) + '</th><th>' + esc(t('nearestExp')) + '</th><th>' + esc(t('reorder')) + '</th>' + (isMgr() ? '<th>' + esc(t('cost')) + '</th><th>' + esc(t('price')) + '</th><th>💰 ' + esc(t('refCostL')) + '</th>' : '') + '</tr></thead><tbody>' + L.map(function (i) {
+  $('itBody').innerHTML = L.length ? '<div class="tbl xlt" data-xk="items" data-xt="' + esc(t('items')) + '"><table><thead><tr><th>' + esc(t('itCodeCol')) + '</th><th>' + esc(t('itNameCol')) + '</th><th>' + esc(t('cat')) + '</th><th>' + esc(t('mainQty')) + '</th><th>' + esc(t('unit')) + '</th><th>' + esc(t('status')) + '</th><th>' + esc(t('nearestExp')) + '</th><th>' + esc(t('reorder')) + '</th>' + (isMgr() ? '<th>' + esc(t('cost')) + '</th><th>' + esc(t('price')) + '</th><th>💰 ' + esc(t('refCostL')) + '</th>' : '') + '</tr></thead><tbody>' + L.map(function (i) {
     var st = itemStatus(i, C), q0 = qtyAt(i.code, MAINLOC), s = DB.stock.find(function (r) { return r.item === i.code && r.loc === MAINLOC && r.qty > 0; }), dd = s ? daysTo(s.expiry) : null;
     return '<tr><td class="n"><b>' + esc(i.code) + '</b></td><td class="wrap"><b>' + ihtml(i.code) + '</b>' + (isMgr() ? ' <button class="ghost sm ren" title="' + esc(t('itRenameBtn')) + '" onclick="itRename(' + q(i.code) + ')">✏️</button>' : '') + '</td><td>' + (isMgr() && !document.body.classList.contains('ro') ? '<select class="sm" style="min-width:130px" onchange="itSetCat(' + esc(q(i.code)) + ',this)">' + allItemCats().map(function (c) { return '<option value="' + esc(c) + '"' + (c === i.cat ? ' selected' : '') + '>' + esc(v(c)) + '</option>'; }).join('') + '</select>' : esc(v(i.cat || ''))) + '</td><td class="n qbig' + (q0 < i.reorder ? ' qlow' : '') + '">' + num(q0) + ctnSplit(i, q0) + '</td><td>' + unitBoth(i) + (isMgr() && !document.body.classList.contains('ro') ? ' <button class="ghost sm ren" title="' + esc(t('itUnitBtn')) + '" onclick="itSetUnit(' + q(i.code) + ')">✏️</button>' : '') + '</td><td><span class="st ' + STCLS[st[0]] + '">' + esc(t(st[1])) + '</span></td><td>' + (s && s.expiry ? '<span class="' + (dd !== null && dd <= EXPDAYS ? 'st warn' : '') + '">' + esc(String(s.expiry).slice(0, 10)) + '</span>' : '—') + '</td><td class="n">' + i.reorder + '</td>' + (isMgr() ? '<td class="n">' + num(i.cost) + '</td><td class="n">' + num(i.price) + '</td><td class="n">' + (i.refCost === undefined || i.refCost === '' ? '—' : num(i.refCost)) + (ME.readonly ? '' : ' <button class="ghost sm ren" onclick="refCostEdit(' + q(i.code) + ')">✏️</button>') + '</td>' : '') + '</tr>';
   }).join('') + '</tbody></table></div>' : '<p class="empty">' + esc(t('noItemsF')) + '</p>';
@@ -8906,7 +8922,7 @@ function renderSales() {
   var codes = DB.stock.filter(function (s) { return s.loc === loc && s.qty > 0 && IM[s.item]; }).map(function (s) { return s.item; });
   Object.keys(SV).forEach(function (c) { if (codes.indexOf(c) < 0 && IM[c]) codes.push(c); });
   var shown = codes.filter(function (c) { var i = IM[c]; return !f || [i.name, i.code, i.name_ur, i.name_hi, i.name_bn].join(' ').toLowerCase().indexOf(f) > -1 || (SV[c] && SV[c].qty); });
-  shown.sort(function (a, b) { var ca = IM[a].cat, cb = IM[b].cat; return ca === cb ? iname(a).localeCompare(iname(b)) : ca.localeCompare(cb); });
+  shown.sort(codeCmp);
   $('slBody').innerHTML = shown.length ? '<div class="tbl"><table><thead><tr><th>' + esc(t('item')) + '</th><th>' + esc(t('qty')) + '</th><th>' + esc(t('amount')) + '</th></tr></thead><tbody>' + shown.map(function (c) {
     var it = IM[c], sv = SV[c] || {}, have = qtyAt(c, loc), over = Number(sv.qty) > have;
     return '<tr id="slr-' + esc(c) + '" class="' + (over ? 'over' : sv.qty ? 'filled' : '') + '"><td class="wrap"><b>' + ihtml(c) + '</b><small class="sub2">' + esc(t('availShort')) + ': ' + num(have) + ' ' + esc(unitT(it.unit)) + ' — ' + num(it.price) + ' ' + esc(t('sar')) + '</small></td>' +
@@ -10579,7 +10595,7 @@ function trqNewCard() {
     h += '<div class="tqchips">' + chips.map(function (x) { return '<button type="button" class="' + (TRQ_CAT === x[0] ? 'on' : '') + '" onclick="TRQ_CAT=' + esc(JSON.stringify(x[0])) + ';renderTrq()">' + esc(x[1]) + ' <small>' + x[2] + '</small>' + (x[3] ? '<b class="cnt">' + x[3] + '</b>' : '') + '</button>'; }).join('') + '</div>';
     codes = codes.filter(function (k) { if (TRQ_CAT === '__sel') return !!TRQ_Q[k]; if (TRQ_CAT && trqItemCat(k, DB.items) !== TRQ_CAT) return false; return true; });
     codes = codes.filter(function (k) { if (isPk(k)) return TRQ_Q[k] || !f || (pkName(k) + ' ' + t('trqPackTag')).toLowerCase().indexOf(f) > -1; var x = IM[k]; return TRQ_Q[k] || !f || [x.name, x.code, x.name_ur, x.name_hi, x.name_bn].join(' ').toLowerCase().indexOf(f) > -1; })
-      .sort(function (a, b) { return (TRQ_Q[b] ? 1 : 0) - (TRQ_Q[a] ? 1 : 0) || (trqHave(b, from) > 0 ? 1 : 0) - (trqHave(a, from) > 0 ? 1 : 0) || (isPk(a) ? 1 : 0) - (isPk(b) ? 1 : 0) || (isPk(a) || isPk(b) ? 0 : newestFirst(a, b)); }).slice(0, 400);
+      .sort(function (a, b) { return (TRQ_Q[b] ? 1 : 0) - (TRQ_Q[a] ? 1 : 0) || (isPk(a) ? 1 : 0) - (isPk(b) ? 1 : 0) || (isPk(a) || isPk(b) ? 0 : codeCmp(a, b)); }).slice(0, 400);
     CPDEF = 'c';
     h += '<div class="qlist xlt" data-xk="tqn" data-xt="' + esc(t('trqItemsT')) + '" style="margin-top:12px">' + (codes.length ? codes.map(function (k) {
       var have = trqHave(k, from), val = TRQ_Q[k] || '';
