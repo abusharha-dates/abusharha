@@ -786,6 +786,8 @@ td.hot{color:var(--bad);font-weight:800}
 /* ===== نافذة التأكيد ===== */
 #modal{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px}
 #modal[hidden]{display:none!important}
+/* النوافذ الطويلة: المحتوى ينزل ويطلع داخل النافذة، وأزرار الإلغاء والاعتماد تبقى ظاهرة دايماً */
+#modal .mbox{display:flex;flex-direction:column;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px)}#modal #mMsg{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}#modal .mrow2,#modal h3{flex:none}
 #payModal{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px}#payModal[hidden]{display:none!important}
 #payModal .form input,#payModal .form select{width:100%}
 .mbox{background:var(--surface);color:var(--ink);border-radius:var(--r-lg);padding:20px;width:100%;max-width:440px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
