@@ -418,7 +418,7 @@ body.staffUI #tabs{display:none!important}
 .sfcard .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.sfcard .form label{min-width:0}.sfcard input,.sfcard select{width:100%;min-width:0;max-width:100%;box-sizing:border-box}.sfcard .form .wide{grid-column:1/-1}
 .pchip{display:inline-block;margin:4px 4px 0 0;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:700;cursor:pointer;border:1px dashed var(--line);background:var(--surface);color:var(--muted)}.pchip.on{border:1px solid #9ad3a6;background:#e6f4ea;color:#1e6b34}
 .pstbox .pstchips{display:flex;flex-wrap:wrap;gap:8px}.pstchip{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:7px 14px;font-weight:700;cursor:pointer}.pstchip b{background:var(--gold,#c9a227);color:#fff;border-radius:12px;padding:0 8px;margin-inline-start:4px}
-.cochips{margin-top:6px}.cochips .colbl{align-self:center;font-size:16px;margin-inline-end:2px}.cog{border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:7px}.corow{margin:6px 0}.corow select{max-width:100%}
+.cochips{margin-top:6px}.cochips .colbl{align-self:center;font-size:16px;margin-inline-end:2px}.cog{border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:7px}.corow{margin:6px 0}.corow select{max-width:100%}.coall{margin:6px 0;display:flex;gap:6px}.coits{max-height:45vh;overflow-y:auto;border-top:1px dashed var(--line);padding-top:4px}.coit{display:flex;align-items:flex-start;gap:6px;padding:4px 0;border-bottom:1px solid var(--line)}.coit input{margin-top:3px;flex:0 0 auto}
 .pstchip.ap{border-color:#3f8a55;background:var(--okbg,#e8f5e9)}.pstchip.ap b{background:#3f8a55}
 .pstleg{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--muted);margin-top:9px}.pstleg span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;margin-inline-end:5px;vertical-align:middle;background:var(--gold,#c9a227)}.pstleg .g::before{background:#3f8a55}
 .ii{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;border:1.5px solid currentColor;font-size:11.5px;font-weight:900;font-style:normal;margin-inline-start:6px;opacity:.75;cursor:pointer;vertical-align:middle;font-family:Georgia,serif}
@@ -4362,7 +4362,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 150, APP_DATE = '2026-11-10';
+var APP_BUILD = 152, APP_DATE = '2026-11-10';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -6679,7 +6679,7 @@ var Demo = (function () {
       var w = wuser(tok); mgr(w); map = map || {}; var n = 0, by = {};
       Object.keys(map).slice(0, 5000).forEach(function (code) { var it = D.items.find(function (i) { return String(i.code) === String(code); }); if (!it) return; var co0 = String(map[code] || '').trim().slice(0, 60);
         if (co0 && !D.suppliers.some(function (sp) { return sp.name === co0; })) D.suppliers.push({ no: supNext(), name: co0, created: now(), by: w.name });
-        if (String(it.co || '') !== co0) { it.co = co0; n++; by[co0 || '— بدون —'] = (by[co0 || '— بدون —'] || 0) + 1; } });
+        if (String(it.co || '') !== co0) { if (!co0 && it.co) it.coNo = it.co; it.co = co0; n++; by[co0 || '— بدون —'] = (by[co0 || '— بدون —'] || 0) + 1; } });
       if (n) { aud(w.name, 'ربط الأصناف بالشركات', n + ' صنف — ' + Object.keys(by).map(function (k) { return k + ': ' + by[k]; }).join('، ')); save(); }
       return allFor(w);
     },
@@ -8905,12 +8905,14 @@ var COSEL = null;
 function coOpen() {
   var G = {}; DB.items.forEach(function (i) { if (i.active === 'محذوف') return; var b = brandOf(i.name); if (!b) return; (G[b] = G[b] || []).push(i); });
   var sups = Object.keys(DB.supNo || {}), match = function (b) { var nb = arN(b).replace(/^ال/, ''); return sups.find(function (s0) { var ns = arN(s0); return ns.indexOf(nb) > -1; }) || ''; };
-  COSEL = Object.keys(G).sort(function (a, b) { return G[b].length - G[a].length; }).map(function (b) { var m0 = match(b), done = G[b].filter(function (i) { return i.co; }).length; return { b: b, items: G[b], co: m0 || b, isNew: !m0, on: done < G[b].length, done: done }; });
+  COSEL = Object.keys(G).sort(function (a, b) { return G[b].length - G[a].length; }).map(function (b) { var m0 = match(b), done = G[b].filter(function (i) { return i.co; }).length; var c0 = m0 || b, pk = G[b].map(function (i) { return i.co ? i.co === c0 : i.coNo !== c0; }); return { b: b, items: G[b], co: c0, isNew: !m0, on: G[b].some(function (i, j) { return !i.co && pk[j]; }), done: done, pick: pk }; });
   var none = DB.items.filter(function (i) { return i.active !== 'محذوف' && !brandOf(i.name) && !i.co; }).length;
   var html = '<p class="hint">' + esc(t('coHint')) + '</p>' + COSEL.map(function (g, k) { return '<div class="cog"><label class="chk"><input type="checkbox"' + (g.on ? ' checked' : '') + ' onchange="COSEL[' + k + '].on=this.checked"> <b>«' + esc(g.b) + '»</b> — ' + g.items.length + ' ' + esc(t('coItems')) + (g.done ? ' <small class="muted">(' + esc(t('coDone', g.done)) + ')</small>' : '') + '</label>' +
     '<div class="corow">← <select onchange="COSEL[' + k + '].co=this.value">' + (g.isNew ? '<option selected value="' + esc(g.b) + '">➕ ' + esc(t('coAsNew', g.b)) + '</option>' : '') + sups.map(function (s0) { return '<option value="' + esc(s0) + '"' + (!g.isNew && s0 === g.co ? ' selected' : '') + '>' + esc(s0) + '</option>'; }).join('') + '</select></div>' +
-    '<details><summary class="muted">' + esc(t('coShow')) + '</summary><small>' + g.items.slice(0, 60).map(function (i) { return esc(i.code + ' ' + i.name); }).join('<br>') + '</small></details></div>'; }).join('') + '<p class="muted">' + esc(t('coNoneN', none)) + '</p>';
-  ask({ title: '🏢 ' + t('coT'), html: html, ok: t('coApply') }).then(function (ok) { if (!ok) return; var M = {}; COSEL.forEach(function (g) { if (g.on) g.items.forEach(function (i) { if (!i.co) M[i.code] = g.co; }); }); if (!Object.keys(M).length) return toast(t('coNothing')); run('setItemCos', [M], '✅ ' + t('coSaved', Object.keys(M).length), function () { renderItems(); }); });
+    '<details><summary class="muted">' + esc(t('coShow')) + '</summary><div class="coall"><button type="button" class="btn ghost sm" onclick="coAll(' + k + ',true)">' + esc(t('coAllY')) + '</button> <button type="button" class="btn ghost sm" onclick="coAll(' + k + ',false)">' + esc(t('coAllN')) + '</button></div><div class="coits" id="coits' + k + '">' + g.items.map(function (i, j) { return '<label class="chk coit"><input type="checkbox"' + (g.pick[j] ? ' checked' : '') + ' onchange="COSEL[' + k + '].pick[' + j + ']=this.checked;COSEL[' + k + '].touched=1"> <small>' + esc(i.code + ' ' + i.name) + (i.co ? ' <span class="muted">(' + esc(i.co) + ')</span>' : '') + '</small></label>'; }).join('') + '</div></details></div>'; }).join('') + '<p class="muted">' + esc(t('coNoneN', none)) + '</p>';
+  ask({ title: '🏢 ' + t('coT'), html: html, ok: t('coApply') }).then(function (ok) { if (!ok) return; var M = {}, nA = 0, nR = 0; COSEL.forEach(function (g) { var go = g.on || g.touched; if (!go) return; g.items.forEach(function (i, j) { if (g.pick[j]) { if (!i.co) { M[i.code] = g.co; nA++; } } else if (i.co && (i.co === g.co || i.co === g.b)) { M[i.code] = ''; nR++; } }); }); if (!Object.keys(M).length) return toast(t('coNothing')); run('setItemCos', [M], '✅ ' + t('coSaved2', nA, nR), function () { renderItems(); }); });
+}
+function coAll(k, v) { var g = COSEL[k]; g.pick = g.items.map(function () { return v; }); g.touched = 1; var b = $('coits' + k); if (b) b.querySelectorAll('input').forEach(function (e) { e.checked = v; });
 }
 /* أزرار الشركات تحت الفئات (طلب النقل والتالف) */
 function coChips(codes, cur, setFn) { var C = {}; codes.forEach(function (k) { var x = IM[k]; if (x && x.co) C[x.co] = (C[x.co] || 0) + 1; }); var K = Object.keys(C).sort(function (a, b) { return C[b] - C[a]; }); if (!K.length) return ''; if (cur && !C[cur]) cur = '';
@@ -11596,15 +11598,15 @@ function psOpen(co) {
   ask({ title: '📤 ' + t('psTitle', co || t('coNone')), html: '<div id="psBox"></div>', ok: t('psDone'), cancel: t('cancel') }).then(function () { var S = PS; PS = null; if (!S || !S.sent) return;
     var ids = []; S.rows.forEach(function (g) { if (g.on && Number(g.q) > 0) ids = ids.concat(g.newIds); }); if (ids.length) prqDo('ordered', ids); });
   psRender(); }
-function psRender() { var bx = $('psBox'); if (!bx || !PS) return; var ph = psSupPhone(PS.co);
+function psRender() { var bx = $('psBox'); if (!bx || !PS) return; var ph = psSupPhone(PS.co), mm = $('mMsg'), l0 = bx.querySelector('.pslist'), sM = mm ? mm.scrollTop : 0, sL = l0 ? l0.scrollTop : 0;
   bx.innerHTML = '<div class="tqchips"><button type="button" class="' + (!PS.code ? 'on' : '') + '" onclick="PS.code=false;psRender()">' + esc(t('psNoCode')) + '</button><button type="button" class="' + (PS.code ? 'on' : '') + '" onclick="PS.code=true;psRender()">' + esc(t('psWithCode')) + '</button></div>' +
-    '<div class="pslist">' + PS.rows.map(function (g, i) { return '<label class="psrow' + (g.on ? '' : ' off') + '"><input type="checkbox"' + (g.on ? ' checked' : '') + ' onchange="PS.rows[' + i + '].on=this.checked;psRender()"><span class="psnm">' + esc(iname(g.item)) + '<small>' + esc(g.item) + '</small></span><input class="psq" type="number" min="0" step="any" inputmode="decimal" value="' + esc(g.q) + '" oninput="PS.rows[' + i + '].q=this.value;psMsg()"><small class="psu">' + esc(g.ul) + '</small></label>'; }).join('') + '</div>' +
+    '<div class="pslist">' + PS.rows.map(function (g, i) { return '<label class="psrow' + (g.on ? '' : ' off') + '"><input type="checkbox"' + (g.on ? ' checked' : '') + ' onchange="PS.rows[' + i + '].on=this.checked;this.parentNode.classList.toggle(\'off\',!this.checked);psMsg()"><span class="psnm">' + esc(iname(g.item)) + '<small>' + esc(g.item) + '</small></span><input class="psq" type="number" min="0" step="any" inputmode="decimal" value="' + esc(g.q) + '" oninput="PS.rows[' + i + '].q=this.value;psMsg()"><small class="psu">' + esc(g.ul) + '</small></label>'; }).join('') + '</div>' +
     '<span class="camrow"><input type="search" id="psQ" data-bc="1" autocomplete="off" placeholder="➕ ' + esc(t('psAddPh')) + '" value="' + esc(PS.q) + '" oninput="PS.q=this.value;psRes()">' + camBtn('psQ') + '</span><div id="psRes" class="psres"></div>' +
     '<textarea id="psMsgT" rows="7" class="psmsg"></textarea>' +
     '<div class="psph"><span>📞 ' + esc(t('psPhone')) + '</span><input id="psPh" type="tel" inputmode="tel" placeholder="05xxxxxxxx" value="' + esc(ph) + '"></div>' +
     '<div class="psbtns"><button type="button" class="psw" onclick="psSend(\'wa\')">🟢 ' + esc(t('psWa')) + '</button><button type="button" class="pst" onclick="psSend(\'tg\')">✈️ ' + esc(t('psTg')) + '</button><button type="button" class="ghost" onclick="psSend(\'cp\')">📋 ' + esc(t('psCopy')) + '</button></div>' +
     '<p class="hint">' + esc(t('psHint')) + '</p>';
-  psMsg(); psRes(); }
+  psMsg(); psRes(); var l1 = bx.querySelector('.pslist'); if (l1) l1.scrollTop = sL; if (mm) mm.scrollTop = sM; }
 function psMsg() { var m = $('psMsgT'); if (m) m.value = psText(); }
 function psRes() { var b = $('psRes'); if (!b || !PS) return; var f = String(PS.q || '').trim(), fN = arN(f.toLowerCase()); if (!f) { b.innerHTML = ''; return; }
   if (IM[f] && BCU[f]) return psAdd(f);
@@ -11846,7 +11848,7 @@ function mrCalc(data, ym, items) {
     cvPermW: '🏭 تحويل الأصناف في المستودع — تسجيل', permOther: 'باقي الصلاحيات',
     btStRecv: 'مستلم — بانتظار التعميد', btShortTag: 'ناقص', btRecvBy: 'استلمه {0} — {1}', btSentRecv: 'انرسل {0} — وصل {1}', btRecvOk: 'وصل {0}', coL: 'الشركة', coNone: 'بدون', coAdd: 'إضافة شركة/مندوب جديد', coNewQ: 'اسم الشركة/المندوب الجديد:', coT: 'ربط الأصناف بالشركات', coBtn: 'الشركات',
     coHint: 'النظام قرأ أسماء الأصناف واقترح الشركة (أم صالح وام صالح واحد، صرة وصره واحد…). اختر لكل مجموعة المندوب/الشركة من القائمة، أو تنضاف كمندوب جديد، وشيل الصح عن اللي ما تبغاه. الأصناف اللي لها شركة من قبل ما تتغيّر.',
-    coItems: 'صنف', coDone: '{0} مربوط من قبل', coAsNew: 'إضافة «{0}» كشركة جديدة', coShow: 'عرض الأصناف', coNoneN: '{0} صنف ما انقرأت له شركة من اسمه — تحددها من ✏️ لو تبغى.', coApply: 'اعتمد الشركات', coNothing: 'ما فيه شي جديد', coSaved: 'انربط {0} صنف بشركاته',
+    coItems: 'صنف', coDone: '{0} مربوط من قبل', coAsNew: 'إضافة «{0}» كشركة جديدة', coShow: 'عرض الأصناف', coNoneN: '{0} صنف ما انقرأت له شركة من اسمه — تحددها من ✏️ لو تبغى.', coApply: 'اعتمد الشركات', coNothing: 'ما فيه شي جديد', coSaved: 'انربط {0} صنف بشركاته', coSaved2: 'انربط {0} صنف · وانشالت الشركة من {1}', coAllY: '✅ الكل', coAllN: '⬜ ولا شي',
     bfBy: 'أدخلها {0} — {1}', bfDocS: 'الفاتورة', bfGoodsS: 'البضاعة', bfNoCur: 'الصنف ما له تكلفة سابقة', bfHigher: 'أعلى من التكلفة الحالية {0} بـ {1}%', bfLower: 'أقل من التكلفة الحالية {0} بـ {1}%', bfSame: 'قريب من التكلفة الحالية', bfNewCost: 'التكلفة الجديدة بعد الخصم ({0})',
     bfApplyHint: 'بعد الاعتماد: التكلفة المرجعية للأصناف تصير سعر هذي الفاتورة (شامل الضريبة وبعد الخصم) — وقيمة المستودع ما تتغيّر.', sar: 'ريال', phRetake: 'إعادة التصوير',
     shopT: 'قائمة المشتريات', shopCnt: '{0} صنف · {1} شركة', shopAllOpen: 'المفتوح كله', shopStNew: 'مطلوب', shopStDone: 'وصل', shopOld: 'من 3 أيام وأكثر', shopCoN: '{0} صنف', shopOrdCo: 'طلبت كل أصناف {0}', shopOrdAll: 'طلبتها كلها', shopOrd: 'طلبته من المورد', shopUnord: 'رجّعه مطلوب', shopArrived: 'وصل',
