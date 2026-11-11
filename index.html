@@ -449,6 +449,7 @@ body.staffUI #tabs{display:none!important}
 .trqseg3 button{flex:1;position:relative;min-width:0;border:0;background:none;border-radius:10px;padding:8px 2px 7px;font-weight:800;font-size:13px;line-height:1.35;color:var(--muted);box-shadow:none}
 .trqseg3 button i{display:block;font-style:normal;font-size:21px;margin-bottom:1px}.trqseg3 button.on{background:var(--gold);color:#2b1d08}
 .trqseg3 .cnt,.trqtabs .cnt{display:inline-block;min-width:18px;height:19px;line-height:19px;border-radius:10px;padding:0 5px;font-size:11.5px;font-weight:900;text-align:center;box-sizing:border-box}.trqseg3 .cnt{position:absolute;top:4px;inset-inline-start:6px;margin:0}.cnt.cr{background:var(--bad);color:#fff}.cnt.cy{background:var(--gold);color:#2b1d08}.trqseg3 button.on .cnt.cy{background:#2b1d08;color:var(--gold)}
+.prqbrbtn{border:1px dashed var(--gold)!important;color:var(--gold)!important;background:none!important}.prqbrrow{border:2px solid var(--gold);border-radius:14px;padding:6px;margin:8px 0}
 .trqinfo{display:flex;align-items:center;gap:4px;margin:0 2px 4px;color:var(--muted)}
 .trqtabs{display:flex;margin:0 0 10px;border-bottom:1.5px solid var(--line)}
 .trqtabs button{flex:1;min-width:0;background:none;border:0;border-radius:0;border-bottom:3px solid transparent;margin-bottom:-1.5px;padding:7px 2px 6px;font-size:12.5px;font-weight:700;line-height:1.4;color:var(--muted);box-shadow:none}
@@ -4362,7 +4363,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 152, APP_DATE = '2026-11-10';
+var APP_BUILD = 153, APP_DATE = '2026-11-11';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -7206,7 +7207,7 @@ function resetView(view) {
   if (view === 'home') { LAYOUT = null; MYHIDE = null; }
   if (view === 'convert') CV_EDIT = '';
   if (view === 'upl') UP = null;
-  if (view === 'trq') { TRQ_Q = {}; TRQ_OPEN = ''; TRQ_PH = null; TRQ_TAB = 'act'; }
+  if (view === 'trq') { TRQ_Q = {}; TRQ_OPEN = ''; TRQ_PH = null; TRQ_TAB = 'act'; TRQ_FORM = false; BT_FORM = false; }
 }
 function show(view) {
   if (!allowed(view)) view = 'home';
@@ -8070,14 +8071,16 @@ function btRender(kv) {
   /* 🔄 المرسل يسجّل: «من» = فرعه (ثابت لو له فرع واحد)، ويختار «إلى» — والفرع المستلم يأكد الاستلام */
   var mg0 = isMgr(), one = BT.id ? '' : myOne(), myL = mg0 ? [] : myLocs(), frV = keep.from || one || '', itemsMode = !BT.id || !!(BT.lines && BT.lines.length);
   var frOpts = mg0 || myL.length < 1 || BT.id ? btLocOpts(frV) : '<option value="">' + esc(t('chooseLoc')) + '</option>' + myL.filter(function (c) { return LM[c]; }).map(function (c) { return '<option value="' + esc(c) + '"' + (c === frV ? ' selected' : '') + '>' + esc(ln(c)) + '</option>'; }).join('');
-  var h = '<div class="card"><h2>🔄 ' + esc(BT.id ? t('btEditT', BT.id) : t('segTrqB')) + '</h2><div class="form">' +
+  var hideF = mg0 && !BT.id && !BT_FORM && !(BT.lines && BT.lines.length);
+  var h = '<div class="card"' + (hideF ? ' hidden' : '') + '><h2>🔄 ' + esc(BT.id ? t('btEditT', BT.id) : t('segTrqB')) + '</h2><div class="form">' +
     '<label><span>' + esc(t('btFrom')) + '</span><select id="btFrom"' + (one ? ' disabled' : '') + '>' + frOpts + '</select></label>' +
     '<label><span>' + esc(t('btTo')) + '</span><select id="btTo">' + btLocOpts(keep.to) + '</select></label>' +
     '<label><span>' + esc(t('date')) + '</span><input id="btDate" type="date" value="' + esc(keep.date) + '"></label>' +
     (BT.id ? '<label><span>' + esc(t('btAmt')) + '</span><input id="btAmt" type="number" min="0" step="any" inputmode="decimal" value="' + esc(keep.amt) + '"></label>' : btLinesHTML() + (mg0 && !(BT.lines && BT.lines.length) ? '<label><span>' + esc(t('btAmtOnly')) + '</span><input id="btAmt" type="number" min="0" step="any" inputmode="decimal" value="' + esc(keep.amt) + '"></label>' : '')) +
     '<label class="wide"><span>' + esc(t('btNote')) + '</span><input id="btNote" data-tph="optionalPh" placeholder="' + esc(t('optionalPh')) + '" value="' + esc(keep.note) + '"></label>' +
     '<div class="wide"><span class="lblx">' + esc(t('btDoc')) + ' <small class="muted">(' + esc(t('btOptional')) + ')</small></span><div class="clph" id="btDocBox"></div></div></div>' +
-    '<div class="mrow2" style="margin-top:14px">' + (BT.id ? '<button class="ghost" type="button" onclick="btReset()">' + esc(t('cancel')) + '</button>' : '') + '<button class="primary big" type="button" style="margin-top:0" onclick="btSave()">' + (isMgr() ? '💾 ' + esc(t('btSaveBtn')) : esc(t('btSendBtn'))) + '</button></div></div>';
+    '<div class="mrow2" style="margin-top:14px">' + (BT.id || (mg0 && BT_FORM) ? '<button class="ghost" type="button" onclick="BT_FORM=false;btReset()">' + esc(t('cancel')) + '</button>' : '') + '<button class="primary big" type="button" style="margin-top:0" onclick="btSave()">' + (isMgr() ? '💾 ' + esc(t('btSaveBtn')) : esc(t('btSendBtn'))) + '</button></div></div>';
+  if (hideF) h = addBar('BT_FORM=true;btRender()', t('btAddBtn')) + h;
   /* السجل */
   var M = BT.month, L = (DB.brTrans || []).filter(function (k) { return String(k.date).slice(0, 7) === M; }).sort(function (a, b) { return a.date === b.date ? (a.id < b.id ? 1 : -1) : a.date < b.date ? 1 : -1; });
   var S = {}; L.forEach(function (k) { if (k.status === 'ملغاة') return; (S[k.from] = S[k.from] || { o: 0, i: 0 }).o += k.amount; (S[k.to] = S[k.to] || { o: 0, i: 0 }).i += k.amount; });
@@ -8120,13 +8123,13 @@ function btSave() {
   if (LL.length) { var x1 = { from: $('btFrom').value || myOne(), to: $('btTo').value, date: $('btDate').value, note: $('btNote').value.trim(), lines: LL.map(function (l) { return { item: l.item, qty: l.qty }; }), doc: BT.doc ? (MODE === 'demo' ? { url: BT.doc.url, pdf: !!BT.doc.pdf, name: BT.doc.name || '' } : { data: BT.doc.data, mime: BT.doc.mime, name: BT.doc.name || '' }) : null };
     if (!x1.from || !x1.to) return toast('⚠️ ' + t('e_chooseloc'), true); if (x1.from === x1.to) return toast('⚠️ ' + t('e_btsame'), true);
     return ask({ title: t('btSendQ', ln(x1.from), ln(x1.to)), msg: x1.lines.map(function (l) { return '• ' + iname(l.item) + ' × ' + qCPtxt(l.item, l.qty); }).join('\n'), ok: t('btSendBtn') }).then(function (ok) {
-      if (ok) run('saveBrTrans', [x1], t('btSentTo', ln(x1.to)), function () { BT.lines = []; BT.doc = null; if ($('btNote')) $('btNote').value = ''; btRender(); });
+      if (ok) run('saveBrTrans', [x1], t('btSentTo', ln(x1.to)), function () { BT.lines = []; BT.doc = null; BT_FORM = false; if ($('btNote')) $('btNote').value = ''; btRender(); });
     }); }
   var d = BT.doc, x = { id: BT.id, from: $('btFrom').value, to: $('btTo').value, date: $('btDate').value, amount: Number(($('btAmt') || {}).value), note: $('btNote').value.trim(), doc: d && !d.existing ? (MODE === 'demo' ? { url: d.url, pdf: !!d.pdf, name: d.name || '' } : { data: d.data, mime: d.mime, name: d.name || '' }) : null };
   if (!x.from || !x.to) return toast('⚠️ ' + t('e_chooseloc'), true); if (x.from === x.to) return toast('⚠️ ' + t('e_btsame'), true);
   if (!(x.amount > 0)) return toast('⚠️ ' + t('e_amount'), true);
   ask({ title: t(x.id ? 'btEditQ' : 'btSaveQ', ln(x.from), ln(x.to), num(x.amount)), msg: x.date + (x.note ? ' — ' + x.note : ''), ok: t('save') }).then(function (ok) {
-    if (ok) run('saveBrTrans', [x], x.id ? t('btEdited') : isMgr() ? t('btSaved') : t('btSavedPend'), function () { BT.id = null; BT.doc = null; ['btAmt', 'btNote'].forEach(function (k) { if ($(k)) $(k).value = ''; }); btRender(); });
+    if (ok) run('saveBrTrans', [x], x.id ? t('btEdited') : isMgr() ? t('btSaved') : t('btSavedPend'), function () { BT.id = null; BT.doc = null; BT_FORM = false; ['btAmt', 'btNote'].forEach(function (k) { if ($(k)) $(k).value = ''; }); btRender(); });
   });
 }
 function btOp(id, op) {
@@ -9398,6 +9401,11 @@ function dmgPendN() { return (DB.dmgReq || []).filter(function (r) { return r.st
 function bcList(s0) { return String(s0 || '').split(/[|,\s]+/).filter(Boolean); }
 function bcFind(code) { code = String(code || '').trim(); if (!code) return null; var r = null; (DB.items || []).some(function (i) { if (bcList(i.ctnBarcode).indexOf(code) > -1) r = { it: i, u: 'c' }; else if (bcList(i.midBarcode).indexOf(code) > -1) r = { it: i, u: 'm' }; else if (bcList(i.barcode).indexOf(code) > -1) r = { it: i, u: 'p' }; return !!r; }); return r; }
 function bcApply(el) { var v0 = String(el.value || '').trim(); if (!/^[0-9-]{6,20}$/.test(v0) || IM[v0]) return false; var r = bcFind(v0); if (!r) return false; BCU[String(r.it.code)] = r.u; el.value = String(r.it.code); toast('🔖 ' + t('bcHit', r.it.code + ' ' + iname(r.it.code), r.u === 'c' ? bigUT(r.it) : r.u === 'm' ? unitT(r.it.midU || 'باكت') : unitT(r.it.unit))); return true; }
+/* 📌 الآيفون: الضغط على مربع ✅ داخل نافذة يرجّع القائمة لفوق — نحفظ مكان التمرير قبل الضغط ونرجّعه بعده */
+var MSCR = null;
+function mScrollers(el) { var L = [], m = $('mMsg'); while (el && el !== document.body) { if (el.scrollHeight > el.clientHeight + 2 && /auto|scroll/.test(getComputedStyle(el).overflowY)) L.push(el); if (el === m) break; el = el.parentElement; } return L; }
+['pointerdown', 'touchstart'].forEach(function (ev) { document.addEventListener(ev, function (e) { var t0 = e.target; if (!t0 || !t0.closest || !t0.closest('#modal')) return; var L = mScrollers(t0); MSCR = { at: Date.now(), L: L.map(function (x) { return [x, x.scrollTop]; }) }; }, { capture: true, passive: true }); });
+document.addEventListener('change', function (e) { var t0 = e.target; if (!MSCR || !t0 || t0.type !== 'checkbox' || !t0.closest('#modal') || Date.now() - MSCR.at > 1500) return; var S = MSCR; function fix() { S.L.forEach(function (p) { if (p[0].isConnected && Math.abs(p[0].scrollTop - p[1]) > 4) p[0].scrollTop = p[1]; }); } fix(); requestAnimationFrame(fix); setTimeout(fix, 60); setTimeout(fix, 250); }, true);
 document.addEventListener('input', function (e) { var el = e.target; if (el && el.tagName === 'INPUT' && el.id && (CAMIDS.indexOf(el.id) > -1 || el.id === 'trqFilter' || /^bcq/.test(el.id) || el.dataset.bc)) bcApply(el); }, true);
 var CAMIDS = ['slFilter', 'cvFilter', 'mvFilter', 'tkFilter', 'ctFind', 'itQ', 'wq'], CAMON = false;
 function camBtn(id) { return '<button type="button" class="cambtn" title="' + esc(t('scBtn')) + '" aria-label="' + esc(t('scBtn')) + '" onclick="scanInto(\'' + id + '\')">📷</button>'; }
@@ -11394,8 +11402,15 @@ function trqCanExec(r) { return r.status === 'جديد' && can('trqExec') && !ME
 function trqMine() { return trqAll().filter(function (r) { return trqCanExec(r) || trqCanRecv(r); }); }
 function trqStatus(r) { var k = { 'جديد': ['warn', 'trqS_new'], 'قيد النقل': ['cold', 'trqS_transit'], 'مستلم': ['ok', 'trqS_done'], 'ملغى': ['bad', 'trqS_cancel'] }[r.status] || ['', r.status]; return '<span class="st ' + k[0] + '">' + esc(t(k[1])) + '</span>'; }
 
+var TRQ_FORM = false, BT_FORM = false;
+/* ➕ للمدير: النموذج مخفي — يفتحه وقت الحاجة (زي الإقفال) */
+function addBar(on, lbl) { return '<div class="cladd"><button type="button" class="primary" onclick="' + on + '">➕ ' + esc(lbl) + '</button></div>'; }
 function renderTrq() {
-  var h = '', newC = can('trqReq') && !ME.readonly && TRQ_TAB !== 'bt' && !(TRQ_OPEN && TRQ_TAB === 'act') ? trqNewCard() : '';
+  var h = '', newC = '';
+  if (can('trqReq') && !ME.readonly && TRQ_TAB !== 'bt' && !(TRQ_OPEN && TRQ_TAB === 'act')) {
+    if (isMgr() && !TRQ_FORM && !Object.keys(TRQ_Q).length) newC = addBar('TRQ_FORM=true;renderTrq()', t('trqAddBtn'));
+    else newC = trqNewCard() + (isMgr() ? '<div class="cladd"><button type="button" class="ghost" onclick="TRQ_FORM=false;TRQ_Q={};renderTrq()">' + esc(t('cancel')) + '</button></div>' : '');
+  }
   var act = trqMine(), open = trqAll().filter(function (r) { return (r.status === 'جديد' || r.status === 'قيد النقل') && act.indexOf(r) < 0 && trqSeeC(r); }),
     hist = trqAll().filter(function (r) { return (r.status === 'مستلم' || r.status === 'ملغى') && trqSeeC(r); }).slice(0, 60);
   var shorts = trqShorts(), sOpen = shorts.filter(function (r) { return !r.shortRes; }).length;
@@ -11514,7 +11529,7 @@ function trqQT(k, q) { return isPk(k) ? num(q) + ' ' + trqUnit(k) : qCPtxt(k, q)
 function qCPtxt(k, q) { var i = IM[k] || {}, per = Number(i.perCtn) || 0; q = Number(q) || 0; if (per > 1 && q >= per) { var c = Math.floor(q / per), r0 = Math.round((q - c * per) * 1000) / 1000; return num(c) + ' ' + bigUT(i) + (r0 ? ' + ' + num(r0) + ' ' + unitT(i.unit) : ''); } return num(q) + ' ' + unitT(i.unit || 'حبة'); }
 function trqSplitT(k, val, from) { var q0 = Number(val) || 0; if (!q0) return ''; var av = trqAvail(k, from), tq = Math.min(q0, av), pq = Math.round((q0 - tq) * 1000) / 1000; if (!pq) return ''; return (tq > 0 ? '🚚 ' + esc(t('prqPartT', trqQT(k, tq))) + ' · ' : '') + '🛒 ' + esc(t('prqPartB', trqQT(k, pq))); }
 /* 🛒 طلبات الشراء (البضاعة الناقصة اللي طلبتها الفروع وما لها رصيد) */
-var PRQ_ST = 'open', PRQ_LOC = '', PRQ_SEL = {};
+var PRQ_ST = 'open', PRQ_LOC = '', PRQ_SEL = {}, PRQ_BR = '', PRQ_BRO = false;
 function prqAll() { return (DB.prq || []).slice().sort(function (a, b) { return String(a.created) < String(b.created) ? 1 : -1; }); }
 function prqNewN() { return (DB.prq || []).filter(function (r) { return r.status === 'جديد'; }).length; }
 /* 🛒 قائمة المشتريات المفتوحة: كل صنف سطر واحد بمجموعه وتوزيعه على الفروع، مرتّبة بالشركة */
@@ -11522,12 +11537,15 @@ var PRQ_OPEN_ST = ['جديد', 'تم الطلب'];
 function prqView() {
   if (PRQ_ST !== 'open' && PRQ_ST !== 'جديد' && PRQ_ST !== 'تم الطلب') return prqTable();
   var mg = isMgr() && !ME.readonly, A = prqAll(), O = A.filter(function (r) { return PRQ_OPEN_ST.indexOf(r.status) > -1 && (PRQ_ST === 'open' || r.status === PRQ_ST); });
+  /* 🏬 حسب الفرع (مخفي — يفتح وقت الحاجة) */
+  var BRN = {}; O.forEach(function (r) { var b = BRN[r.to] = BRN[r.to] || {}; b[r.item] = 1; }); var brL = Object.keys(BRN).sort(function (a, b) { return Object.keys(BRN[b]).length - Object.keys(BRN[a]).length; }); if (PRQ_BR && !BRN[PRQ_BR]) PRQ_BR = ''; if (PRQ_BR) O = O.filter(function (r) { return r.to === PRQ_BR; });
   var cnt = function (st) { return A.filter(function (r) { return st === 'open' ? PRQ_OPEN_ST.indexOf(r.status) > -1 : r.status === st; }).length; };
   var G = {}; O.forEach(function (r) { var k = String(r.item), g = G[k] = G[k] || { item: k, name: r.itemName, tot: 0, br: {}, ids: [], st: {}, eta: '', first: r.created, last: r.created }; g.tot += Number(r.qty) || 0; g.br[r.to] = (g.br[r.to] || 0) + (Number(r.qty) || 0); g.ids.push(r.id); g.st[r.status] = 1; if (r.eta && (!g.eta || r.eta < g.eta)) g.eta = r.eta; if (r.created < g.first) g.first = r.created; var la = r.addedAt || r.created; if (la > g.last) g.last = la; });
   var CO = {}; Object.keys(G).forEach(function (k) { var c = (IM[k] && IM[k].co) || ''; (CO[c] = CO[c] || []).push(G[k]); });
   var nItems = Object.keys(G).length, nCo = Object.keys(CO).filter(Boolean).length;
   var h = '<div class="card"><h2>🛒 ' + esc(t('shopT')) + ' <small class="muted">' + esc(t('shopCnt', nItems, nCo)) + '</small></h2>' + hlp(t(mg ? 'shopHintM' : 'shopHintW')) +
-    '<div class="tqchips">' + [['open', '📋 ' + t('shopAllOpen')], ['جديد', '🟡 ' + t('shopStNew')], ['تم الطلب', '🔵 ' + t('shopStOrd')], ['تم الشراء', '✅ ' + t('shopStDone')], ['ملغي', '✕ ' + t('prqStCancel')]].map(function (x) { return '<button type="button" class="' + (PRQ_ST === x[0] ? 'on' : '') + '" onclick="PRQ_ST=' + esc(JSON.stringify(x[0])) + ';renderTrq()">' + esc(x[1]) + ' <small>' + cnt(x[0]) + '</small></button>'; }).join('') + '</div>';
+    '<div class="tqchips">' + [['open', '📋 ' + t('shopAllOpen')], ['جديد', '🟡 ' + t('shopStNew')], ['تم الطلب', '🔵 ' + t('shopStOrd')], ['تم الشراء', '✅ ' + t('shopStDone')], ['ملغي', '✕ ' + t('prqStCancel')]].map(function (x) { return '<button type="button" class="' + (PRQ_ST === x[0] ? 'on' : '') + '" onclick="PRQ_ST=' + esc(JSON.stringify(x[0])) + ';renderTrq()">' + esc(x[1]) + ' <small>' + cnt(x[0]) + '</small></button>'; }).join('') + (brL.length && !PRQ_BR && !PRQ_BRO ? '<button type="button" class="prqbrbtn" onclick="PRQ_BRO=true;renderTrq()">🏬 ' + esc(t('prqByBr')) + ' ▾</button>' : '') + '</div>' +
+    (brL.length && (PRQ_BR || PRQ_BRO) ? '<div class="prqbrrow tqchips"><button type="button" class="' + (!PRQ_BR ? 'on' : '') + '" onclick="PRQ_BR=\'\';PRQ_BRO=false;renderTrq()">🏬 ' + esc(t('prqAllBr')) + '</button>' + brL.map(function (b) { return '<button type="button" class="' + (PRQ_BR === b ? 'on' : '') + '" onclick="PRQ_BR=' + esc(JSON.stringify(b)) + ';renderTrq()">' + esc(ln(b)) + ' <small>' + Object.keys(BRN[b]).length + '</small></button>'; }).join('') + '</div>' : '');
   if (!nItems) return h + '<p class="empty">' + esc(t('prqNoneNew')) + '</p></div>';
   var old3 = new Date(Date.now() - 3 * 864e5).toISOString().slice(0, 10);
   if (mg) h += '<div class="psall"><button type="button" class="btn sm" onclick="psAllTg()">✈️ ' + esc(t('psAllTg')) + '</button></div>';
@@ -11586,7 +11604,7 @@ function acsRender() { var b = $('acsBox'), d = ACS.d; if (!b || !d) return; var
       '<tr class="acssum"><td>' + esc(t('acsTot')) + '</td>' + R0.map(function (x) { return '<td class="n">' + x[1].u.tot + '</td>'; }).join('') + '</tr><tr><td>' + esc(t('acsAvg')) + '</td>' + R0.map(function (x) { return '<td class="n">' + num(x[1].avg) + '</td>'; }).join('') + '</tr></table></div>'; }
   b.innerHTML = h + '<p class="hint">' + esc(t('acsHint')) + '</p>'; }
 var PS = null;
-function psRows(co) { var A = prqAll().filter(function (r) { return PRQ_OPEN_ST.indexOf(r.status) > -1 && (((IM[r.item] && IM[r.item].co) || '') === co); }), G = {};
+function psRows(co) { var A = prqAll().filter(function (r) { return PRQ_OPEN_ST.indexOf(r.status) > -1 && (!PRQ_BR || r.to === PRQ_BR) && (((IM[r.item] && IM[r.item].co) || '') === co); }), G = {};
   A.forEach(function (r) { var k = String(r.item), g = G[k] = G[k] || { item: k, tot: 0, newIds: [], on: true }; g.tot += Number(r.qty) || 0; if (r.status === 'جديد') g.newIds.push(r.id); });
   return Object.keys(G).sort(codeCmp).map(function (k) { var g = G[k], u = psUnit(k); g.q = String(Math.round(g.tot / u.f * 1000) / 1000); g.ul = u.l; g.f = u.f; return g; }); }
 function psUnit(k) { var i = IM[k] || {}, per = Number(i.perCtn) || 0; return !isPk(k) && per > 1 ? { f: per, l: bigUT(i) } : { f: 1, l: isPk(k) ? trqUnit(k) : unitT(i.unit || 'حبة') }; }
@@ -11623,7 +11641,7 @@ function psSend(how) { if (!PS) return; var txt = ($('psMsgT') || {}).value || p
   else psCopy(txt); }
 function psCopy(txt) { var ok = function () { toast('📋 ' + t('psCopied')); }; try { if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(txt).then(ok, function () { psCopy0(txt); ok(); }); } catch (e) {} psCopy0(txt); ok(); }
 function psCopy0(txt) { var m = $('psMsgT'); if (m) { m.value = txt; m.focus(); m.select(); try { document.execCommand('copy'); } catch (e) {} } }
-function psAllTg() { var CO = {}; prqAll().forEach(function (r) { if (PRQ_OPEN_ST.indexOf(r.status) > -1) { var c = (IM[r.item] && IM[r.item].co) || ''; CO[c] = 1; } });
+function psAllTg() { var CO = {}; prqAll().forEach(function (r) { if (PRQ_OPEN_ST.indexOf(r.status) > -1 && (!PRQ_BR || r.to === PRQ_BR)) { var c = (IM[r.item] && IM[r.item].co) || ''; CO[c] = 1; } });
   var T = Object.keys(CO).sort(function (a, b) { return !a ? 1 : !b ? -1 : a < b ? -1 : 1; }).map(function (c) { PS = { co: c, rows: psRows(c), code: false }; return '🏢 ' + (c || t('coNone')) + '\n' + psText(); }); PS = null;
   if (!T.length) return toast(t('prqNoneNew')); run('prqTgSelf', [T], '✈️ ' + t('psTgDone')); }
 function prqDo(op, ids) {
@@ -11641,7 +11659,7 @@ function trqCreate() {
   var from = $('trqFrom').value, to = $('trqTo').value, lines = Object.keys(TRQ_Q).map(function (k) { return { item: k, qty: Number(TRQ_Q[k]) }; });
   if (!from) return toast('⚠️ ' + t('e_from'), true); if (!to) return toast('⚠️ ' + t('e_to'), true); if (from === to) return toast('⚠️ ' + t('e_same'), true);
   if (!lines.length) return toast('⚠️ ' + t('trqNoLines'), true);
-  run('trqOp', ['create', { from: from, to: to, lines: lines, note: $('trqNote').value.trim(), more: TRQ_MORE }], function () { var sk = DB.prqSkip || []; if (sk.length) setTimeout(function () { ask({ title: '🛒 ' + t('shopSkipT'), msg: t('shopSkipMsg') + '\n' + sk.map(function (x0) { return '• ' + x0; }).join('\n'), ok: t('iiOk') }); }, 400); TRQ_MORE = {}; return (DB.lastTrq ? t('trqSent', DB.lastTrq) : '') + (DB.lastPrq ? (DB.lastTrq ? ' + ' : '✅ ') + t('prqSent', DB.lastPrq) : '') || (sk.length ? '🛒 ' + t('shopSkipT') : ''); }, function () { TRQ_Q = {}; TRQ_CAT = ''; $('trqNote').value = ''; TRQ_TAB = DB.lastTrq ? 'open' : 'prq'; renderTrq(); });
+  run('trqOp', ['create', { from: from, to: to, lines: lines, note: $('trqNote').value.trim(), more: TRQ_MORE }], function () { TRQ_FORM = false; var sk = DB.prqSkip || []; if (sk.length) setTimeout(function () { ask({ title: '🛒 ' + t('shopSkipT'), msg: t('shopSkipMsg') + '\n' + sk.map(function (x0) { return '• ' + x0; }).join('\n'), ok: t('iiOk') }); }, 400); TRQ_MORE = {}; return (DB.lastTrq ? t('trqSent', DB.lastTrq) : '') + (DB.lastPrq ? (DB.lastTrq ? ' + ' : '✅ ') + t('prqSent', DB.lastPrq) : '') || (sk.length ? '🛒 ' + t('shopSkipT') : ''); }, function () { TRQ_Q = {}; TRQ_CAT = ''; $('trqNote').value = ''; TRQ_TAB = DB.lastTrq ? 'open' : 'prq'; renderTrq(); });
 }
 function trqCard(r) {
   var open = TRQ_OPEN === r.id, ex = trqCanExec(r), rc = trqCanRecv(r), mode = open ? (ex ? 'exec' : rc ? 'recv' : '') : '';
@@ -11848,7 +11866,7 @@ function mrCalc(data, ym, items) {
     cvPermW: '🏭 تحويل الأصناف في المستودع — تسجيل', permOther: 'باقي الصلاحيات',
     btStRecv: 'مستلم — بانتظار التعميد', btShortTag: 'ناقص', btRecvBy: 'استلمه {0} — {1}', btSentRecv: 'انرسل {0} — وصل {1}', btRecvOk: 'وصل {0}', coL: 'الشركة', coNone: 'بدون', coAdd: 'إضافة شركة/مندوب جديد', coNewQ: 'اسم الشركة/المندوب الجديد:', coT: 'ربط الأصناف بالشركات', coBtn: 'الشركات',
     coHint: 'النظام قرأ أسماء الأصناف واقترح الشركة (أم صالح وام صالح واحد، صرة وصره واحد…). اختر لكل مجموعة المندوب/الشركة من القائمة، أو تنضاف كمندوب جديد، وشيل الصح عن اللي ما تبغاه. الأصناف اللي لها شركة من قبل ما تتغيّر.',
-    coItems: 'صنف', coDone: '{0} مربوط من قبل', coAsNew: 'إضافة «{0}» كشركة جديدة', coShow: 'عرض الأصناف', coNoneN: '{0} صنف ما انقرأت له شركة من اسمه — تحددها من ✏️ لو تبغى.', coApply: 'اعتمد الشركات', coNothing: 'ما فيه شي جديد', coSaved: 'انربط {0} صنف بشركاته', coSaved2: 'انربط {0} صنف · وانشالت الشركة من {1}', coAllY: '✅ الكل', coAllN: '⬜ ولا شي',
+    coItems: 'صنف', coDone: '{0} مربوط من قبل', coAsNew: 'إضافة «{0}» كشركة جديدة', coShow: 'عرض الأصناف', coNoneN: '{0} صنف ما انقرأت له شركة من اسمه — تحددها من ✏️ لو تبغى.', coApply: 'اعتمد الشركات', coNothing: 'ما فيه شي جديد', coSaved: 'انربط {0} صنف بشركاته', coSaved2: 'انربط {0} صنف · وانشالت الشركة من {1}', prqByBr: 'حسب الفرع', trqAddBtn: 'إضافة طلب من المستودع', btAddBtn: 'إضافة نقل بين الفروع', prqAllBr: 'كل الفروع', coAllY: '✅ الكل', coAllN: '⬜ ولا شي',
     bfBy: 'أدخلها {0} — {1}', bfDocS: 'الفاتورة', bfGoodsS: 'البضاعة', bfNoCur: 'الصنف ما له تكلفة سابقة', bfHigher: 'أعلى من التكلفة الحالية {0} بـ {1}%', bfLower: 'أقل من التكلفة الحالية {0} بـ {1}%', bfSame: 'قريب من التكلفة الحالية', bfNewCost: 'التكلفة الجديدة بعد الخصم ({0})',
     bfApplyHint: 'بعد الاعتماد: التكلفة المرجعية للأصناف تصير سعر هذي الفاتورة (شامل الضريبة وبعد الخصم) — وقيمة المستودع ما تتغيّر.', sar: 'ريال', phRetake: 'إعادة التصوير',
     shopT: 'قائمة المشتريات', shopCnt: '{0} صنف · {1} شركة', shopAllOpen: 'المفتوح كله', shopStNew: 'مطلوب', shopStDone: 'وصل', shopOld: 'من 3 أيام وأكثر', shopCoN: '{0} صنف', shopOrdCo: 'طلبت كل أصناف {0}', shopOrdAll: 'طلبتها كلها', shopOrd: 'طلبته من المورد', shopUnord: 'رجّعه مطلوب', shopArrived: 'وصل',
