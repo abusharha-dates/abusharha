@@ -1009,6 +1009,7 @@ body.nomgr .ivact button:nth-child(n+2),body.nomgr .payh button,body.nomgr #ivCr
 .pdtot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:14px}.pdtot b{font-size:17px;color:var(--gold)}
 .pdbtns{display:flex;gap:8px;margin-top:10px}.pdbtns .btn{flex:1}
 .cladd{display:flex;justify-content:flex-end;margin:0 0 10px}.cladd button{font-weight:800;padding:10px 16px}
+.ivpen{background:none!important;border:0!important;padding:0 4px!important;font-size:13px;opacity:.75;cursor:pointer;vertical-align:middle}.ivpsel{font-size:13px;padding:4px 6px;width:96px;min-width:0}.ivdetw{position:sticky;right:0;width:min(640px,calc(100vw - 72px));white-space:normal}
 .cfhead{text-align:center;color:#c62828;font-weight:800;font-size:22px;text-decoration:underline;margin-bottom:10px}
 table.cft{width:100%;border-collapse:collapse;border:2px solid var(--ink)}
 table.cft td,table.cft th{border:1.5px solid var(--ink);padding:8px 10px;font-size:16px;vertical-align:middle}
@@ -1816,14 +1817,16 @@ function rolePerms(role, settings) { var RM = rolePermMap(settings); if (Array.i
 /* ===== فواتير الاستلام (مشتركة بين الخادم والواجهة) ===== */
 var BR_TYPE = 'فاتورة فرع'; // فاتورة مشتريات لفرع (ليس المستودع): مبلغ + مندوب + صورة فقط، بدون أصناف ولا تؤثر على المخزون
 var OB_TYPE = 'رصيد افتتاحي'; // رصيد افتتاحي على المورد/المندوب: دين آجل بدون أصناف ولا يدخل في المشتريات
-var INV_TYPES = ['فاتورة مشتريات', 'مرتجع مشتريات'], PAY_TYPES = ['نقدي', 'شبكة', 'تحويل', 'آجل'];
+var INV_TYPES = ['فاتورة مشتريات', 'مرتجع مشتريات'], PAY_TYPES = ['نقدي', 'تحويل', 'آجل'];
+/* «شبكة» انلغت من الفواتير وصارت «تحويل» (نفس الحساب: البنك) — أي قيمة قديمة توصل تتحوّل */
+function normPay(p) { return p === 'شبكة' ? 'تحويل' : p; }
 /* «داخل الكرتون» ثابت من بيانات الصنف، إلا الأصناف بالكيلو (وزن الكرتون يختلف) فيُعدَّل */
 function ctnLocked(it) { return !!it && Number(it.perCtn) > 1 && fixUnit(it.unit) !== 'كجم'; }
 function invNormalize(x, hasItem, getItem) {
   x = x || {};
   var invType = INV_TYPES.indexOf(x.invType) > -1 ? x.invType : '';
   if (!invType) throw new Error('e_invtype');
-  var payType = PAY_TYPES.indexOf(x.payType) > -1 ? x.payType : '';
+  var payType = PAY_TYPES.indexOf(normPay(x.payType)) > -1 ? normPay(x.payType) : '';
   if (!payType) throw new Error('e_invpay');
   var supplier = String(x.supplier || '').trim();
   if (!supplier) throw new Error('e_invsup');
@@ -1846,7 +1849,7 @@ function invNormalize(x, hasItem, getItem) {
   return { invType: invType, payType: payType, supplier: supplier, supInv: String(x.supInv || '').trim(), date: date, lines: lines, total: Math.round(total * 100) / 100, loc: String(x.loc || '').trim() };
 }
 /* متابعة الآجل: مجموع المدفوع لفاتورة */
-var PAY_METHODS = ['نقدي', 'شبكة', 'تحويل'];
+var PAY_METHODS = ['نقدي', 'تحويل'];
 function invPaid(id, pays) { var s = 0; (pays || []).forEach(function (p) { if (String(p.invId) === String(id)) s += Number(p.amount) || 0; }); return Math.round(s * 100) / 100; }
 /* الإقفال اليومي: مدى + فيزا + ماستر كارد + نقدي */
 var CLOSE_F = [['mada', 'مدى'], ['visa', 'فيزا'], ['master', 'ماستر كارد'], ['cash', 'نقدي']];
@@ -4363,7 +4366,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 153, APP_DATE = '2026-11-11';
+var APP_BUILD = 155, APP_DATE = '2026-11-11';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -4670,7 +4673,9 @@ var Demo = (function () {
   function aud(u, a, d) { D.audit.push({ date: now(), user: u, action: a, details: d || '' }); }
   function desc(m) { return m.type + ' ' + Number(m.qty) + ' × ' + nm(m.item) + (m.from ? ' من ' + lname(m.from) : '') + (m.to ? ' إلى ' + lname(m.to) : ''); }
   function user(tok) { var n = String(tok || '').replace(/^demo:/, ''), w = D.workers.find(function (x) { return x.name === n; }); if (!w || w.active === 'موقوف') throw new Error('e_auth'); return w; }
-  function wuser(tok) { var w = user(tok); if (w.readonly === 'نعم') throw new Error('e_readonly'); return w; }
+  /* مرة وحدة: الفواتير والسدادات المسجّلة «شبكة» تصير «تحويل» — الأصل محفوظ في payWas/mWas وفي سجل التدقيق */
+  function migPay(by) { if (D.migPay) return; var n = 0, m = 0; (D.invoices || []).forEach(function (x) { if (x.payType === 'شبكة') { x.payWas = 'شبكة'; x.payType = 'تحويل'; n++; } }); (D.invPays || []).forEach(function (p0) { if (p0.method === 'شبكة') { p0.mWas = 'شبكة'; p0.method = 'تحويل'; m++; } }); D.migPay = 1; if (n || m) aud(by || 'النظام', 'تحويل الشبكة إلى تحويل', 'فواتير: ' + n + ' · سدادات: ' + m + ' (الأصل محفوظ)'); }
+  function wuser(tok) { var w = user(tok); migPay(w.name); if (w.readonly === 'نعم') throw new Error('e_readonly'); return w; }
   /* البحث عن المستخدم برقمه أو اسمه */
   function wByLogin(n) { n = String(n || '').trim(); return D.workers.find(function (x) { return (String(x.uno || '') === n || x.name === n) && x.active !== 'موقوف' && x.nologin !== 'نعم'; }); }
   function nextUno() { var m = 100; D.workers.forEach(function (x) { m = Math.max(m, Number(x.uno) || 0); }); return m + 1; }
@@ -5615,6 +5620,11 @@ var Demo = (function () {
       return { from: from, days: days, all: all, me: w.name, users: U, mgrs: D.workers.filter(function (x) { return x.role === MANAGER_ROLE && x.active !== 'موقوف'; }).map(function (x) { return x.name; }) };
     },
     /* 📤 إرسال الطلب للمندوب: جوال المندوب (يتحفظ مرة وحدة) + نسخة الرسالة لتيليجرام المدير نفسه */
+    setInvPay: function (tok, id, pay) {
+      var w = wuser(tok); mgr(w); var x = D.invoices.find(function (z) { return String(z.id) === String(id); }); if (!x) throw new Error('e_notfound');
+      if (x.status !== 'بانتظار التعميد') throw new Error('e_notfound'); pay = normPay(String(pay || '')); if (PAY_TYPES.indexOf(pay) < 0) throw new Error('e_type');
+      var old = x.payType || ''; if (old === pay) return allFor(w); x.payType = pay; aud(w.name, 'تعديل نوع الدفع', 'فاتورة #' + x.id + ': ' + (old || '—') + ' ← ' + pay + ' (قبل الاعتماد)'); save(); return allFor(w);
+    },
     setSupPhone: function (tok, name, phone) {
       var w = wuser(tok); mgr(w); var sp = D.suppliers.find(function (x) { return x.name === String(name || ''); }); if (!sp) throw new Error('e_notfound');
       var ph = String(phone || '').replace(/[^\d+]/g, '').slice(0, 16), old = sp.phone || ''; if (ph === old) return allFor(w);
@@ -5879,12 +5889,12 @@ var Demo = (function () {
           invSup(sup, w.name); R0.obs++; R0.obSum += a; });
         /* 2) الفواتير بالمبلغ (يومية نقد/تحويل + آجل) */
         (x.invs || []).forEach(function (v) { var sup = String(v.supplier || '').trim(), a = r2(v.amount), loc = String(v.loc || ''); if (!sup || !(a > 0)) return; if (!okL(loc)) { R0.warn.push('فاتورة بفرع غير معروف: ' + v.locName + ' — ' + sup + ' ' + a); return; }
-          var pt = PAY_TYPES.indexOf(v.payType) > -1 ? v.payType : 'نقدي';
+          var pt = PAY_TYPES.indexOf(normPay(v.payType)) > -1 ? normPay(v.payType) : 'نقدي';
           D.invoices.push({ pendN: '', id: nid(), brNo: brNext(), date: v.date, created: tm, user: w.name, invType: BR_TYPE, payType: pt, supplier: sup, supInv: '', total: a, count: 0, status: '', edited: '', loc: loc, doc: '', docPdf: false, docName: '', note: String(v.note || '').trim(), imp: bid, posted: PST });
           invSup(sup, w.name); R0.invs++; R0.invSum += a; });
         /* 3) السداد: ينزل على فواتير الآجل المفتوحة للمورد (الأقدم أولاً) */
         (x.pays || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; }).forEach(function (p) {
-          var sup = String(p.supplier || '').trim(), left = r2(p.amount), meth = PAY_TYPES.indexOf(p.method) > -1 ? p.method : 'نقدي'; if (!sup || !(left > 0)) return;
+          var sup = String(p.supplier || '').trim(), left = r2(p.amount), meth = PAY_TYPES.indexOf(normPay(p.method)) > -1 ? normPay(p.method) : 'نقدي'; if (!sup || !(left > 0)) return;
           var open = D.invoices.filter(function (v) { return v.supplier === sup && !v.status && v.payType === 'آجل' && v.invType !== 'مرتجع مشتريات' && String(v.date).slice(0, 10) <= p.date; }).sort(function (a, b) { return String(a.date) < String(b.date) ? -1 : String(a.date) > String(b.date) ? 1 : Number(a.id) - Number(b.id); });
           open.forEach(function (v) { if (left < 0.005) return; var rem = r2(v.total - invPaid(v.id, D.invPays)); if (rem < 0.005) return; var a = Math.min(rem, left);
             D.invPays.push({ id: 'PY' + bid + '-' + D.invPays.length, invId: v.id, date: p.date, amount: r2(a), method: meth, note: 'دفتر ' + ym + (p.note ? ' — ' + p.note : ''), user: w.name, created: tm, imp: bid, posted: PST }); left = r2(left - a); R0.pays++; R0.paySum += r2(a); });
@@ -6283,7 +6293,7 @@ var Demo = (function () {
       if (h.status) throw new Error('e_invcancelled'); if (h.payType !== 'آجل') throw new Error('e_notcredit');
       var amt = Math.round(Number(p.amount) * 100) / 100; if (!(amt > 0)) throw new Error('e_amount');
       var rem = Math.round((Number(h.total) - invPaid(invId, D.invPays)) * 100) / 100; if (amt > rem + 0.001) throw new Error('e_payover|' + rem);
-      var method = PAY_METHODS.indexOf(p.method) > -1 ? p.method : 'نقدي';
+      var method = PAY_METHODS.indexOf(normPay(p.method)) > -1 ? normPay(p.method) : 'نقدي';
       D.invPays.push({ id: 'PY' + Date.now(), invId: h.id, date: /^\d{4}-\d\d-\d\d$/.test(String(p.date || '')) ? p.date : now().slice(0, 10), amount: amt, method: method, note: String(p.note || '').trim(), user: w.name, created: now() });
       aud(w.name, 'سداد آجل', 'فاتورة رقم ' + invId + ' (' + h.supplier + '): دفع ' + amt + ' ريال ' + method + ' — المتبقي ' + Math.round((rem - amt) * 100) / 100); save(); return allFor(w);
     },
@@ -6392,7 +6402,7 @@ var Demo = (function () {
     },
     saveBranchInv: function (tok, x) {
       var w = wuser(tok); needP(w, 'recvBr'); x = x || {};
-      var BL = brInvLines(x), sup = String(x.supplier || '').trim(), amt = BL ? BL.total : Math.round(Number(x.amount) * 100) / 100, date = String(x.date || '').slice(0, 10), loc = String(x.loc || ''), pay = PAY_TYPES.indexOf(x.payType) > -1 ? x.payType : 'نقدي';
+      var BL = brInvLines(x), sup = String(x.supplier || '').trim(), amt = BL ? BL.total : Math.round(Number(x.amount) * 100) / 100, date = String(x.date || '').slice(0, 10), loc = String(x.loc || ''), pay = PAY_TYPES.indexOf(normPay(x.payType)) > -1 ? normPay(x.payType) : 'نقدي';
       if (!BL && w.role !== MANAGER_ROLE && !x.id) throw new Error('e_bfitems');
       var setBL = function (h0) { if (!BL) return; h0.lines = BL.lines; h0.tax = BL.tax; h0.disc = BL.disc; h0.sub = BL.sub; h0.count = BL.lines.length; var GL = goodsList(x, h0.goodsL || (h0.goods ? [h0.goods] : [])); if (GL) { h0.goodsL = GL; h0.goods = GL[0] || ''; } if (!h0.goods && w.role !== MANAGER_ROLE) throw new Error('e_bfgoods'); };
       var L = D.locations.find(function (l) { return l.code === loc; });
@@ -7156,9 +7166,9 @@ function allowed(view) {
 }
 function viewTitle(view) { if (view === 'pass') return t(isMgr() ? 'pwStaffTile' : 'pass'); return view === 'move' ? t(MVINFO[MVT].lbl) : view === 'tasks' ? t(isMgr() ? 'tasksMgr' : 'myTasks') : t(view); }
 function buildNav() {
-  var vis = ['home', 'close', 'safe', 'trq', 'invoices', 'tasks', 'where', 'count', 'log', 'items', 'purch', 'convert', 'expenses', 'maint', 'dash', 'att', 'audit', 'mrep', 'upl', 'profit', 'obl', 'hr', 'pass'].filter(allowed);
+  var vis = ['home', 'close', 'safe', 'trq', 'invoices', 'tasks', 'where', 'count', 'log', 'items', 'purch', 'convert', 'expenses', 'maint', 'dash', 'att', 'audit', 'post', 'mrep', 'upl', 'profit', 'obl', 'hr', 'pass'].filter(allowed);
   var hidN = myHidden(); NAVALL = vis.slice(1); vis = ['home'].concat(navKeys(NAVALL, hidN).filter(function (x) { return x.on; }).map(function (x) { return x.k; }));
-  var ICON = { close: '💰', pass: '👥', invoices: '🧾', purch: '🛒', home: '🏠', dash: '📊', reports: '📈', where: '📍', log: '🧾', tasks: '📋', count: '🧮', convert: '⚖️', bconv: '🔄', ops: '🛠️', expenses: '💸', maint: '🔧', items: '🗃️', att: '🕘', hr: '🧑‍💼', profit: '💹', mrep: '🗓️', upl: '📤', safe: '🏦', post: '📌', trq: '🚚', audit: '🛡️', obl: '🏢' };
+  var ICON = { post: '📥', close: '💰', pass: '👥', invoices: '🧾', purch: '🛒', home: '🏠', dash: '📊', reports: '📈', where: '📍', log: '🧾', tasks: '📋', count: '🧮', convert: '⚖️', bconv: '🔄', ops: '🛠️', expenses: '💸', maint: '🔧', items: '🗃️', att: '🕘', hr: '🧑‍💼', profit: '💹', mrep: '🗓️', upl: '📤', safe: '🏦', post: '📌', trq: '🚚', audit: '🛡️', obl: '🏢' };
   $('tabs').innerHTML = vis.map(function (x) { return '<button data-v="' + x + '" class="' + (x === CUR ? 'on' : '') + '">' + ICON[x] + ' ' + esc(viewTitle(x)) + (x === 'tasks' ? '<b class="tbadge"></b>' : '') + '</button>'; }).join('');
   $('tabs').innerHTML += '<button class="navcfg" data-v="__cfg" title="' + esc(t('navCfg')) + '" aria-label="' + esc(t('navCfg')) + '">⚙️</button>';
   $('tabs').querySelectorAll('button').forEach(function (b) { b.onclick = function () { if (b.dataset.v === '__cfg') { NAVED = navKeys(NAVALL, myHidden()); show('home'); renderHome(); window.scrollTo(0, 0); } else show(b.dataset.v); }; });
@@ -7466,7 +7476,7 @@ function renderRecv() {
   $('ivNo').textContent = RV.edit ? RV.edit : (DB.nextInv || 1);
   $('ivEditTag').hidden = !RV.edit; $('ivEditTag').textContent = RV.edit ? t('ivEditing') : '';
   $('ivCancelEdit').hidden = !RV.edit; $('ivSave').textContent = RV.edit ? t('ivSaveEdit') : t('ivSave');
-  $('ivPay').innerHTML = '<option value="">' + esc(t('ivChoose')) + '</option>' + PAY_TYPES.map(function (p) { return '<option value="' + esc(p) + '">' + esc(v(p)) + '</option>'; }).join(''); $('ivPay').value = H.payType;
+  $('ivPay').innerHTML = '<option value="">' + esc(t('ivChoose')) + '</option>' + PAY_TYPES.map(function (p) { return '<option value="' + esc(p) + '">' + esc(v(p)) + '</option>'; }).join(''); $('ivPay').value = normPay(H.payType);
   $('ivType').innerHTML = INV_TYPES.map(function (p) { return '<option value="' + esc(p) + '">' + esc(v(p)) + '</option>'; }).join(''); $('ivType').value = H.invType;
   $('ivDate').value = H.date || todayS();
   /* 📍 مكان الفاتورة يثبت على مكان المستخدم (المستودع حقه) — ولو له أكثر من مكان يختار من أماكنه بس */
@@ -7855,10 +7865,10 @@ function renderInvoices() {
   $('ivList').innerHTML = L.length ? '<div class="tbl xlt" data-xk="iv" data-xt="' + esc(t('ivListT')) + '"><table><thead><tr><th>' + esc(t('invNo')) + '</th><th>' + esc(t('invDate')) + '</th><th>' + esc(t('invType')) + '</th><th>' + esc(t('ivLoc')) + '</th><th>' + esc(t('supplier')) + '</th><th>' + esc(t('supInv')) + '</th><th>' + esc(t('payType')) + '</th><th>' + esc(t('ivBy')) + '</th><th>' + esc(t('ivCount')) + '</th><th>' + esc(t('total')) + '</th><th>' + esc(t('status')) + '</th><th></th></tr></thead><tbody>' + L.map(function (x) {
     var lines = LN[x.id] || [], ret0 = x.invType === 'مرتجع مشتريات', ob = x.invType === OB_TYPE, br = x.invType === BR_TYPE, open = IVOPEN[x.id];
     var pnd = x.status === 'بانتظار التعميد';
-    var row = '<tr class="' + (pnd ? 'pendrow' : x.status ? 'cxl' : '') + '"><td class="n">' + (br && x.brNo ? '<b>' + esc(brLbl(x)) + '</b><small class="sub2">#' + esc(x.id) + '</small>' : '<b>' + esc(x.id) + '</b>') + '</td><td>' + esc(String(x.date).slice(0, 10)) + '</td><td><span class="st ' + (ret0 ? 'warn' : ob || br ? 'info' : 'ok') + '">' + (ob ? '📌 ' : br ? '🏪 ' : '') + esc(v(x.invType)) + '</span>' + (ob && x.note ? '<small class="sub2">' + esc(x.note) + '</small>' : '') + '</td><td>' + esc(ln(x.loc || MAINLOC)) + '</td><td class="wrap">' + nmH(x.supplier) + '</td><td>' + esc(x.supInv || '—') + '</td><td>' + payBadge(x.payType) + '</td><td><bdi>' + esc(nmT(x.user)) + '</bdi></td><td class="n">' + (ob || br ? '—' : lines.length) + '</td><td class="n"><b>' + num(x.total) + '</b></td>' +
+    var row = '<tr class="' + (pnd ? 'pendrow' : x.status ? 'cxl' : '') + '"><td class="n">' + (br && x.brNo ? '<b>' + esc(brLbl(x)) + '</b><small class="sub2">#' + esc(x.id) + '</small>' : '<b>' + esc(x.id) + '</b>') + '</td><td>' + esc(String(x.date).slice(0, 10)) + '</td><td><span class="st ' + (ret0 ? 'warn' : ob || br ? 'info' : 'ok') + '">' + (ob ? '📌 ' : br ? '🏪 ' : '') + esc(v(x.invType)) + '</span>' + (ob && x.note ? '<small class="sub2">' + esc(x.note) + '</small>' : '') + '</td><td>' + esc(ln(x.loc || MAINLOC)) + '</td><td class="wrap">' + nmH(x.supplier) + '</td><td>' + esc(x.supInv || '—') + '</td><td>' + payBadge(x.payType) + (pnd && isMgr() && !ME.readonly ? '<button type="button" class="ivpen" title="' + esc(t('exPayL')) + '" onclick="ivPayEd(' + esc(q(x.id)) + ',this)">✏️</button>' : '') + '</td><td><bdi>' + esc(nmT(x.user)) + '</bdi></td><td class="n">' + (ob || br ? '—' : lines.length) + '</td><td class="n"><b>' + num(x.total) + '</b></td>' +
       '<td class="wrap">' + (isCredit(x) ? crBadge(x) + ' ' : '') + (pnd ? '<span class="st warn">⏳ ' + esc(t('ivPendTag')) + '</span>' + (isMgr() && !ME.readonly ? '<div style="display:flex;gap:6px;margin-top:6px"><button class="primary sm" onclick="invAppr(' + q(x.id) + ',true)">✅ ' + esc(t('ivApprBtn')) + '</button><button class="ghost sm" onclick="invAppr(' + q(x.id) + ',false)">✕ ' + esc(t('ivRejBtn')) + '</button></div>' : '') : x.status ? '<span class="st bad">' + esc(x.status) + '</span>' : (x.apprBy ? '<span class="st ok">' + esc(t('ivApprTag', x.apprBy)) + '</span> ' : '') + x.edited ? '<span class="st warn">' + esc(t('ivEditedTag')) + '</span><small class="muted"> ' + esc(String(x.edited)) + '</small>' : '<span class="st ok">' + esc(t('ivOk')) + '</span>') + (x.invType !== OB_TYPE && !x.status ? postChip('inv', x.id, x.posted) : '') + '</td>' +
       '<td class="ivact"><button class="btn sm" onclick="invToggle(' + q(x.id) + ')">' + (open ? '▲' : '👁') + '</button>' + (x.doc && (x.docPdf || !(x.docsEx || []).length) ? '<button class="btn sm" title="' + esc(t('ivDocLbl')) + '" onclick="ivDocOpen(' + q(x.doc) + ')">' + (x.docPdf ? '📄' : '🖼️') + '</button>' : '') + ivPhBtn(x) + (isCredit(x) && creditInfo(x).rem > 0.001 ? '<button class="primary sm" onclick="invPay(' + q(x.id) + ')">💵 ' + esc(t('pyBtn')) + '</button>' : '') + (pnd || x.status ? '' : '<button class="btn sm" onclick="' + (ob ? 'obEdit' : br ? 'bfEdit' : 'invEdit') + '(' + q(x.id) + ')">✏️ ' + esc(t('ivEditBtn')) + '</button><button class="ghost sm" onclick="invCancel(' + q(x.id) + ')">✕</button>') + '</td></tr>';
-    if (open && (ob || br)) row += '<tr class="ivdet"><td colspan="12">' + (br ? '<p class="muted" style="margin:0 0 6px">' + esc(t('bfNoItems')) + '</p>' : '') + (x.payType === 'آجل' ? payHist(x) : '') + '</td></tr>';
+    if (open && (ob || br)) row += '<tr class="ivdet"><td colspan="12">' + (br ? ((x.lines || []).length ? '<div class="ivdetw">' + bfReviewHTML(x) + '</div>' : '<p class="muted" style="margin:0 0 6px">' + esc(t('bfNoItems')) + '</p>') : '') + (x.payType === 'آجل' ? payHist(x) : '') + '</td></tr>';
     else if (open) row += '<tr class="ivdet"><td colspan="12">' + xlBox('iv' + x.id, '📦 ' + esc(t('ivItemsT')), lines.length, '<table class="sub"><thead><tr><th>' + esc(t('itCodeCol')) + '</th><th>' + esc(t('itNameCol')) + '</th><th>' + esc(t('unit')) + '</th><th>' + esc(t('qty')) + '</th><th>' + esc(t('ivPrice')) + '</th><th>' + esc(t('total')) + '</th></tr></thead><tbody>' + lines.map(function (l) {
       return '<tr><td>' + esc(l.item) + '</td><td class="wrap"><bdi>' + esc(l.itemName) + '</bdi></td><td>' + (l.uom === 'كرتون' ? esc(unitT('كرتون')) + ' <small class="muted">(' + num(l.per) + ' ' + esc(unitT(l.unit)) + ' = ' + num(l.baseQty) + ')</small>' : esc(unitT(l.unit))) + '</td><td class="n">' + num(l.qty) + '</td><td class="n">' + num(l.price) + '</td><td class="n">' + num(l.total) + '</td></tr>';
     }).join('') + '</tbody></table>') + (x.payType === 'آجل' ? payHist(x) : '') + '</td></tr>';
@@ -7867,6 +7877,9 @@ function renderInvoices() {
 }
 /* ---------- متابعة فواتير الآجل ---------- */
 function creditInfo(x) { var paid = invPaid(x.id, DB.invPays), rem = Math.round((x.total - paid) * 100) / 100; return { paid: paid, rem: rem, st: rem <= 0.001 ? 'paid' : paid > 0 ? 'part' : 'open' }; }
+/* ✏️ تعديل نوع الدفع لفاتورة بانتظار التعميد — قبل الاعتماد */
+function ivPayEd(id, b) { var x = DB.invoices.find(function (z) { return String(z.id) === String(id); }); if (!x) return; var s0 = document.createElement('select'); s0.className = 'ivpsel'; s0.innerHTML = PAY_TYPES.map(function (p) { return '<option value="' + esc(p) + '"' + (p === x.payType ? ' selected' : '') + '>' + esc(v(p)) + '</option>'; }).join('');
+  s0.onchange = function () { if (s0.value === x.payType) return renderInvoices(); run('setInvPay', [id, s0.value], '✅ ' + t('ivPayDone', v(s0.value)), function () { renderInvoices(); }); }; s0.onblur = function () { setTimeout(function () { if (s0.isConnected && s0.value === x.payType) renderInvoices(); }, 200); }; var td = b.parentNode; td.innerHTML = ''; td.appendChild(s0); s0.focus(); try { s0.showPicker && s0.showPicker(); } catch (e) {} }
 function isCredit(x) { return x.payType === 'آجل' && !x.status && x.invType !== 'مرتجع مشتريات'; }
 function creditOpen() { return (DB.invoices || []).filter(function (x) { return isCredit(x) && creditInfo(x).rem > 0.001; }); }
 var PAY_INV = null;
@@ -8019,7 +8032,7 @@ function bfEdit(id) {
   var rj = (DB.myRej || []).find(function (x) { return String(x.id) === String(id); }), h = rj || DB.invoices.find(function (x) { return String(x.id) === String(id); }); if (!h) return;
   show('recv'); ivModeSet('br'); BF = { id: h.id, ex: (h.docsEx || []).map(function (u) { return { keep: u }; }), rej: rj ? rj.reason : '', doc: h.doc ? { url: h.doc, pdf: !!h.docPdf, name: h.docName || '', existing: true } : null };
   BF.q = {}; BF.ord = []; BF.icq = ''; (h.lines || []).forEach(function (l) { BF.q[l.item] = { u: l.u, uq: l.uq, price: l.price, tot: '', tm: false }; BF.ord.push(String(l.item)); }); BF.tax = h.tax || 'inc'; BF.disc = h.disc ? { k: h.disc.k, v: h.disc.v } : { k: 'amt', v: '' }; BF.goods = (h.goodsL && h.goodsL.length ? h.goodsL : h.goods ? [h.goods] : []).map(function (u) { return { url: u, existing: true }; });
-  bfFill(); $('bfLoc').value = h.loc; $('bfDate').value = String(h.date).slice(0, 10); $('bfSupSel').value = h.supplier; $('bfAmt').value = String(h.total); $('bfPay').value = h.payType; $('bfSupInv').value = h.supInv || ''; bfFill();
+  bfFill(); $('bfLoc').value = h.loc; $('bfDate').value = String(h.date).slice(0, 10); $('bfSupSel').value = h.supplier; $('bfAmt').value = String(h.total); $('bfPay').value = normPay(h.payType); $('bfSupInv').value = h.supInv || ''; bfFill();
 }
 /* ❌ الفواتير المرفوضة: صاحبها يشوف السبب، يصحّح فاتورة الفرع ويرسلها، أو يأكد إنه اطّلع */
 function rejInvOpen(id) {
@@ -11866,7 +11879,7 @@ function mrCalc(data, ym, items) {
     cvPermW: '🏭 تحويل الأصناف في المستودع — تسجيل', permOther: 'باقي الصلاحيات',
     btStRecv: 'مستلم — بانتظار التعميد', btShortTag: 'ناقص', btRecvBy: 'استلمه {0} — {1}', btSentRecv: 'انرسل {0} — وصل {1}', btRecvOk: 'وصل {0}', coL: 'الشركة', coNone: 'بدون', coAdd: 'إضافة شركة/مندوب جديد', coNewQ: 'اسم الشركة/المندوب الجديد:', coT: 'ربط الأصناف بالشركات', coBtn: 'الشركات',
     coHint: 'النظام قرأ أسماء الأصناف واقترح الشركة (أم صالح وام صالح واحد، صرة وصره واحد…). اختر لكل مجموعة المندوب/الشركة من القائمة، أو تنضاف كمندوب جديد، وشيل الصح عن اللي ما تبغاه. الأصناف اللي لها شركة من قبل ما تتغيّر.',
-    coItems: 'صنف', coDone: '{0} مربوط من قبل', coAsNew: 'إضافة «{0}» كشركة جديدة', coShow: 'عرض الأصناف', coNoneN: '{0} صنف ما انقرأت له شركة من اسمه — تحددها من ✏️ لو تبغى.', coApply: 'اعتمد الشركات', coNothing: 'ما فيه شي جديد', coSaved: 'انربط {0} صنف بشركاته', coSaved2: 'انربط {0} صنف · وانشالت الشركة من {1}', prqByBr: 'حسب الفرع', trqAddBtn: 'إضافة طلب من المستودع', btAddBtn: 'إضافة نقل بين الفروع', prqAllBr: 'كل الفروع', coAllY: '✅ الكل', coAllN: '⬜ ولا شي',
+    coItems: 'صنف', coDone: '{0} مربوط من قبل', coAsNew: 'إضافة «{0}» كشركة جديدة', coShow: 'عرض الأصناف', coNoneN: '{0} صنف ما انقرأت له شركة من اسمه — تحددها من ✏️ لو تبغى.', coApply: 'اعتمد الشركات', coNothing: 'ما فيه شي جديد', coSaved: 'انربط {0} صنف بشركاته', coSaved2: 'انربط {0} صنف · وانشالت الشركة من {1}', prqByBr: 'حسب الفرع', trqAddBtn: 'إضافة طلب من المستودع', ivPayDone: 'تغيّر نوع الدفع إلى {0}', btAddBtn: 'إضافة نقل بين الفروع', prqAllBr: 'كل الفروع', coAllY: '✅ الكل', coAllN: '⬜ ولا شي',
     bfBy: 'أدخلها {0} — {1}', bfDocS: 'الفاتورة', bfGoodsS: 'البضاعة', bfNoCur: 'الصنف ما له تكلفة سابقة', bfHigher: 'أعلى من التكلفة الحالية {0} بـ {1}%', bfLower: 'أقل من التكلفة الحالية {0} بـ {1}%', bfSame: 'قريب من التكلفة الحالية', bfNewCost: 'التكلفة الجديدة بعد الخصم ({0})',
     bfApplyHint: 'بعد الاعتماد: التكلفة المرجعية للأصناف تصير سعر هذي الفاتورة (شامل الضريبة وبعد الخصم) — وقيمة المستودع ما تتغيّر.', sar: 'ريال', phRetake: 'إعادة التصوير',
     shopT: 'قائمة المشتريات', shopCnt: '{0} صنف · {1} شركة', shopAllOpen: 'المفتوح كله', shopStNew: 'مطلوب', shopStDone: 'وصل', shopOld: 'من 3 أيام وأكثر', shopCoN: '{0} صنف', shopOrdCo: 'طلبت كل أصناف {0}', shopOrdAll: 'طلبتها كلها', shopOrd: 'طلبته من المورد', shopUnord: 'رجّعه مطلوب', shopArrived: 'وصل',
