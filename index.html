@@ -1260,8 +1260,8 @@ html[data-ui="v2"] .clstick .primary.big{width:auto;flex:0 0 auto;padding:12px 2
 @media (max-width:760px){html[data-ui="v2"] .clstick{bottom:calc(84px + env(safe-area-inset-bottom,0px))}}
 /* الإقفال — المدير */
 html[data-ui="v2"] #clListCard{background:none;padding:0}
-html[data-ui="v2"] #clListCard .filters{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto}
-html[data-ui="v2"] #clListCard .filters select{width:auto;flex:0 0 auto;background:var(--surface);border:0;border-radius:14px;padding:6px 10px;font-weight:700;font-size:13px;color:var(--palm)}
+html[data-ui="v2"] #clListCard .filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;overflow:visible}
+html[data-ui="v2"] #clListCard .filters select{width:100%;min-width:0;text-overflow:ellipsis;background:var(--surface);border:0;border-radius:14px;padding:6px 10px;font-weight:700;font-size:13px;color:var(--palm)}
 html[data-ui="v2"] .kpis .kpi,html[data-ui="v2"] .kpis>*{border:0!important;box-shadow:none!important;background:var(--surface);border-radius:16px}
 html[data-ui="v2"] .clch{font-weight:800;font-size:15px;margin:10px 2px 8px}
 html[data-ui="v2"] .clc{background:var(--surface);border-radius:16px;padding:10px 12px;margin-bottom:8px}html[data-ui="v2"] .clc.pend{background:#FBF4E4;border:1px solid #EAD9B0}
@@ -1297,6 +1297,7 @@ html[data-ui="v2"] #clKpis .kpi.warn{background:#F6EAD0!important}
   html[data-ui="v2"] .hometiles:not(.s4):not(.myedit):not(.lyedit):not(.secedit){display:flex;flex-wrap:wrap;gap:12px}
   html[data-ui="v2"] .hometiles:not(.s4):not(.myedit):not(.lyedit):not(.secedit)>.ht{flex:1 1 calc(25% - 12px);min-width:170px;box-sizing:border-box}
 }
+@media (min-width:761px){html[data-ui="v2"] .clcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}html[data-ui="v2"] .clcards .clc{margin:0}html[data-ui="v2"] #clListCard .filters{max-width:640px}}
 </style>
 <script>
 (function () { try { var ic = document.querySelector('link[rel=icon]').href, m = { name: 'أبوشرحة للتمور', short_name: 'أبوشرحة', lang: 'ar', dir: 'rtl', display: 'standalone', start_url: location.href.split('#')[0], background_color: document.documentElement.getAttribute('data-ui') === 'v2' ? '#FFFFFF' : '#4e3622', theme_color: document.documentElement.getAttribute('data-ui') === 'v2' ? '#FFFFFF' : '#4e3622', icons: [{ src: ic, sizes: '192x192', type: 'image/png' }, { src: ic, sizes: '512x512', type: 'image/png' }] };
@@ -4575,7 +4576,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 170, APP_DATE = '2026-11-12';
+var APP_BUILD = 172, APP_DATE = '2026-11-12';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -8731,7 +8732,8 @@ function renderClose() {
     .sort(function (a, b) { var pa = (a.status || 'معلق') === 'معلق' ? 0 : 1, pb = (b.status || 'معلق') === 'معلق' ? 0 : 1; return pa - pb || (a.date < b.date ? 1 : a.date > b.date ? -1 : (a.created < b.created ? 1 : -1)); });
   var S = { mada: 0, visa: 0, master: 0, cash: 0, total: 0, count: 0 }; L.forEach(function (c) { Object.keys(S).forEach(function (k) { S[k] += c[k]; }); });
   $('clKpis').innerHTML = kpi(t('clS_pend'), clPending().length, clPending().length ? 'warn' : '', "$('clfSt').value='معلق';renderClose()") + kpi(t('clCashCard'), money2(S.cash), 'good clbig') + kpi(t('clBankCard'), money2(S.mada + S.visa + S.master) + '<small class="clbsub">' + esc(t('clMadaS')) + ' ' + num(S.mada) + ' | ' + esc(t('clVisaS')) + ' ' + num(S.visa) + ' | ' + esc(t('clMasterS')) + ' ' + num(S.master) + '</small>', 'clbig clbank') + kpi(t('clTotal'), money2(S.total), '') + kpi(t('clCount'), num(S.count), '');
-  if (V2 && window.innerWidth <= 760 && L.length) { $('clList').innerHTML = '<div class="clch">' + esc(t('clListT')) + ' <b class="cnt">' + L.length + '</b></div>' + clCardsV2(L); return; }
+  if (V2 && L.length) { var pN = L.filter(function (c) { return (c.status || 'معلق') === 'معلق'; }).length, lim = Math.max(10, pN), full = !!XLFULL.clv || L.length <= lim + 2, tg = '<button type="button" class="btn sm ghost" onclick="XLFULL.clv=!XLFULL.clv;renderClose()">' + (full ? '▲ ' + esc(t('foldLess')) : '▼ ' + esc(t('foldAll', L.length))) + '</button>';
+    $('clList').innerHTML = '<div class="clch foldbar"><span>' + esc(t('clListT')) + ' <b class="cnt">' + L.length + '</b></span>' + (L.length > lim + 2 ? tg : '') + '</div>' + clCardsV2(full ? L : L.slice(0, lim)) + (!full ? '<button type="button" class="btn foldmore" onclick="XLFULL.clv=true;renderClose()">▼ ' + esc(t('foldAll', L.length)) + '</button>' : ''); return; }
   $('clList').innerHTML = L.length ? '<div class="tbl cltbl xlt" data-xk="cl" data-xt="' + esc(t('clListT')) + '"><table><thead><tr><th class="clfirst">' + esc(t('status')) + '</th><th>' + esc(t('date')) + '</th><th>' + esc(t('clBranch')) + '</th><th>' + esc(t('clCashier')) + '</th><th>' + esc(t('cl_mada')) + '</th><th>' + esc(t('cl_visa')) + '</th><th>' + esc(t('cl_master')) + '</th><th>' + esc(t('cl_cash')) + '</th><th>' + esc(t('clTotal')) + '</th><th>' + esc(t('clFloat')) + '</th><th>' + esc(t('clCount')) + '</th><th>' + esc(t('clNotes')) + '</th></tr></thead><tbody>' + L.map(function (c) {
     var st = c.status || 'معلق', dd0 = clDiff(c), row = '<tr class="' + (st === 'معلق' ? 'pendrow' : '') + (dd0 !== null && dd0 < 0 ? ' clshort' : '') + '">' + clActs(c, st) + '<td>' + esc(c.date) + ' <small class="muted">' + esc(dayName(c.date)) + '</small></td><td><b>' + esc(ln(c.loc)) + '</b></td><td><b><bdi>' + esc(nmT(c.cashier || c.user)) + '</bdi></b><br>' + clDiffTag(c) + '</td><td class="n">' + num(c.mada) + '</td><td class="n">' + num(c.visa) + '</td><td class="n">' + num(c.master) + '</td><td class="n">' + num(c.cash) + '</td><td class="n"><b>' + num(c.total) + '</b>' + (dd0 !== null ? '<br><small class="muted">' + esc(t('clSysShort', num(c.sys))) + '</small>' : '') + '</td><td class="n">' + (c.float === '' || c.float === undefined ? '—' : num(c.float)) + '</td><td class="n">' + num(c.count) + '</td><td class="wrap"><small>' + esc(c.notes || '—') + '</small></td></tr>';
     if (CL_OPEN[c.id]) row += '<tr class="ivdet"><td colspan="12">' + clLogHtml(c) + '</td></tr>';
