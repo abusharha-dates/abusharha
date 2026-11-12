@@ -5,6 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#4e3622">
+<script>/* 🎨 التصميم الجديد (شكل فقط) — «القديم» من الإعدادات يرجّع الشكل السابق */try{if(localStorage.getItem("tamr_ui")!=="old"){document.documentElement.setAttribute("data-ui","v2");document.documentElement.setAttribute("data-theme","light");var m0=document.querySelector('meta[name="theme-color"]');if(m0)m0.setAttribute("content","#FFFFFF");}}catch(e){document.documentElement.setAttribute("data-ui","v2");}</script>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1010,6 +1011,7 @@ body.nomgr .ivact button:nth-child(n+2),body.nomgr .payh button,body.nomgr #ivCr
 .pdbtns{display:flex;gap:8px;margin-top:10px}.pdbtns .btn{flex:1}
 .cladd{display:flex;justify-content:flex-end;margin:0 0 10px}.cladd button{font-weight:800;padding:10px 16px}
 .ivpen{background:none!important;border:0!important;padding:0 4px!important;font-size:13px;opacity:.75;cursor:pointer;vertical-align:middle}.ivpsel{font-size:13px;padding:4px 6px;width:96px;min-width:0}.ivdetw{position:sticky;right:0;width:min(640px,calc(100vw - 72px));white-space:normal}
+.itselbar{position:sticky;top:0;z-index:5;background:var(--surface);border:2px solid var(--gold);border-radius:14px;padding:10px;margin:8px 0}.itselh{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}.itselgo{margin-top:8px}.itselrow{display:flex;gap:6px;margin-top:6px}.itselrow select{flex:1;min-width:0}tr.itsel td{background:var(--tint)}.itcb{width:20px;height:20px}
 .cfhead{text-align:center;color:#c62828;font-weight:800;font-size:22px;text-decoration:underline;margin-bottom:10px}
 table.cft{width:100%;border-collapse:collapse;border:2px solid var(--ink)}
 table.cft td,table.cft th{border:1.5px solid var(--ink);padding:8px 10px;font-size:16px;vertical-align:middle}
@@ -1096,6 +1098,81 @@ button.chip{cursor:pointer;border:0;font:inherit}
 .ldot{width:34px;height:34px;border-radius:50%;border:3px solid rgba(253,242,225,.25);border-top-color:#fdf2e1;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* ================= 🎨 التصميم الجديد (رمل النهار — أزرار بنية) — شكل فقط ================= */
+:root[data-ui="v2"][data-ui]{
+  --bg:#FFFFFF;--surface:#F4EFE6;--surface2:#E9E1D3;--ink:#2B1A10;--muted:#7A6652;--line:#E4DACA;
+  --palm:#5A3A22;--palm2:#6E4A2E;--onpalm:#FFFFFF;--date:#8A4B1C;--gold:#C4891F;
+  --hdr:#FFFFFF;--hdr2:#FFFFFF;--onhdr:#2B1A10;--tint:#EDE4D5;--tintink:#5A3A22;
+  --ok:#1E6B47;--okbg:#DDEDE3;--warn:#9A6410;--warnbg:#F6EAD0;--bad:#B5462B;--badbg:#F6E0DA;--cold:#2A6A8F;--coldbg:#E0ECF3;
+  --r-lg:20px;--r-sm:12px;color-scheme:light}
+html[data-ui="v2"] body{background:var(--bg)}
+html[data-ui="v2"] .uic{display:block;flex:none}
+/* الهيدر */
+html[data-ui="v2"] .shell{background:#fff;color:var(--ink);box-shadow:none;border-bottom:1px solid var(--line)}
+html[data-ui="v2"] .live{background:var(--ok)}
+html[data-ui="v2"] .top small{opacity:1;color:var(--muted)}
+html[data-ui="v2"] .hdrbtn,html[data-ui="v2"] .langwrap,html[data-ui="v2"] .uchip{background:var(--surface)!important;border:0!important;color:var(--ink)!important}
+html[data-ui="v2"] .hdrbtn .hbi,html[data-ui="v2"] .langwrap>span{display:inline-flex;align-items:center}
+html[data-ui="v2"] .me select{background:transparent;border:0;color:var(--ink)}
+html[data-ui="v2"] .uchip .av{background:var(--ink)!important;color:#fff!important}
+html[data-ui="v2"] nav button{color:var(--muted);opacity:1;display:inline-flex;align-items:center;gap:6px}
+html[data-ui="v2"] nav button:not(.on):hover{background:var(--surface);color:var(--ink)}
+html[data-ui="v2"] nav button.on{background:var(--ink);color:#fff}
+/* البطاقات والأزرار */
+html[data-ui="v2"] .card{border:0;border-radius:22px}
+html[data-ui="v2"] .btn,html[data-ui="v2"] .ghost{background:#fff;border:1px solid var(--line);border-radius:14px}
+html[data-ui="v2"] .card .btn,html[data-ui="v2"] .card .ghost{background:#fff}
+html[data-ui="v2"] .primary{background:var(--palm);border-color:var(--palm);color:#fff;border-radius:14px;font-weight:700}
+html[data-ui="v2"] input,html[data-ui="v2"] select,html[data-ui="v2"] textarea{background:#fff;border:1px solid var(--line);border-radius:12px}
+html[data-ui="v2"] .backbtn{background:var(--surface);border:0}
+html[data-ui="v2"] #backBar h2{font-size:24px;font-weight:800}
+html[data-ui="v2"] .banner{border-radius:16px}
+/* الرئيسية */
+html[data-ui="v2"] .hello h2{font-size:27px;font-weight:800}
+html[data-ui="v2"] .ht{background:var(--surface);border:0;border-radius:20px;min-height:104px;font-size:14.5px;box-shadow:none}
+html[data-ui="v2"] .ht:hover{box-shadow:none;transform:none;background:var(--surface2)}
+html[data-ui="v2"] .ht>span{width:52px;height:52px;border-radius:16px;background:#fff!important;box-shadow:none;color:var(--palm)}
+html[data-ui="v2"] .ht.dmg>span{color:var(--bad)}
+html[data-ui="v2"] .ht b{background:var(--gold);color:#fff}
+/* بانتظار إجرائك — حلقة صغيرة في الزاوية */
+html[data-ui="v2"] .actb{padding:14px 16px 6px}
+html[data-ui="v2"] .acth .ring{order:3;width:38px;height:38px}
+html[data-ui="v2"] .acth .ring span{width:30px;height:30px;font-size:12.5px;font-weight:800;background:var(--surface)}
+html[data-ui="v2"] .acth .tt b{font-size:17px;font-weight:800}
+html[data-ui="v2"] .actx{order:4;width:30px;height:30px;background:#fff;border:0}
+html[data-ui="v2"] .acti{border-top-color:var(--line)}
+html[data-ui="v2"] .acti .ic{background:#fff;color:var(--palm);border-radius:14px}
+html[data-ui="v2"] .acti .br{display:none}
+/* نقل البضاعة — الأقسام */
+html[data-ui="v2"] .trqseg3{background:var(--surface);border:0;border-radius:18px}
+html[data-ui="v2"] .trqseg3 button i{display:flex;justify-content:center;margin-bottom:3px}
+html[data-ui="v2"] .trqseg3 button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(43,26,16,.12)}
+/* النوافذ */
+html[data-ui="v2"] #modal .mbox,html[data-ui="v2"] .mbox{border-radius:24px}
+/* 📱 الجوال: كبسولة سفلية */
+@media (max-width:760px){
+  html[data-ui="v2"] .shell nav#tabs{display:none!important}
+  html[data-ui="v2"] #bbar{display:flex!important;position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:40;background:#2B1A10;border:0;border-radius:32px;padding:7px;gap:2px;box-shadow:0 10px 28px rgba(43,26,16,.28);justify-content:space-between}
+  html[data-ui="v2"] #bbar button{flex:1 1 0;min-width:0;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:6px;height:48px;min-height:0;padding:0 6px;border-radius:26px;background:none;border:0;color:#CDBBA6;font-size:13px;font-weight:700}
+  html[data-ui="v2"] #bbar button em{display:none;font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  html[data-ui="v2"] #bbar button.on{flex:2.2 1 0;background:#fff;color:#2B1A10}
+  html[data-ui="v2"] #bbar button.on em{display:inline}
+  html[data-ui="v2"] #bbar button b{top:4px;inset-inline-start:auto;inset-inline-end:10px}
+  html[data-ui="v2"] main{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))!important}
+  html[data-ui="v2"] .big{bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
+  html[data-ui="v2"] #toast{bottom:calc(90px + env(safe-area-inset-bottom,0px))!important}
+  html[data-ui="v2"] .hdrbtn .hbt{display:none}
+  html[data-ui="v2"] .hometiles{grid-template-columns:repeat(3,1fr);gap:10px}
+  html[data-ui="v2"] .hometiles.s4{grid-template-columns:1fr 1fr}
+  html[data-ui="v2"] .ht{min-height:96px;font-size:13px;padding:12px 6px}
+}
+html[data-ui="v2"] #moreSheet .sh{border-radius:26px 26px 0 0;background:#fff}
+html[data-ui="v2"] #moreSheet .mlist button{background:var(--surface);border:0;border-radius:18px;font-size:14.5px;color:var(--ink)}
+html[data-ui="v2"] #moreSheet .mlist button .uic{color:var(--palm);width:24px;height:24px}
+html[data-ui="v2"] #moreSheet .mlist button span.mt{font-size:14.5px;line-height:1.4;font-weight:700}
+html[data-ui="v2"] .brandlogo{filter:brightness(.42) sepia(.7) saturate(1.6)}
+html[data-ui="v2"] .ht>span .uic{width:27px;height:27px}
+html[data-ui="v2"] .acti .ic .uic{width:21px;height:21px}
 </style>
 <script>
 (function () { try { var ic = document.querySelector('link[rel=icon]').href, m = { name: 'أبوشرحة للتمور', short_name: 'أبوشرحة', lang: 'ar', dir: 'rtl', display: 'standalone', start_url: location.href.split('#')[0], background_color: '#4e3622', theme_color: '#4e3622', icons: [{ src: ic, sizes: '192x192', type: 'image/png' }, { src: ic, sizes: '512x512', type: 'image/png' }] };
@@ -1620,7 +1697,7 @@ button.chip{cursor:pointer;border:0;font:inherit}
 
   <section id="v-items" class="view">
     <div class="card">
-      <h2><span data-t="items"></span> <button class="btn sm" id="itToggle" data-t="newItem"></button> <button class="btn sm" id="itImpBtn" onclick="iiPick()" hidden>📥 <span data-t="iiBtn"></span></button> <button class="btn sm" id="itCoBtn" onclick="coOpen()" hidden>🏢 <span data-t="coBtn"></span></button></h2>
+      <h2><span data-t="items"></span> <button class="btn sm" id="itToggle" data-t="newItem"></button> <button class="btn sm" id="itImpBtn" onclick="iiPick()" hidden>📥 <span data-t="iiBtn"></span></button> <button class="btn sm" id="itCoBtn" onclick="coOpen()" hidden>🏢 <span data-t="coBtn"></span></button> <button class="btn sm" id="itSelBtn" onclick="itSelTog()" hidden>☑️ <span data-t="itSelB"></span></button></h2>
       <div id="iiBox"></div>
       <div id="itForm" hidden style="margin-bottom:16px">
         <div class="form">
@@ -3047,7 +3124,7 @@ function tmMin(t) { var p = String(t).slice(11, 16).split(':'); return (+p[0] ||
 var TRQ_PKCAT = 'أدوات استهلاكية';
 function trqItemCat(code, items) { code = String(code); if (code.indexOf('PK:') === 0) return TRQ_PKCAT; var it = (items || []).find(function (i) { return String(i.code) === code; }); return (it && it.cat) || 'أصناف أخرى'; }
 /* 🎨 لون التطبيق: بني (داكن) أو بيج (فاتح) أو تلقائي حسب الجوال — ينحفظ على الجهاز */
-function themeApply(th) { try { var r = document.documentElement; if (th === 'dark' || th === 'light') r.setAttribute('data-theme', th); else r.removeAttribute('data-theme'); } catch (e) { } }
+function themeApply(th) { try { var r = document.documentElement; if (r.getAttribute('data-ui') === 'v2') th = 'light'; if (th === 'dark' || th === 'light') r.setAttribute('data-theme', th); else r.removeAttribute('data-theme'); } catch (e) { } }
 try { themeApply(localStorage.getItem('tamr-theme') || ''); } catch (e) { }
 var ATT_GRACE = 15;
 function attSchedOf(settings) {
@@ -4366,7 +4443,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 155, APP_DATE = '2026-11-11';
+var APP_BUILD = 157, APP_DATE = '2026-11-12';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -7165,14 +7242,37 @@ function allowed(view) {
   var p = VIEW_PERM[view]; return p ? can(p) : isMgr();
 }
 function viewTitle(view) { if (view === 'pass') return t(isMgr() ? 'pwStaffTile' : 'pass'); return view === 'move' ? t(MVINFO[MVT].lbl) : view === 'tasks' ? t(isMgr() ? 'tasksMgr' : 'myTasks') : t(view); }
+/* ================= 🎨 التصميم الجديد — شكل فقط (رموز + شريط سفلي) ================= */
+var UI_ICONS = {"home": "<path d=\"M3 10.5 12 3l9 7.5\"/><path d=\"M5 9.5V20h14V9.5\"/><path d=\"M10 20v-5h4v5\"/>", "register": "<rect x=\"7\" y=\"2.5\" width=\"10\" height=\"5\" rx=\"1\"/><path d=\"M12 7.5V10\"/><path d=\"M5 10h14l1.5 7h-17z\"/><rect x=\"3\" y=\"17\" width=\"18\" height=\"4\" rx=\"1\"/><path d=\"M8 13h.01M12 13h.01M16 13h.01\"/>", "safe": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><circle cx=\"11\" cy=\"12\" r=\"3.2\"/><path d=\"M11 8.8v1\"/><path d=\"M17 9v6\"/><path d=\"M6 20v1.5M18 20v1.5\"/>", "truck": "<path d=\"M2 5h12v11H2z\"/><path d=\"M14 8.5h4.5L22 12.5V16h-8\"/><circle cx=\"6\" cy=\"17.5\" r=\"2\"/><circle cx=\"17.5\" cy=\"17.5\" r=\"2\"/><path d=\"M5 9h6v4H5z\"/>", "receipt": "<path d=\"M6 3h12v18l-3-2-3 2-3-2-3 2z\"/><path d=\"M9 8h6\"/><path d=\"M9 12h6\"/><path d=\"M9 16h3\"/>", "tasks": "<rect x=\"5\" y=\"4\" width=\"14\" height=\"17\" rx=\"2\"/><path d=\"M9 4V2.5h6V4\"/><path d=\"m8.5 12 2 2 4-4\"/><path d=\"M9 17.5h6\"/>", "route": "<circle cx=\"6\" cy=\"18\" r=\"2.2\"/><circle cx=\"18\" cy=\"6\" r=\"2.2\"/><path d=\"M8.2 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.8\"/>", "count": "<rect x=\"5\" y=\"4\" width=\"14\" height=\"17\" rx=\"2\"/><path d=\"M9 4V2.5h6V4\"/><path d=\"M8.5 10h1M8.5 14h1M8.5 18h1\"/><path d=\"M12 10h3.5M12 14h3.5M12 18h3.5\"/>", "history": "<path d=\"M3 12a9 9 0 1 0 3-6.7\"/><path d=\"M3 4v4.5h4.5\"/><path d=\"M12 7.5V12l3 2\"/>", "items": "<path d=\"M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z\"/><path d=\"M3 7.5 12 12l9-4.5\"/><path d=\"M12 12v9\"/>", "bag": "<path d=\"M5 8h14l-1 13H6z\"/><path d=\"M9 8V6a3 3 0 0 1 6 0v2\"/>", "convert": "<rect x=\"2.5\" y=\"3\" width=\"8\" height=\"8\" rx=\"1.5\"/><rect x=\"13.5\" y=\"13\" width=\"8\" height=\"8\" rx=\"1.5\"/><path d=\"M14 4.5h3.5a2 2 0 0 1 2 2V10\"/><path d=\"m17.5 8 2 2 2-2\"/><path d=\"M10 19.5H6.5a2 2 0 0 1-2-2V14\"/><path d=\"m6.5 16-2-2-2 2\"/>", "expense": "<path d=\"M3 7h13a2 2 0 0 1 2 2v1.5\"/><path d=\"M18 16.5V18a2 2 0 0 1-2 2H4a1 1 0 0 1-1-1V7\"/><path d=\"M3 7l10-3v3\"/><path d=\"M12 13.5h9\"/><path d=\"m18.5 11 2.5 2.5-2.5 2.5\"/>", "broom": "<path d=\"M12 2v9\"/><path d=\"M8 11h8l2.5 10h-13z\"/><path d=\"M9.5 15.5 9 21M12 15.5V21M14.5 15.5l.5 5.5\"/>", "dash": "<rect x=\"2.5\" y=\"3.5\" width=\"19\" height=\"13\" rx=\"2\"/><path d=\"M8 20.5h8M12 16.5v4\"/><path d=\"M7 13v-3M11 13V7.5M15 13v-4.5\"/>", "attend": "<circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M3 20c0-3.3 2.7-6 6-6 1 0 2 .2 2.8.7\"/><circle cx=\"17.5\" cy=\"16.5\" r=\"4\"/><path d=\"M17.5 14.5v2l1.4 1\"/>", "audit": "<path d=\"M6 3h8l4 4v6\"/><path d=\"M6 3v18h6\"/><path d=\"M14 3v4h4\"/><circle cx=\"16.5\" cy=\"17\" r=\"3\"/><path d=\"m21 21.5-2.3-2.3\"/>", "post": "<ellipse cx=\"12\" cy=\"5.5\" rx=\"7\" ry=\"2.5\"/><path d=\"M5 5.5v6c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-6\"/><path d=\"M5 11.5v6c0 1.4 3.1 2.5 7 2.5\"/><path d=\"M15 17.5h6\"/><path d=\"m18.5 15 2.5 2.5-2.5 2.5\"/>", "mrep": "<path d=\"M6 3h8l4 4v14H6z\"/><path d=\"M14 3v4h4\"/><path d=\"M9 18v-3M12 18v-6M15 18v-4\"/>", "upload": "<path d=\"M7 18a4.5 4.5 0 0 1-.5-9A6 6 0 0 1 18 8a4 4 0 0 1-.5 10\"/><path d=\"M12 12v8\"/><path d=\"m9 15 3-3 3 3\"/>", "profit": "<path d=\"M3 20h18\"/><path d=\"m4 15 5-5 4 3 7-7\"/><path d=\"M15 6h5v5\"/>", "obl": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M3 10h18\"/><path d=\"M8 3v4M16 3v4\"/><path d=\"M7.5 14h8.5l-2-1.8\"/><path d=\"M16.5 17.5H8l2 1.8\"/>", "hr": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><circle cx=\"9\" cy=\"11\" r=\"2.5\"/><path d=\"M5.5 17c.5-1.8 1.9-3 3.5-3s3 1.2 3.5 3\"/><path d=\"M15 9.5h3M15 13h3\"/>", "userkey": "<circle cx=\"9\" cy=\"8\" r=\"3.5\"/><path d=\"M3 20c0-3.3 2.7-6 6-6 1.2 0 2.3.3 3.2.9\"/><circle cx=\"17\" cy=\"15\" r=\"2.2\"/><path d=\"M17 17.2V21.5\"/><path d=\"M17 19.5h2\"/>", "damage": "<path d=\"M3 7.5 12 3l9 4.5v5\"/><path d=\"M3 7.5v9L12 21\"/><path d=\"M3 7.5 12 12l9-4.5\"/><path d=\"M12 12v9\"/><circle cx=\"18\" cy=\"18\" r=\"3.8\"/><path d=\"m16.5 16.5 3 3M19.5 16.5l-3 3\"/>", "warehouse": "<path d=\"M2 21V8l10-5 10 5v13\"/><path d=\"M6 21v-9h12v9\"/><path d=\"M6 15h12M6 18h12\"/>", "stores": "<path d=\"M4 9 5.5 4h13L20 9\"/><path d=\"M4 9h16v1.5a2.7 2.7 0 0 1-5.3.8 2.7 2.7 0 0 1-5.4 0A2.7 2.7 0 0 1 4 10.5z\"/><path d=\"M5 13v8h14v-8\"/><path d=\"M8.5 15.5h6.5l-1.8-1.6\"/><path d=\"M15.5 18.5H9l1.8 1.6\"/>", "cart": "<circle cx=\"9\" cy=\"20\" r=\"1.5\"/><circle cx=\"17\" cy=\"20\" r=\"1.5\"/><path d=\"M2 3h3l2.5 12h11L21 7H6.2\"/>", "menu": "<path d=\"M4 7h16\"/><path d=\"M4 12h16\"/><path d=\"M4 17h16\"/>", "gear": "<path d=\"M10.3 3h3.4l.5 2.4 1.8 1 2.3-.8 1.7 2.9-1.8 1.6v2l1.8 1.6-1.7 2.9-2.3-.8-1.8 1-.5 2.4h-3.4l-.5-2.4-1.8-1-2.3.8-1.7-2.9 1.8-1.6v-2L3.7 9.5l1.7-2.9 2.3.8 1.8-1z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>", "camera": "<path d=\"M4 8h3l2-3h6l2 3h3v11H4z\"/><circle cx=\"12\" cy=\"13\" r=\"3.5\"/>", "image": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><circle cx=\"9\" cy=\"9.5\" r=\"1.8\"/><path d=\"m21 16-5-5-9 9\"/>", "edit": "<path d=\"M4 20h4L19 9l-4-4L4 16z\"/><path d=\"m13.5 6.5 4 4\"/>", "approve": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m8 12.5 3 3 5-6\"/>", "reject": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m9 9 6 6M15 9l-6 6\"/>", "send": "<path d=\"M21 3 10 14\"/><path d=\"M21 3 14.5 21l-4.5-7-7-4.5z\"/>", "refresh": "<path d=\"M20 11a8 8 0 0 0-14.5-4.5L4 8\"/><path d=\"M4 3.5V8h4.5\"/><path d=\"M4 13a8 8 0 0 0 14.5 4.5L20 16\"/><path d=\"M20 20.5V16h-4.5\"/>", "globe": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18\"/><path d=\"M12 3c2.5 2.5 3.7 5.5 3.7 9s-1.2 6.5-3.7 9c-2.5-2.5-3.7-5.5-3.7-9S9.5 5.5 12 3z\"/>", "switch": "<path d=\"M16 3h4v4\"/><path d=\"M20 3l-6 6\"/><path d=\"M8 21H4v-4\"/><path d=\"M4 21l6-6\"/><circle cx=\"8\" cy=\"8\" r=\"3\"/><circle cx=\"16\" cy=\"16\" r=\"3\"/>", "search": "<circle cx=\"11\" cy=\"11\" r=\"6.5\"/><path d=\"m20 20-4-4\"/>", "scan": "<path d=\"M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3\"/><path d=\"M8 9v6M11 9v6M14 9v6M17 9v6\"/>", "print": "<path d=\"M7 9V3h10v6\"/><rect x=\"3\" y=\"9\" width=\"18\" height=\"8\" rx=\"2\"/><path d=\"M7 14h10v7H7z\"/>", "plus": "<path d=\"M12 5v14\"/><path d=\"M5 12h14\"/>", "pin": "<path d=\"M12 17v5\"/><path d=\"M9 3h6l-1 6 3 3v2H7v-2l3-3z\"/>", "bell": "<path d=\"M6 16V11a6 6 0 0 1 12 0v5l2 2H4z\"/><path d=\"M10 20.5a2 2 0 0 0 4 0\"/>", "eye": "<path d=\"M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>", "cash": "<rect x=\"3\" y=\"6\" width=\"18\" height=\"12\" rx=\"2\"/><circle cx=\"12\" cy=\"12\" r=\"2.5\"/><path d=\"M7 9v.01\"/><path d=\"M17 15v.01\"/>", "alert": "<path d=\"M12 3 2 20h20z\"/><path d=\"M12 10v4\"/><path d=\"M12 17v.01\"/>", "chart": "<path d=\"M4 20V10\"/><path d=\"M10 20V4\"/><path d=\"M16 20v-7\"/><path d=\"M22 20H2\"/>", "x": "<path d=\"M6 6l12 12\"/><path d=\"M18 6 6 18\"/>", "recv": "<path d=\"M5 3h11v9\"/><path d=\"M5 3v18l2.5-1.7L10 21l2.5-1.7\"/><path d=\"M8 8h5M8 12h3\"/><circle cx=\"17.5\" cy=\"17.5\" r=\"4\"/><path d=\"M17.5 15.5v4M15.5 17.5h4\"/>"};
+var V2 = document.documentElement.getAttribute('data-ui') === 'v2';
+var NAVE = { post: '📌', close: '💰', pass: '👥', invoices: '🧾', purch: '🛒', home: '🏠', dash: '📊', reports: '📈', where: '📍', log: '🧾', tasks: '📋', count: '🧮', convert: '⚖️', bconv: '🔄', ops: '🛠️', expenses: '💸', maint: '🔧', items: '🗃️', att: '🕘', hr: '🧑‍💼', profit: '💹', mrep: '🗓️', upl: '📤', safe: '🏦', trq: '🚚', audit: '🛡️', obl: '🏢', recv: '📥', dmg: '🗑️', more: '➕' };
+var NAVI = { home: 'home', close: 'register', safe: 'safe', trq: 'truck', invoices: 'receipt', tasks: 'tasks', where: 'route', count: 'count', log: 'history', items: 'items', purch: 'bag', convert: 'convert', expenses: 'expense', maint: 'broom', dash: 'dash', att: 'attend', audit: 'audit', post: 'post', mrep: 'mrep', upl: 'upload', profit: 'profit', obl: 'obl', hr: 'hr', pass: 'userkey', dmg: 'damage', recv: 'recv', more: 'plus', reports: 'chart', bconv: 'stores', ops: 'gear' };
+var EMOI = { '🧾': 'receipt', '💵': 'cash', '🚚': 'truck', '🔄': 'stores', '📦': 'convert', '🗑️': 'damage', '🏪': 'stores', '💰': 'register', '🛒': 'cart', '🛍️': 'cart', '⚠️': 'alert', '🏭': 'warehouse', '📥': 'recv', '➕': 'plus' };
+function svgI(k, sz) { var p = UI_ICONS[k]; if (!p) return ''; return '<svg class="uic" width="' + (sz || 22) + '" height="' + (sz || 22) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + '</svg>'; }
+function IC(k, sz) { return V2 && NAVI[k] ? svgI(NAVI[k], sz) : (NAVE[k] || ''); }
+function ICE(e, sz) { return V2 && EMOI[e] ? svgI(EMOI[e], sz) : e; }
+function uiSet(v) { try { if (v === 'old') localStorage.setItem('tamr_ui', 'old'); else localStorage.removeItem('tamr_ui'); } catch (e) { } location.reload(); }
+function uiRow() { return '<div class="card throw"><b>' + (V2 ? svgI('gear', 18) + ' ' : '🎨 ') + esc(t('uiT')) + '</b><div class="pills"><button type="button" class="' + (V2 ? 'on' : '') + '" onclick="uiSet(\'v2\')">' + esc(t('uiNew')) + '</button><button type="button" class="' + (!V2 ? 'on' : '') + '" onclick="uiSet(\'old\')">' + esc(t('uiOld')) + '</button></div></div>'; }
+/* 📱 الشريط السفلي (كبسولة) — أول 4 من ترتيب قائمتك + «المزيد» */
+function uiBar(vis) {
+  if (!V2) return; var bb = $('bbar'), ml = $('moreList'); if (!bb) return;
+  var main = vis.slice(0, 4), lbl = function (x) { return x === 'home' ? t('home') : viewTitle(x); };
+  bb.innerHTML = main.map(function (x) { return '<button type="button" data-v="' + x + '" class="' + (x === CUR ? 'on' : '') + '">' + IC(x, 22) + '<em>' + esc(lbl(x)) + '</em>' + (x === 'tasks' ? '<b class="tbadge"></b>' : '') + '</button>'; }).join('') +
+    '<button type="button" data-v="__more" class="' + (main.indexOf(CUR) < 0 && CUR !== 'home' ? 'on' : '') + '">' + svgI('menu', 22) + '<em>' + esc(t('uiMore')) + '</em></button>';
+  bb.querySelectorAll('button').forEach(function (b) { b.onclick = function () { if (b.dataset.v === '__more') openMore(); else show(b.dataset.v); }; });
+  ml.innerHTML = vis.slice(4).map(function (x) { return '<button type="button" data-v="' + x + '">' + IC(x, 22) + '<span class="mt">' + esc(lbl(x)) + '</span></button>'; }).join('') +
+    '<button type="button" data-v="__cfg">' + svgI('gear', 22) + '<span class="mt">' + esc(t('navCfg')) + '</span></button>';
+  ml.querySelectorAll('button').forEach(function (b) { b.onclick = function () { closeMore(); if (b.dataset.v === '__cfg') { NAVED = navKeys(NAVALL, myHidden()); show('home'); renderHome(); window.scrollTo(0, 0); } else show(b.dataset.v); }; });
+}
+function uiHdr() { if (!V2) return; var r = document.querySelector('#hdrRef .hbi'); if (r) r.innerHTML = svgI('refresh', 18); var o = document.querySelector('#hdrOut .hbi'); if (o) o.innerHTML = svgI('switch', 18); var g = document.querySelector('.langwrap > span'); if (g) g.innerHTML = svgI('globe', 18); }
 function buildNav() {
   var vis = ['home', 'close', 'safe', 'trq', 'invoices', 'tasks', 'where', 'count', 'log', 'items', 'purch', 'convert', 'expenses', 'maint', 'dash', 'att', 'audit', 'post', 'mrep', 'upl', 'profit', 'obl', 'hr', 'pass'].filter(allowed);
   var hidN = myHidden(); NAVALL = vis.slice(1); vis = ['home'].concat(navKeys(NAVALL, hidN).filter(function (x) { return x.on; }).map(function (x) { return x.k; }));
   var ICON = { post: '📥', close: '💰', pass: '👥', invoices: '🧾', purch: '🛒', home: '🏠', dash: '📊', reports: '📈', where: '📍', log: '🧾', tasks: '📋', count: '🧮', convert: '⚖️', bconv: '🔄', ops: '🛠️', expenses: '💸', maint: '🔧', items: '🗃️', att: '🕘', hr: '🧑‍💼', profit: '💹', mrep: '🗓️', upl: '📤', safe: '🏦', post: '📌', trq: '🚚', audit: '🛡️', obl: '🏢' };
-  $('tabs').innerHTML = vis.map(function (x) { return '<button data-v="' + x + '" class="' + (x === CUR ? 'on' : '') + '">' + ICON[x] + ' ' + esc(viewTitle(x)) + (x === 'tasks' ? '<b class="tbadge"></b>' : '') + '</button>'; }).join('');
-  $('tabs').innerHTML += '<button class="navcfg" data-v="__cfg" title="' + esc(t('navCfg')) + '" aria-label="' + esc(t('navCfg')) + '">⚙️</button>';
+  $('tabs').innerHTML = vis.map(function (x) { return '<button data-v="' + x + '" class="' + (x === CUR ? 'on' : '') + '">' + (V2 ? IC(x, 18) : ICON[x]) + ' ' + esc(viewTitle(x)) + (x === 'tasks' ? '<b class="tbadge"></b>' : '') + '</button>'; }).join('');
+  $('tabs').innerHTML += '<button class="navcfg" data-v="__cfg" title="' + esc(t('navCfg')) + '" aria-label="' + esc(t('navCfg')) + '">' + (V2 ? svgI('gear', 18) : '⚙️') + '</button>';
   $('tabs').querySelectorAll('button').forEach(function (b) { b.onclick = function () { if (b.dataset.v === '__cfg') { NAVED = navKeys(NAVALL, myHidden()); show('home'); renderHome(); window.scrollTo(0, 0); } else show(b.dataset.v); }; });
-  $('bbar').innerHTML = ''; $('moreList').innerHTML = '';
+  $('bbar').innerHTML = ''; $('moreList').innerHTML = ''; uiBar(vis); uiHdr();
 }
 function openMore() { $('moreSheet').hidden = false; }
 function closeMore() { $('moreSheet').hidden = true; }
@@ -7224,6 +7324,7 @@ function show(view) {
   if (view !== CUR) resetView(view);
   CUR = view; document.body.classList.toggle('recvOn', view === 'recv');
   document.querySelectorAll('#tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.v === view); });
+  if (V2) { var bbHit = false; document.querySelectorAll('#bbar button').forEach(function (b) { var o = b.dataset.v === view; b.classList.toggle('on', o); if (o) bbHit = true; }); var bbM = document.querySelector('#bbar [data-v="__more"]'); if (bbM) bbM.classList.toggle('on', !bbHit); }
   try { var tbOn = document.querySelector('#tabs button.on'), tbN = document.getElementById('tabs'); if (tbOn && tbN && tbN.scrollWidth > tbN.clientWidth) tbN.scrollLeft = tbOn.offsetLeft - (tbN.clientWidth - tbOn.offsetWidth) / 2; } catch (e) { }
   document.querySelectorAll('.view').forEach(function (s) { s.classList.toggle('on', s.id === 'v-' + view); });
   var back = view !== 'home';
@@ -7347,22 +7448,22 @@ function renderHome() {
   if (!mgr && !staffDay && can('close') && clReturnedMine().length) h += '<button class="banner bad" onclick="show(\'close\')">↩️ ' + esc(t('clBannerEmp', clReturnedMine().length)) + '</button>';
   function T(p, k, x) { if (can(p)) L.push([k, x]); }
   var L = [];
-  if (!can('recv') && can('recvBr')) L.push(['recv', tile('in', '📥', t('recv'), "recvNew()")]); else T('recv', 'recv', tile('in', '📥', t('recv'), "recvNew()")); T('close', 'close', tile('', '💰', t('close'), "show('close')", mgr ? clPending().length : clReturnedMine().length));
-  if (allowed('trq')) L.push(['trq', tile('', '🚚', t('trq'), "show('trq')", trqMine().length + (mgr ? prqNewN() : 0))]);
-  T('dmg', 'dmg', tile('dmg', '🗑️', t('tp_dmg'), "goMove('تالف')"));
-  T('invoices', 'invoices', tile('', '🧾', t('invoices'), "show('invoices')", mgr ? creditOpen().length + invPendList().length : 0));
-  T('tasks', 'tasks', canAssign() ? tile('', '📋', t('tasksMgr'), "setTF('pending');show('tasks')", pend.length) : tile('', '📋', t('myTasks'), "setTF('pending');show('tasks')", mine.length));
-  T('where', 'where', tile('', '📍', t('where'), "show('where')")); T('count', 'count', tile('', '🧮', t('count'), "show('count')", mgr ? ctPending().length : 0));
-  T('log', 'log', tile('', '🧾', t('log'), "show('log')")); T('items', 'items', tile('', '🗃️', t('items'), "show('items')"));
-  T('purch', 'purch', tile('', '🛒', t('purch'), "show('purch')", mgr ? puPending().length : 0)); if (can('convert') || can('bconv') || can('bconvRev')) L.push(['convert', tile('', '⚖️', t('convert'), "show('convert')", can('bconvRev') ? bcPendN() : 0)]);
-  T('expenses', 'expenses', tile('', '💸', t('expenses'), "show('expenses')")); T('maint', 'maint', tile('', '🔧', t('maint'), "show('maint')"));
-  if (!mgr) { T('dash', 'dash', tile('', '📊', t('dash'), "show('dash')"));  T('att', 'att', tile('', '🕘', t('att'), "show('att')")); T('audit', 'audit', tile('', '🛡️', t('audit'), "show('audit')")); }
-  if (mgr && can('mrep')) L.push(['mrep', tile('', '🗓️', t('mrep'), "show('mrep')")]);
-  if (mgr && can('upl')) L.push(['upl', tile('', '📤', t('upl'), "show('upl')")]);
-  if (can('profit')) L.push(['profit', tile('', '💹', t('profit'), "show('profit')")]);
-  if (mgr && can('obl')) L.push(['obl', tile('', '🏢', t('obl'), "show('obl')")]);
-  if (mgr && can('hr')) L.push(['hr', tile('', '🧑‍💼', t('hrEmpTile'), "HRT='emp';show('hr')", hrAlerts().length)]);
-  if (mgr && can('users')) L.push(['pass', tile('', '👥', t('pwStaffTile'), "show('pass')")]);
+  if (!can('recv') && can('recvBr')) L.push(['recv', tile('in', IC('recv'), t('recv'), "recvNew()")]); else T('recv', 'recv', tile('in', IC('recv'), t('recv'), "recvNew()")); T('close', 'close', tile('', IC('close'), t('close'), "show('close')", mgr ? clPending().length : clReturnedMine().length));
+  if (allowed('trq')) L.push(['trq', tile('', IC('trq'), t('trq'), "show('trq')", trqMine().length + (mgr ? prqNewN() : 0))]);
+  T('dmg', 'dmg', tile('dmg', IC('dmg'), t('tp_dmg'), "goMove('تالف')"));
+  T('invoices', 'invoices', tile('', IC('invoices'), t('invoices'), "show('invoices')", mgr ? creditOpen().length + invPendList().length : 0));
+  T('tasks', 'tasks', canAssign() ? tile('', IC('tasks'), t('tasksMgr'), "setTF('pending');show('tasks')", pend.length) : tile('', IC('tasks'), t('myTasks'), "setTF('pending');show('tasks')", mine.length));
+  T('where', 'where', tile('', IC('where'), t('where'), "show('where')")); T('count', 'count', tile('', IC('count'), t('count'), "show('count')", mgr ? ctPending().length : 0));
+  T('log', 'log', tile('', IC('log'), t('log'), "show('log')")); T('items', 'items', tile('', IC('items'), t('items'), "show('items')"));
+  T('purch', 'purch', tile('', IC('purch'), t('purch'), "show('purch')", mgr ? puPending().length : 0)); if (can('convert') || can('bconv') || can('bconvRev')) L.push(['convert', tile('', IC('convert'), t('convert'), "show('convert')", can('bconvRev') ? bcPendN() : 0)]);
+  T('expenses', 'expenses', tile('', IC('expenses'), t('expenses'), "show('expenses')")); T('maint', 'maint', tile('', IC('maint'), t('maint'), "show('maint')"));
+  if (!mgr) { T('dash', 'dash', tile('', IC('dash'), t('dash'), "show('dash')"));  T('att', 'att', tile('', IC('att'), t('att'), "show('att')")); T('audit', 'audit', tile('', IC('audit'), t('audit'), "show('audit')")); }
+  if (mgr && can('mrep')) L.push(['mrep', tile('', IC('mrep'), t('mrep'), "show('mrep')")]);
+  if (mgr && can('upl')) L.push(['upl', tile('', IC('upl'), t('upl'), "show('upl')")]);
+  if (can('profit')) L.push(['profit', tile('', IC('profit'), t('profit'), "show('profit')")]);
+  if (mgr && can('obl')) L.push(['obl', tile('', IC('obl'), t('obl'), "show('obl')")]);
+  if (mgr && can('hr')) L.push(['hr', tile('', IC('hr'), t('hrEmpTile'), "HRT='emp';show('hr')", hrAlerts().length)]);
+  if (mgr && can('users')) L.push(['pass', tile('', IC('pass'), t('pwStaffTile'), "show('pass')")]);
   var H = {}; L.forEach(function (x) { H[x[0]] = x[1]; });
   LYDEF = L.map(function (x) { return x[0]; }); LYKEYS = layoutSort(LYDEF);
   var keys = LAYOUT ? LAYOUT.filter(function (k) { return H[k]; }) : LYKEYS, hid = myHidden();
@@ -7380,7 +7481,7 @@ function renderHome() {
     if (main3.length < 3) { rest.slice(0, 3 - main3.length).forEach(function (k) { main3.push(k); }); rest = keys.filter(function (k) { return main3.indexOf(k) < 0; }); }
     if (rest.length === 1) { main3.push(rest[0]); rest = []; }
     MORE_H = rest.map(function (k) { return H[k].replace('onclick="', 'onclick="stMoreClose();'); }).join('');
-    h += '<div class="hometiles s4">' + main3.map(function (k) { return H[k]; }).join('') + (rest.length ? tile('', '➕', t('stMore'), 'stMoreOpen()') : '') + '</div>';
+    h += '<div class="hometiles s4">' + main3.map(function (k) { return H[k]; }).join('') + (rest.length ? tile('', IC('more'), t('stMore'), 'stMoreOpen()') : '') + '</div>';
     $('v-home').innerHTML = h; return;
   }
   if (LAYOUT) h += '<div class="banner info" style="cursor:default">🔀 ' + esc(t('lyHint')) + '</div>';
@@ -8404,8 +8505,8 @@ function actHomeBox() {
   if (!Y.length && !G.length) return ''; var S0b = bnrSeen('act'); if (ids.length && ids.every(function (x) { return S0b.indexOf(String(x)) > -1; })) return '';
   /* 📌 تصميم «ب»: حلقة فيها المجموع (ذهبي = إدراج، أخضر = اعتماد) + قائمة نظيفة — كل بند سطر بعرض الصندوق، وتحته شريط بحصته من المجموع */
   var nY = Y.reduce(function (a, x) { return a + x.n; }, 0), nG = G.reduce(function (a, x) { return a + x.n; }, 0), T = nY + nG || 1, pY = Math.round(nY / T * 100);
-  var row = function (x, k) { return '<button type="button" class="acti ' + k + '" onclick="' + esc(x.oc) + '"><span class="ic">' + x.ic + '</span><span class="tx"><b>' + esc(x.l) + '</b><small>' + esc(t(k === 'y' ? 'actLegY' : 'actLegG')) + '</small><span class="br"><i style="width:' + Math.max(4, Math.round(x.n / T * 100)) + '%"></i></span></span><span class="nn">' + x.n + '</span><span class="cv">‹</span></button>'; };
-  return '<div class="card actb"><div class="acth"><span class="ring" style="background:conic-gradient(var(--gold) 0 ' + pY + '%,var(--ok,#3f9a5c) ' + pY + '% 100%)"><span>' + (nY + nG) + '</span></span><span class="tt"><b>📌 ' + esc(t('actT')) + '</b><small>' + (nY ? '<i class="dy"></i>' + nY + ' ' + esc(t('actShY')) + '&nbsp;&nbsp; ' : '') + (nG ? '<i class="dg"></i>' + nG + ' ' + esc(t('actShG')) : '') + '</small></span>' +
+  var row = function (x, k) { return '<button type="button" class="acti ' + k + '" onclick="' + esc(x.oc) + '"><span class="ic">' + ICE(x.ic, 20) + '</span><span class="tx"><b>' + esc(x.l) + '</b><small>' + esc(t(k === 'y' ? 'actLegY' : 'actLegG')) + '</small><span class="br"><i style="width:' + Math.max(4, Math.round(x.n / T * 100)) + '%"></i></span></span><span class="nn">' + x.n + '</span><span class="cv">‹</span></button>'; };
+  return '<div class="card actb"><div class="acth"><span class="ring" style="background:conic-gradient(var(--gold) 0 ' + pY + '%,var(--ok,#3f9a5c) ' + pY + '% 100%)"><span>' + (nY + nG) + '</span></span><span class="tt"><b>' + (V2 ? '' : '📌 ') + esc(t('actT')) + '</b><small>' + (nY ? '<i class="dy"></i>' + nY + ' ' + esc(t('actShY')) + '&nbsp;&nbsp; ' : '') + (nG ? '<i class="dg"></i>' + nG + ' ' + esc(t('actShG')) : '') + '</small></span>' +
     '<button type="button" class="actx" title="' + esc(t('bnrHide')) + '" aria-label="' + esc(t('bnrHide')) + '" onclick="bnrX(\'act\',' + esc(JSON.stringify(ids.map(String))) + ')">✕</button></div>' +
     '<div class="actl">' + Y.map(function (x) { return row(x, 'y'); }).join('') + G.map(function (x) { return row(x, 'g'); }).join('') + '</div></div>';
 }
@@ -9748,7 +9849,7 @@ function saveEditSales(id) {
 
 /* ---------- الأصناف ---------- */
 function renderItems() {
-  renderCatMgr(); $('itImpBtn').hidden = !itCanEd(); $('itCoBtn').hidden = !itCanEd(); iiRender();
+  renderCatMgr(); $('itImpBtn').hidden = !itCanEd(); $('itCoBtn').hidden = !itCanEd(); $('itSelBtn').hidden = !itCanEd() || !!IT_SEL; iiRender();
   var C = compute(), f = $('itQ').value.trim().toLowerCase(), cf = $('itCatF').value, sf = $('itStF').value;
   var fN = arN(f), base = DB.items.filter(function (i) { return (!f || itText(i).indexOf(fN) > -1) && (!cf || i.cat === cf); });
   var cnt = { bad: 0, reorder: 0, exp: 0, ok: 0 }; base.forEach(function (i) { cnt[itemStatus(i, C)[0]]++; });
@@ -9757,9 +9858,23 @@ function renderItems() {
   var L = base.filter(function (i) { return !sf || itemStatus(i, C)[0] === sf; }).sort(function (a, b) { return newestFirst(a.code, b.code); });
   $('itBody').innerHTML = L.length ? '<div class="tbl xlt" data-xk="items" data-xt="' + esc(t('items')) + '"><table><thead><tr>' + (itCanEd() ? '<th></th>' : '') + '<th>' + esc(t('itCodeCol')) + '</th><th>' + esc(t('itNameCol')) + '</th><th>' + esc(t('cat')) + '</th><th>' + esc(t('mainQty')) + '</th><th>' + esc(t('unit')) + '</th><th>' + esc(t('status')) + '</th><th>' + esc(t('nearestExp')) + '</th><th>' + esc(t('reorder')) + '</th>' + (isMgr() ? '<th>' + esc(t('cost')) + '</th><th>' + esc(t('price')) + '</th><th>💰 ' + esc(t('refCtnCol')) + '</th>' : '') + '</tr></thead><tbody>' + L.map(function (i) {
     var st = itemStatus(i, C), q0 = qtyAt(i.code, MAINLOC), s = DB.stock.find(function (r) { return r.item === i.code && r.loc === MAINLOC && r.qty > 0; }), dd = s ? daysTo(s.expiry) : null;
-    return '<tr>' + (itCanEd() ? '<td><button class="ghost sm ren" title="' + esc(t('itEditT', i.code)) + '" onclick="itEdit(' + q(i.code) + ')">✏️</button></td>' : '') + '<td class="n"><b>' + esc(i.code) + '</b></td><td class="wrap"><b>' + ihtml(i.code) + '</b></td><td>' + esc(v(i.cat || '')) + (i.co ? '<small class="sub2">🏢 ' + esc(i.co) + '</small>' : '') + '</td><td class="n qbig' + (q0 < i.reorder ? ' qlow' : '') + '">' + num(q0) + ctnSplit(i, q0) + '</td><td>' + unitBoth(i) + '</td><td><span class="st ' + STCLS[st[0]] + '">' + esc(t(st[1])) + '</span></td><td>' + (s && s.expiry ? '<span class="' + (dd !== null && dd <= EXPDAYS ? 'st warn' : '') + '">' + esc(String(s.expiry).slice(0, 10)) + '</span>' : '—') + '</td><td class="n">' + i.reorder + '</td>' + (isMgr() ? '<td class="n">' + num(i.cost) + '</td><td class="n">' + num(i.price) + '</td><td class="n">' + (rcHas(i) ? '<b>' + num(i.refCost) + '</b> <small class="muted">/ ' + esc(rcCtnU(i)) + '</small>' + (rcPer(i) > 1 ? '<small class="muted rcp">' + esc(unitT(i.unit)) + ' ' + num(rcPiece(i)) + '</small>' : '') : '—') + '</td>' : '') + '</tr>';
+    return '<tr' + (IT_SEL && IT_SEL[i.code] ? ' class="itsel"' : '') + '>' + (itCanEd() ? '<td>' + (IT_SEL ? '<input type="checkbox" class="itcb" data-c="' + esc(i.code) + '"' + (IT_SEL[i.code] ? ' checked' : '') + ' onchange="itSelOne(this)">' : '<button class="ghost sm ren" title="' + esc(t('itEditT', i.code)) + '" onclick="itEdit(' + q(i.code) + ')">✏️</button>') + '</td>' : '') + '<td class="n"><b>' + esc(i.code) + '</b></td><td class="wrap"><b>' + ihtml(i.code) + '</b></td><td>' + esc(v(i.cat || '')) + (i.co ? '<small class="sub2">🏢 ' + esc(i.co) + '</small>' : '') + '</td><td class="n qbig' + (q0 < i.reorder ? ' qlow' : '') + '">' + num(q0) + ctnSplit(i, q0) + '</td><td>' + unitBoth(i) + '</td><td><span class="st ' + STCLS[st[0]] + '">' + esc(t(st[1])) + '</span></td><td>' + (s && s.expiry ? '<span class="' + (dd !== null && dd <= EXPDAYS ? 'st warn' : '') + '">' + esc(String(s.expiry).slice(0, 10)) + '</span>' : '—') + '</td><td class="n">' + i.reorder + '</td>' + (isMgr() ? '<td class="n">' + num(i.cost) + '</td><td class="n">' + num(i.price) + '</td><td class="n">' + (rcHas(i) ? '<b>' + num(i.refCost) + '</b> <small class="muted">/ ' + esc(rcCtnU(i)) + '</small>' + (rcPer(i) > 1 ? '<small class="muted rcp">' + esc(unitT(i.unit)) + ' ' + num(rcPiece(i)) + '</small>' : '') : '—') + '</td>' : '') + '</tr>';
   }).join('') + '</tbody></table></div>' : '<p class="empty">' + esc(t('noItemsF')) + '</p>';
+  IT_VIS = L.map(function (i) { return i.code; }); itSelBar();
 }
+/* ☑️ تحديد أصناف (من نتيجة البحث) وربطها بشركة مرة وحدة — مؤقت لترتيب الشركات */
+var IT_SEL = null, IT_VIS = [];
+function itSelTog() { IT_SEL = IT_SEL ? null : {}; renderItems(); }
+function itSelOne(e) { var c = e.getAttribute('data-c'); if (e.checked) IT_SEL[c] = 1; else delete IT_SEL[c]; e.closest('tr').classList.toggle('itsel', e.checked); itSelBar(); }
+function itSelAll() { var all = IT_VIS.every(function (c) { return IT_SEL[c]; }); IT_VIS.forEach(function (c) { if (all) delete IT_SEL[c]; else IT_SEL[c] = 1; }); document.querySelectorAll('.itcb').forEach(function (e) { e.checked = !!IT_SEL[e.getAttribute('data-c')]; e.closest('tr').classList.toggle('itsel', e.checked); }); itSelBar(); }
+function itSelBar() { var b = $('itSelBar'); if (!b) { b = document.createElement('div'); b.id = 'itSelBar'; $('itBody').parentNode.insertBefore(b, $('itBody')); }
+  if (!IT_SEL) { b.hidden = true; return; } b.hidden = false; var n = Object.keys(IT_SEL).length, inV = IT_VIS.filter(function (c) { return IT_SEL[c]; }).length, prev = $('itSelCo') ? $('itSelCo').value : '';
+  var cos = {}; (DB.suppliers || []).forEach(function (s0) { var nm = typeof s0 === 'string' ? s0 : (s0 && s0.name); if (nm) cos[nm] = 1; }); DB.items.forEach(function (i) { if (i.co) cos[i.co] = 1; });
+  b.className = 'itselbar'; b.innerHTML = '<div class="itselh"><span class="muted">' + esc(t('itSelN', inV, IT_VIS.length)) + (n > inV ? ' · ' + esc(t('itSelHid', n - inV)) : '') + '</span><span><button type="button" class="btn sm ghost" onclick="itSelAll()">✅ ' + esc(t('coAllY').replace(/^✅ /, '')) + '</button> <button type="button" class="btn sm ghost" onclick="itSelTog()">✕ ' + esc(t('itSelEnd')) + '</button></span></div>' +
+    (n ? '<div class="itselgo"><b>🏢 ' + esc(t('itSelCoT', n)) + '</b><div class="itselrow"><select id="itSelCo"><option value="">— ' + esc(t('itSelPick')) + ' —</option>' + Object.keys(cos).sort().map(function (c) { return '<option value="' + esc(c) + '"' + (c === prev ? ' selected' : '') + '>' + esc(c) + '</option>'; }).join('') + '<option value="__none">🚫 ' + esc(t('itSelNone')) + '</option></select><button type="button" class="primary" onclick="itSelApply()">' + esc(t('itSelOk')) + '</button></div></div>' : '');
+}
+function itSelApply() { var c = $('itSelCo').value; if (!c) return toast(t('itSelPick')); var co = c === '__none' ? '' : c, M = {}; Object.keys(IT_SEL).forEach(function (k) { var i = DB.items.find(function (x) { return x.code === k; }); if (i && String(i.co || '') !== co) M[k] = co; }); var n = Object.keys(M).length; if (!n) return toast(t('coNothing'));
+  run('setItemCos', [M], '✅ ' + t(co ? 'itSelDone' : 'itSelDone0', n, co), function () { IT_SEL = {}; renderItems(); }); }
 /* ---------- سجل التدقيق (مراقبة الموظفين) ---------- */
 function renderAudit() { if ($('acsWrap')) $('acsWrap').hidden = !isMgr();
   var rg = attRange($('auPeriod').value || '30'), u = $('auUser').value, a = $('auAct').value, f = $('auQ').value.trim(), imp = $('auImp').checked;
@@ -9973,7 +10088,7 @@ function renderAtt() {
 /* 🎨 اختيار اللون داخل «تخصيص نوافذي» (يتطبق فوراً وينحفظ على الجهاز) */
 function themeCur() { try { return localStorage.getItem('tamr-theme') || ''; } catch (e) { return ''; } }
 function themeSet(v0) { try { if (v0) localStorage.setItem('tamr-theme', v0); else localStorage.removeItem('tamr-theme'); } catch (e) { } themeApply(v0); renderHome(); }
-function themeRow() { var c = themeCur(); return '<div class="card throw"><b>🎨 ' + esc(t('thT')) + '</b><div class="pills">' + [['dark', '🟫 ' + t('thDark')], ['light', '🟨 ' + t('thLight')], ['', '📱 ' + t('thAuto')]].map(function (x) { return '<button type="button" class="' + (x[0] === c ? 'on' : '') + '" onclick="themeSet(\'' + x[0] + '\')">' + esc(x[1]) + '</button>'; }).join('') + '</div></div>'; }
+function themeRow() { var c = themeCur(); return uiRow() + (V2 ? '' : '<div class="card throw"><b>🎨 ' + esc(t('thT')) + '</b><div class="pills">' + [['dark', '🟫 ' + t('thDark')], ['light', '🟨 ' + t('thLight')], ['', '📱 ' + t('thAuto')]].map(function (x) { return '<button type="button" class="' + (x[0] === c ? 'on' : '') + '" onclick="themeSet(\'' + x[0] + '\')">' + esc(x[1]) + '</button>'; }).join('') + '</div></div>'); }
 function themePick() {
   var cur = ''; try { cur = localStorage.getItem('tamr-theme') || ''; } catch (e) { }
   ask({ title: '🎨 ' + t('thT'), pick: [['dark', '🟫 ' + t('thDark')], ['light', '🟨 ' + t('thLight')], ['', '📱 ' + t('thAuto')]], cur: cur, ok: t('save') }).then(function (r) {
@@ -11435,7 +11550,7 @@ function renderTrq() {
   /* 🚚 نقل البضاعة: شريط فوق بثلاث أقسام — 🏭 من المستودع | 🔄 بين الفروع | 🛒 قائمة المشتريات (شاشة مستقلة) — وتحت «من المستودع» تبويباته */
   var prqOn = !onlyBt && !simp, segOf = TRQ_TAB === 'bt' ? 'b' : TRQ_TAB === 'prq' && prqOn ? 'p' : 'w';
   var segs = (onlyBt ? [] : [['w', '🏭', t('segTrqW'), act.length, 'infoTrqW', 'TRQ_TAB=TRQ_WLAST||\'act\'', 'r']]).concat(btOn ? [['b', '🔄', t('segTrqB'), btP, 'infoTrqB', 'TRQ_TAB=\'bt\'', '']] : []).concat(prqOn ? [['p', '🛒', t('trqT_prq').replace(/^🛒\s*/, ''), prqNewN(), '', 'TRQ_TAB=\'prq\'', 'y']] : []);
-  if (segs.length > 1) h += '<div class="trqseg3">' + segs.map(function (x) { return '<button type="button" class="' + (x[0] === segOf ? 'on' : '') + '" onclick="' + x[5] + ';renderTrq()">' + (x[3] ? '<b class="cnt' + (x[6] ? ' c' + x[6] : '') + '">' + x[3] + '</b>' : '') + '<i>' + x[1] + '</i>' + esc(x[2]) + '</button>'; }).join('') + '</div>';
+  if (segs.length > 1) h += '<div class="trqseg3">' + segs.map(function (x) { return '<button type="button" class="' + (x[0] === segOf ? 'on' : '') + '" onclick="' + x[5] + ';renderTrq()">' + (x[3] ? '<b class="cnt' + (x[6] ? ' c' + x[6] : '') + '">' + x[3] + '</b>' : '') + '<i>' + ICE(x[1], 24) + '</i>' + esc(x[2]) + '</button>'; }).join('') + '</div>';
   var seg0 = segs.find(function (x) { return x[0] === segOf; }); if (seg0 && seg0[4]) h += '<div class="trqinfo">' + infoI(seg0[2], t(seg0[4])) + ' <small>' + esc(t('trqWhat')) + '</small></div>';
   if (segOf === 'w') h += '<div class="trqtabs">' + (simp ? [['act', '⏳', 'trqT_new', act.length], ['mine', '📋', 'trqT_mine', open.length]] : [['act', '⏳', 'tbS_act', act.length], ['open', '📋', 'tbS_open', open.length], ['short', '⚠️', 'tbS_short', sOpen], ['hist', '🗂️', 'tbS_hist', 0]]).map(function (x) {
     return '<button type="button" class="' + (TRQ_TAB === x[0] ? 'on' : '') + '" onclick="TRQ_TAB=\'' + x[0] + '\';renderTrq()"><i>' + x[1] + '</i>' + esc(t(x[2]).replace(/^[\u2190-\u2BFF\uD800-\uDFFF\uFE0F\u200D\s]+/, '')) + (x[3] ? ' <b class="cnt' + (x[0] === 'act' ? ' cr' : '') + '">' + x[3] + '</b>' : '') + '</button>';
@@ -11879,7 +11994,7 @@ function mrCalc(data, ym, items) {
     cvPermW: '🏭 تحويل الأصناف في المستودع — تسجيل', permOther: 'باقي الصلاحيات',
     btStRecv: 'مستلم — بانتظار التعميد', btShortTag: 'ناقص', btRecvBy: 'استلمه {0} — {1}', btSentRecv: 'انرسل {0} — وصل {1}', btRecvOk: 'وصل {0}', coL: 'الشركة', coNone: 'بدون', coAdd: 'إضافة شركة/مندوب جديد', coNewQ: 'اسم الشركة/المندوب الجديد:', coT: 'ربط الأصناف بالشركات', coBtn: 'الشركات',
     coHint: 'النظام قرأ أسماء الأصناف واقترح الشركة (أم صالح وام صالح واحد، صرة وصره واحد…). اختر لكل مجموعة المندوب/الشركة من القائمة، أو تنضاف كمندوب جديد، وشيل الصح عن اللي ما تبغاه. الأصناف اللي لها شركة من قبل ما تتغيّر.',
-    coItems: 'صنف', coDone: '{0} مربوط من قبل', coAsNew: 'إضافة «{0}» كشركة جديدة', coShow: 'عرض الأصناف', coNoneN: '{0} صنف ما انقرأت له شركة من اسمه — تحددها من ✏️ لو تبغى.', coApply: 'اعتمد الشركات', coNothing: 'ما فيه شي جديد', coSaved: 'انربط {0} صنف بشركاته', coSaved2: 'انربط {0} صنف · وانشالت الشركة من {1}', prqByBr: 'حسب الفرع', trqAddBtn: 'إضافة طلب من المستودع', ivPayDone: 'تغيّر نوع الدفع إلى {0}', btAddBtn: 'إضافة نقل بين الفروع', prqAllBr: 'كل الفروع', coAllY: '✅ الكل', coAllN: '⬜ ولا شي',
+    coItems: 'صنف', coDone: '{0} مربوط من قبل', coAsNew: 'إضافة «{0}» كشركة جديدة', coShow: 'عرض الأصناف', coNoneN: '{0} صنف ما انقرأت له شركة من اسمه — تحددها من ✏️ لو تبغى.', coApply: 'اعتمد الشركات', coNothing: 'ما فيه شي جديد', coSaved: 'انربط {0} صنف بشركاته', coSaved2: 'انربط {0} صنف · وانشالت الشركة من {1}', prqByBr: 'حسب الفرع', trqAddBtn: 'إضافة طلب من المستودع', uiT: 'التصميم', uiNew: 'الجديد', uiOld: 'القديم', uiMore: 'المزيد', itSelB: 'تحديد', itSelN: 'محدد {0} من {1}', itSelHid: '{0} محدد من بحث سابق', itSelEnd: 'إنهاء التحديد', itSelCoT: 'حدد الشركة لـ {0} صنف', itSelPick: 'اختر الشركة', itSelNone: 'بدون شركة', itSelOk: 'اعتمد', itSelDone: 'انربط {0} صنف بـ {1}', itSelDone0: 'انشالت الشركة من {0} صنف', ivPayDone: 'تغيّر نوع الدفع إلى {0}', btAddBtn: 'إضافة نقل بين الفروع', prqAllBr: 'كل الفروع', coAllY: '✅ الكل', coAllN: '⬜ ولا شي',
     bfBy: 'أدخلها {0} — {1}', bfDocS: 'الفاتورة', bfGoodsS: 'البضاعة', bfNoCur: 'الصنف ما له تكلفة سابقة', bfHigher: 'أعلى من التكلفة الحالية {0} بـ {1}%', bfLower: 'أقل من التكلفة الحالية {0} بـ {1}%', bfSame: 'قريب من التكلفة الحالية', bfNewCost: 'التكلفة الجديدة بعد الخصم ({0})',
     bfApplyHint: 'بعد الاعتماد: التكلفة المرجعية للأصناف تصير سعر هذي الفاتورة (شامل الضريبة وبعد الخصم) — وقيمة المستودع ما تتغيّر.', sar: 'ريال', phRetake: 'إعادة التصوير',
     shopT: 'قائمة المشتريات', shopCnt: '{0} صنف · {1} شركة', shopAllOpen: 'المفتوح كله', shopStNew: 'مطلوب', shopStDone: 'وصل', shopOld: 'من 3 أيام وأكثر', shopCoN: '{0} صنف', shopOrdCo: 'طلبت كل أصناف {0}', shopOrdAll: 'طلبتها كلها', shopOrd: 'طلبته من المورد', shopUnord: 'رجّعه مطلوب', shopArrived: 'وصل',
