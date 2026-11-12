@@ -1173,8 +1173,10 @@ html[data-ui="v2"] #modal .mbox,html[data-ui="v2"] .mbox{border-radius:24px}
   html[data-ui="v2"] .hometiles{grid-template-columns:repeat(3,1fr);gap:10px}
   html[data-ui="v2"] .hometiles:not(.s4){grid-template-columns:repeat(6,1fr)}
   html[data-ui="v2"] .hometiles:not(.s4)>.ht{grid-column:span 2}
-  html[data-ui="v2"] .hometiles:not(.s4)>.ht:last-child:nth-child(3n+1){grid-column:3 / span 2}
-  html[data-ui="v2"] .hometiles:not(.s4)>.ht:nth-last-child(2):nth-child(3n+1){grid-column:2 / span 2}html[data-ui="v2"] .hometiles:not(.s4)>.ht:last-child:nth-child(3n+2){grid-column:4 / span 2}
+  html[data-ui="v2"] .hometiles:not(.s4)>.ht:last-child:nth-child(3n+1){grid-column:1 / -1}
+  html[data-ui="v2"] .hometiles:not(.s4)>.ht:nth-last-child(2):nth-child(3n+1){grid-column:1 / span 3}html[data-ui="v2"] .hometiles:not(.s4)>.ht:last-child:nth-child(3n+2){grid-column:4 / span 3}
+  html[data-ui="v2"] .hometiles:not(.s4)>.ht:last-child:nth-child(3n+1),html[data-ui="v2"] .hometiles:not(.s4)>.ht:nth-last-child(2):nth-child(3n+1),html[data-ui="v2"] .hometiles:not(.s4)>.ht:last-child:nth-child(3n+2){flex-direction:row;min-height:0;justify-content:center;gap:12px;padding:10px 12px}
+  html[data-ui="v2"] .hometiles:not(.s4)>.ht:last-child:nth-child(3n+1)>span,html[data-ui="v2"] .hometiles:not(.s4)>.ht:nth-last-child(2):nth-child(3n+1)>span,html[data-ui="v2"] .hometiles:not(.s4)>.ht:last-child:nth-child(3n+2)>span{margin:0}
   html[data-ui="v2"] .hometiles.s4{grid-template-columns:1fr 1fr}
   html[data-ui="v2"] .ht{min-height:96px;font-size:13px;padding:12px 6px}
 }
@@ -1238,8 +1240,8 @@ html[data-ui="v2"] body{display:flex;flex-direction:column;min-height:100vh;min-
 /* ===== المرحلة ٢ ===== */
 /* الإقفال — نموذج الموظف */
 html[data-ui="v2"] .closecard{background:none;padding:0;border:0;box-shadow:none}
-html[data-ui="v2"] .cft,html[data-ui="v2"] .cft tbody{display:block;border:0;width:100%}
-html[data-ui="v2"] .cft tr{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:16px;padding:8px 12px;margin-bottom:7px;border:0}
+html[data-ui="v2"] .cft{display:block;border:0;width:100%}html[data-ui="v2"] .cft tbody{display:flex;flex-wrap:wrap;gap:7px;width:100%}
+html[data-ui="v2"] .cft tr{display:flex;flex:1 1 100%;min-width:0;box-sizing:border-box;align-items:center;gap:10px;background:var(--surface);border-radius:16px;padding:8px 12px;margin:0;border:0}
 html[data-ui="v2"] .cft td,html[data-ui="v2"] .cft th{border:0!important;background:none!important;padding:0!important}
 html[data-ui="v2"] .cft td.lb{flex:1;font-weight:700;display:flex;align-items:center;gap:8px}
 html[data-ui="v2"] .cft td:not(.lb){flex:0 0 52%}html[data-ui="v2"] .cft td[colspan]{flex:1 1 100%}
@@ -1247,11 +1249,11 @@ html[data-ui="v2"] .cft tr.th{display:none}html[data-ui="v2"] .cft tr.tot{displa
 html[data-ui="v2"] .cft tr.clsysrow{background:#fff;border:2px solid var(--gold)}
 html[data-ui="v2"] .cft .sysbox{border:0!important;padding:0!important;background:none!important}
 html[data-ui="v2"] .clic{display:inline-flex;width:32px;height:32px;flex:none;background:#fff;border-radius:10px;align-items:center;justify-content:center;color:var(--palm)}
-html[data-ui="v2"] .cft tr.clhalf{display:inline-flex;flex-direction:column;align-items:stretch;width:calc(50% - 4px);vertical-align:top;gap:6px}
-html[data-ui="v2"] .cft tr.clhalf+tr.clhalf{margin-inline-start:8px}
+html[data-ui="v2"] .cft tr.clhalf{flex:1 1 calc(50% - 4px);flex-direction:column;align-items:stretch;gap:6px}
+
 html[data-ui="v2"] .cft tr.clhalf td.lb{font-size:13px}html[data-ui="v2"] .cft tr.clhalf td:not(.lb){flex:none}
-html[data-ui="v2"] .cft tr.clphr{flex-direction:column;align-items:stretch}html[data-ui="v2"] .cft tr.clphr td:not(.lb){flex:none}
-html[data-ui="v2"] .cft textarea{width:100%;margin-top:6px}
+html[data-ui="v2"] .cft tr.clphr{flex:1 1 calc(50% - 4px);flex-direction:column;align-items:stretch;background:#fff;border:2px dashed #C9B79C}html[data-ui="v2"] .cft tr.clphr td.lb{font-size:13px}html[data-ui="v2"] .cft tr.clphr td:not(.lb){flex:none}
+html[data-ui="v2"] .cft textarea{width:100%;margin-top:6px;box-sizing:border-box}html[data-ui="v2"] .cft td.lb[colspan]{flex-direction:column;align-items:stretch;gap:2px}
 html[data-ui="v2"] .clstick{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:15;background:#fff;border:1px solid var(--line);box-shadow:0 6px 20px rgba(43,26,16,.15);border-radius:20px;padding:8px;display:flex;align-items:center;gap:8px}
 html[data-ui="v2"] .clstot{flex:1;padding:0 8px}html[data-ui="v2"] .clstot small{display:block;color:var(--muted);font-size:12px}html[data-ui="v2"] .clstot b{font-size:20px;color:var(--ink)}
 html[data-ui="v2"] .clstick .primary.big{width:auto;flex:0 0 auto;padding:12px 20px;margin:0}html[data-ui="v2"] .clstick .ghost{flex:0 0 auto}
@@ -2064,6 +2066,14 @@ function closeNormalize(x) {
 }
 /* أثر الفاتورة على المستودع الرئيسي: مشتريات (+) ، مرتجع (−) */
 /* فاتورة مرفوضة لسا ما تصرّف فيها صاحبها (آخر 60 يوم): تطلع له في «اللي عليك» وتذكيرات التلجرام */
+/* ✕ على فاتورة بانتظار التعميد: «إعادة للتصحيح» أو «إلغاء نهائي» — السبب إجباري، ولا شي ينحذف */
+function ivRejOrCancel(id, cur, note) {
+  ask({ title: t('ivRcT', id), pick: [['fix', '↩ ' + t('ivRcFix')], ['cancel', '🚫 ' + t('ivRcCancel')]], cur: cur || 'fix', reason: true, value: note || '', label: t('reasonLbl'), danger: true, ok: t('confirmBtn') }).then(function (r) {
+    if (!r) return; if (String(r.note || '').length < 3) { toast(t('e_reason')); return ivRejOrCancel(id, r.v, r.note); }
+    if (r.v === 'cancel') run('approveInvoice', [id, 'cancel', r.note], '🚫 ' + t('ivRcCancelled', id));
+    else runFast('approveInvoice', [id, false, r.note], t('ivRejDone', id), function (D) { var h = D.invoices.find(function (v) { return String(v.id) === String(id); }); if (h) { h.status = 'مرفوضة — ' + r.note; h.apprBy = ME.name; h.apprAt = fmtDT(nowR()); } });
+  });
+}
 function invRejQ(h) { return !!h && /^مرفوضة/.test(String(h.status || '')) && !h.rejAck && (!h.apprAt || (Date.now() - new Date(String(h.apprAt).slice(0, 10) + 'T12:00:00').getTime()) < 60 * 864e5); }
 function invRejMine(L, name) { return (L || []).filter(function (h) { return h.user === name && invRejQ(h); }); }
 function invEffect(type, lines) {
@@ -4559,7 +4569,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 166, APP_DATE = '2026-11-12';
+var APP_BUILD = 169, APP_DATE = '2026-11-12';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -6772,6 +6782,7 @@ var Demo = (function () {
     approveInvoice: function (tok, id, ok, reason) {
       var w = wuser(tok); mgr(w); var h = D.invoices.find(function (v) { return String(v.id) === String(id); }); if (!h) throw new Error('e_noinv');
       if (h.status !== 'بانتظار التعميد') throw new Error('e_invnotpend');
+      if (ok === 'cancel') { needReason(reason); var rc = String(reason).trim(); h.status = 'ملغاة — السبب: ' + rc; h.pendN = ''; h.apprBy = w.name; h.apprAt = now(); h.edited = now() + ' — ' + w.name; aud(w.name, 'إلغاء فاتورة', 'فاتورة ' + id + ' (بانتظار التعميد — ' + h.supplier + ' — ' + h.total + ' ريال، أدخلها ' + h.user + ') — السبب: ' + rc); ntf([h.user], '🚫 انلغت فاتورتك رقم ' + id + ' — ' + h.supplier + '\nالسبب: ' + rc, w.name); save(); return allFor(w); }
       if (!ok) { needReason(reason); h.status = 'مرفوضة — ' + String(reason).trim(); h.rejReason = String(reason).trim(); h.rejAck = ''; h.apprBy = w.name; h.apprAt = now(); if (h.invType === BR_TYPE) h.pendN = ''; aud(w.name, 'رفض تعميد فاتورة', 'فاتورة ' + id + ' (' + h.user + ') — السبب: ' + reason); ntf([h.user], '❌ رُفضت فاتورتك رقم ' + id + ' — ' + h.supplier + ' — ' + rl(h.total) + '\nالسبب: ' + reason + '\n' + (h.invType === BR_TYPE ? '✏️ ادخل النظام وصحّحها وأرسلها من جديد (من «اللي عليك» في الرئيسية).' : '✏️ ادخل النظام وشوفها من «اللي عليك» في الرئيسية.'), w.name); save(); return allFor(w); }
       if (h.invType !== BR_TYPE) { /* فاتورة الفرع: مبلغ فقط بدون مخزون */
         var n = JSON.parse(h.pendN || '{}'), loc = invLocD(h.loc), E = invEffect(n.invType, n.lines);
@@ -7376,8 +7387,8 @@ function uiRow() { return '<div class="card throw"><b>' + (V2 ? svgI('gear', 18)
 function uiBar(vis) {
   if (!V2) return; var bb = $('bbar'), ml = $('moreList'); if (!bb) return;
   if (secOn()) { secBar(); return; }
-  var main = vis.slice(0, 4), lbl = function (x) { return x === 'home' ? t('home') : viewTitle(x); };
-  bb.innerHTML = main.map(function (x) { return '<button type="button" data-v="' + x + '" class="' + (x === CUR ? 'on' : '') + '">' + IC(x, 22) + '<em>' + esc(lbl(x)) + '</em>' + (x === 'tasks' ? '<b class="tbadge"></b>' : '') + '</button>'; }).join('') +
+  var main = vis.slice(0, 4), SH = { close: 'bbClose', trq: 'bbTrq', tasks: 'bbTasks', att: 'bbAtt' }, lbl = function (x) { return x === 'home' ? t('home') : viewTitle(x); }, lblS = function (x) { return SH[x] ? t(SH[x]) : lbl(x); };
+  bb.innerHTML = main.map(function (x) { return '<button type="button" data-v="' + x + '" class="' + (x === CUR ? 'on' : '') + '">' + IC(x, 22) + '<em>' + esc(lblS(x)) + '</em>' + (x === 'tasks' ? '<b class="tbadge"></b>' : '') + '</button>'; }).join('') +
     '<button type="button" data-v="__more" class="' + (main.indexOf(CUR) < 0 && CUR !== 'home' ? 'on' : '') + '">' + svgI('menu', 22) + '<em>' + esc(t('uiMore')) + '</em></button>';
   bb.querySelectorAll('button').forEach(function (b) { b.onclick = function () { if (b.dataset.v === '__more') openMore(); else show(b.dataset.v); }; });
   ml.innerHTML = vis.slice(4).map(function (x) { return '<button type="button" data-v="' + x + '">' + IC(x, 22) + '<span class="mt">' + esc(lbl(x)) + '</span></button>'; }).join('') +
@@ -8056,7 +8067,8 @@ function invAppr(id, ok) {
   var x = DB.invoices.find(function (v) { return String(v.id) === String(id); }) || {};
   if (ok && x.lines && x.lines.length) return ask({ title: '🧾 ' + t('ivApprQ', id), html: bfReviewHTML(x), ok: t('ivApprBtn') }).then(function (r) { if (r) run('approveInvoice', [id, true, ''], t('ivApprDone', id)); });
   if (ok) ask({ title: t('ivApprQ', id), msg: t('ivApprMsg', x.supplier, num(x.total), ln(x.loc || MAINLOC)), ok: t('ivApprBtn') }).then(function (r) { if (r) runFast('approveInvoice', [id, true, ''], t('ivApprDone', id), function (D) { var h = D.invoices.find(function (v) { return String(v.id) === String(id); }); if (h) { h.status = ''; h.apprBy = ME.name; h.apprAt = fmtDT(nowR()); } }); });
-  else ask({ title: t('ivRejQ', id), reason: true, danger: true, ok: t('ivRejBtn') }).then(function (r) { if (r) runFast('approveInvoice', [id, false, r], t('ivRejDone', id), function (D) { var h = D.invoices.find(function (v) { return String(v.id) === String(id); }); if (h) { h.status = 'مرفوضة — ' + r; h.apprBy = ME.name; h.apprAt = fmtDT(nowR()); } }); });
+  else ivRejOrCancel(id);
+  if (false) ask({ title: t('ivRejQ', id), reason: true, danger: true, ok: t('ivRejBtn') }).then(function (r) { if (r) runFast('approveInvoice', [id, false, r], t('ivRejDone', id), function (D) { var h = D.invoices.find(function (v) { return String(v.id) === String(id); }); if (h) { h.status = 'مرفوضة — ' + r; h.apprBy = ME.name; h.apprAt = fmtDT(nowR()); } }); });
 }
 function invToggle(id) { IVOPEN[id] = !IVOPEN[id]; renderInvoices(); }
 /* ---------- تقرير مورد: مختصر أو مفصل ---------- */
@@ -8649,7 +8661,7 @@ function clPhPayload(p) { return p ? (MODE === 'demo' ? { url: p.url } : { data:
 function uiCloseForm() {
   if (!V2) return; var cc = document.querySelector('#v-close .closecard'); if (!cc || cc.dataset.ui) return; cc.dataset.ui = '1';
   [['clMada', 'card'], ['clVisa', 'card'], ['clMaster', 'card'], ['clCash', 'cash'], ['clFloat', 'register'], ['clCount', 'receipt']].forEach(function (x) { var td = $(x[0]) && $(x[0]).closest('tr').querySelector('td.lb'); if (td) td.insertAdjacentHTML('afterbegin', '<i class="clic">' + svgI(x[1], 18) + '</i>'); });
-  [['clPhBalBox', 'camera'], ['clPhExBox', 'clip']].forEach(function (x) { var tr = $(x[0]) && $(x[0]).closest('tr'); if (tr) tr.classList.add('clphr'); });
+  [['clPhBalBox', 'camera'], ['clPhExBox', 'clip']].forEach(function (x) { var tr = $(x[0]) && $(x[0]).closest('tr'); if (tr) { tr.classList.add('clphr'); var lb = tr.querySelector('td.lb'); if (lb) lb.innerHTML = lb.innerHTML.replace(/📎\s*/, ''); } });
   var fl = $('clFloat'), ct = $('clCount'); if (fl) fl.closest('tr').classList.add('clhalf'); if (ct) ct.closest('tr').classList.add('clhalf');
   var mr = $('clSave') && $('clSave').parentNode; if (mr) { mr.classList.add('clstick'); mr.insertAdjacentHTML('afterbegin', '<div class="clstot"><small>' + esc(t('clTotal')) + '</small><b id="clTotal2">' + esc($('clTotal').textContent) + '</b></div>'); }
 }
@@ -10140,7 +10152,8 @@ function renderAudit() { if ($('acsWrap')) $('acsWrap').hidden = !isMgr();
   });
   function cell(n) { return '<td class="n ' + (n ? 'hot' : 'muted') + '">' + n + '</td>'; }
   $('auMon').innerHTML = '<div class="tbl"><table><thead><tr><th>' + esc(t('user')) + '</th><th>' + esc(t('m_fail')) + '</th><th>' + esc(t('m_undo')) + '</th><th>' + esc(t('m_edit')) + '</th><th>' + esc(t('m_del')) + '</th><th>' + esc(t('m_sheet')) + '</th><th>' + esc(t('m_short')) + '</th><th>' + esc(t('m_last')) + '</th></tr></thead><tbody>' + Object.keys(mon).map(function (k) {
-    var m = mon[k]; return '<tr><td><b><bdi>' + esc(nmT(m.name)) + '</bdi></b></td>' + cell(m.fail) + cell(m.undo) + cell(m.edit) + cell(m.del) + cell(m.sheet) + cell(m.cnt) + '<td>' + (m.last ? esc(shortDate(m.last)) : '—') + '</td></tr>';
+    var m = mon[k], nmC = esc(nmT(m.name)); if (/^\d{1,6}$/.test(String(m.name))) { var wu = (DB.workers || []).find(function (x) { return String(x.uno || '') === String(m.name); }); nmC = esc(m.name) + ' — ' + (wu ? '<bdi>' + esc(nmT(wu.name)) + '</bdi>' + (wu.active === 'موقوف' ? ' <small class="muted">(' + esc(t('monOff')) + ')</small>' : '') : '<small class="amt-neg">' + esc(t('monNoUser')) + '</small>'); }
+    return '<tr><td><b>' + nmC + '</b></td>' + cell(m.fail) + cell(m.undo) + cell(m.edit) + cell(m.del) + cell(m.sheet) + cell(m.cnt) + '<td>' + (m.last ? esc(shortDate(m.last)) : '—') + '</td></tr>';
   }).join('') + '</tbody></table></div>';
   var L = inP.slice().reverse().filter(function (x) { var k = actKey(x.action); return (!u || x.user === u) && (!a || k === a) && (!imp || AULEVEL[k]) && (!f || (x.user + ' ' + x.action + ' ' + x.details).indexOf(f) > -1); }).slice(0, 300);
   $('auBody').innerHTML = L.length ? '<div class="tbl"><table><thead><tr><th>' + esc(t('date')) + '</th><th>' + esc(t('user')) + '</th><th>' + esc(t('action')) + '</th><th>' + esc(t('details')) + '</th></tr></thead><tbody>' + L.map(function (x) {
@@ -12258,7 +12271,7 @@ function mrCalc(data, ym, items) {
     cvPermW: '🏭 تحويل الأصناف في المستودع — تسجيل', permOther: 'باقي الصلاحيات',
     btStRecv: 'مستلم — بانتظار التعميد', btShortTag: 'ناقص', btRecvBy: 'استلمه {0} — {1}', btSentRecv: 'انرسل {0} — وصل {1}', btRecvOk: 'وصل {0}', coL: 'الشركة', coNone: 'بدون', coAdd: 'إضافة شركة/مندوب جديد', coNewQ: 'اسم الشركة/المندوب الجديد:', coT: 'ربط الأصناف بالشركات', coBtn: 'الشركات',
     coHint: 'النظام قرأ أسماء الأصناف واقترح الشركة (أم صالح وام صالح واحد، صرة وصره واحد…). اختر لكل مجموعة المندوب/الشركة من القائمة، أو تنضاف كمندوب جديد، وشيل الصح عن اللي ما تبغاه. الأصناف اللي لها شركة من قبل ما تتغيّر.',
-    coItems: 'صنف', coDone: '{0} مربوط من قبل', coAsNew: 'إضافة «{0}» كشركة جديدة', coShow: 'عرض الأصناف', coNoneN: '{0} صنف ما انقرأت له شركة من اسمه — تحددها من ✏️ لو تبغى.', coApply: 'اعتمد الشركات', coNothing: 'ما فيه شي جديد', coSaved: 'انربط {0} صنف بشركاته', coSaved2: 'انربط {0} صنف · وانشالت الشركة من {1}', prqByBr: 'حسب الفرع', trqAddBtn: 'إضافة طلب من المستودع', stpReq: 'طلب', stpWay: 'بالطريق', stpGot: 'استلم', pxBtn: 'استلام بالنيابة', pxQ: 'الاستلام شغلة {0}. متأكد تبغى تستلم بالنيابة عنهم؟', lvTitle: 'نظرة سريعة', lvOpen: 'افتح', lvAttT: 'حضور اليوم', lvPres: 'حاضر', lvLate: 'متأخر', lvAbs: 'غايب', lvLastLate: 'آخر متأخر', lvHrT: 'تنبيهات الموظفين', lvExpired: 'انتهت', lvDaysLeft: 'باقي {0} يوم', lvAllOk: 'ما فيه تنبيهات', lvOblT: 'الالتزامات', lvOblMonth: 'التزامات هالشهر', lvOblN: 'عدد الالتزامات', lvTrqT: 'طلبات النقل', lvTrqMine: 'تنتظر إجراءك', lvTrqOpen: 'الجارية', lvPrq: 'مشتريات مطلوبة', lvInvT: 'آخر الفواتير', lvWaitT: 'بانتظار الاعتماد', lvClT: 'إقفالات اليوم', lvClOk: 'معتمد', lvClIn: 'وصل', lvClNot: 'لسا', lvMtT: 'النظافة والصيانة', lvMtOk: 'ما فيه شي اليوم', lvExpT: 'مصاريف آخر 7 أيام', lvNone: 'ما فيه', lvMineT: 'شغلي', lvMyTrq: 'طلبي {0}', lvMyCl: 'آخر إقفال ({0})', lvMyBc: 'تحويل {0}', lvMyTasks: 'مهامي الجديدة', foldN: '{0} طلب', bcUsOk: 'معتمد', bcUsPend: 'بانتظار الاعتماد', secWh: 'المستودع', secUi: 'التصميم وإخفاء المربعات', secBr: 'الفروع', secHr: 'الموارد البشرية', secHrS: 'الموارد', secShort: 'اختصاراتي', secN: '{0} شاشات', secCfg: 'تخصيص الأقسام', secCfgHint: 'اختر القسم، واضغط على أي مربع عشان تنقله أو ترتّبه أو تخفيه', secEmpty: 'ما فيه مربعات هنا', secMoveT: 'انقل «{0}» إلى:', secUp: 'قدّمه', secDown: 'أخّره', secHideB: 'أخفه', secShowB: 'أظهره', secMoved: 'انتقل إلى {0}', uiT: 'التصميم', uiNew: 'الجديد', uiOld: 'القديم', uiMore: 'المزيد', itSelB: 'تحديد', itSelN: 'محدد {0} من {1}', itSelHid: '{0} محدد من بحث سابق', itSelEnd: 'إنهاء التحديد', itSelCoT: 'حدد الشركة لـ {0} صنف', itSelPick: 'اختر الشركة', itSelNone: 'بدون شركة', itSelOk: 'اعتمد', itSelDone: 'انربط {0} صنف بـ {1}', itSelDone0: 'انشالت الشركة من {0} صنف', ivPayDone: 'تغيّر نوع الدفع إلى {0}', btAddBtn: 'إضافة نقل بين الفروع', prqAllBr: 'كل الفروع', coAllY: '✅ الكل', coAllN: '⬜ ولا شي',
+    coItems: 'صنف', coDone: '{0} مربوط من قبل', coAsNew: 'إضافة «{0}» كشركة جديدة', coShow: 'عرض الأصناف', coNoneN: '{0} صنف ما انقرأت له شركة من اسمه — تحددها من ✏️ لو تبغى.', coApply: 'اعتمد الشركات', coNothing: 'ما فيه شي جديد', coSaved: 'انربط {0} صنف بشركاته', coSaved2: 'انربط {0} صنف · وانشالت الشركة من {1}', prqByBr: 'حسب الفرع', trqAddBtn: 'إضافة طلب من المستودع', monOff: 'موقوف', monNoUser: 'رقم غير موجود', ivRcT: 'الفاتورة رقم {0} — وش تبغى تسوي؟', ivRcFix: 'إعادة للتصحيح — ترجع للعامل يصلّحها ويرسلها', ivRcCancel: 'إلغاء نهائي — تنلغي وتبقى في السجل', ivRcCancelled: 'انلغت الفاتورة رقم {0}', bbClose: 'الإقفال', bbTrq: 'النقل', bbTasks: 'مهامي', bbAtt: 'حضوري', stpReq: 'طلب', stpWay: 'بالطريق', stpGot: 'استلم', pxBtn: 'استلام بالنيابة', pxQ: 'الاستلام شغلة {0}. متأكد تبغى تستلم بالنيابة عنهم؟', lvTitle: 'نظرة سريعة', lvOpen: 'افتح', lvAttT: 'حضور اليوم', lvPres: 'حاضر', lvLate: 'متأخر', lvAbs: 'غايب', lvLastLate: 'آخر متأخر', lvHrT: 'تنبيهات الموظفين', lvExpired: 'انتهت', lvDaysLeft: 'باقي {0} يوم', lvAllOk: 'ما فيه تنبيهات', lvOblT: 'الالتزامات', lvOblMonth: 'التزامات هالشهر', lvOblN: 'عدد الالتزامات', lvTrqT: 'طلبات النقل', lvTrqMine: 'تنتظر إجراءك', lvTrqOpen: 'الجارية', lvPrq: 'مشتريات مطلوبة', lvInvT: 'آخر الفواتير', lvWaitT: 'بانتظار الاعتماد', lvClT: 'إقفالات اليوم', lvClOk: 'معتمد', lvClIn: 'وصل', lvClNot: 'لسا', lvMtT: 'النظافة والصيانة', lvMtOk: 'ما فيه شي اليوم', lvExpT: 'مصاريف آخر 7 أيام', lvNone: 'ما فيه', lvMineT: 'شغلي', lvMyTrq: 'طلبي {0}', lvMyCl: 'آخر إقفال ({0})', lvMyBc: 'تحويل {0}', lvMyTasks: 'مهامي الجديدة', foldN: '{0} طلب', bcUsOk: 'معتمد', bcUsPend: 'بانتظار الاعتماد', secWh: 'المستودع', secUi: 'التصميم وإخفاء المربعات', secBr: 'الفروع', secHr: 'الموارد البشرية', secHrS: 'الموارد', secShort: 'اختصاراتي', secN: '{0} شاشات', secCfg: 'تخصيص الأقسام', secCfgHint: 'اختر القسم، واضغط على أي مربع عشان تنقله أو ترتّبه أو تخفيه', secEmpty: 'ما فيه مربعات هنا', secMoveT: 'انقل «{0}» إلى:', secUp: 'قدّمه', secDown: 'أخّره', secHideB: 'أخفه', secShowB: 'أظهره', secMoved: 'انتقل إلى {0}', uiT: 'التصميم', uiNew: 'الجديد', uiOld: 'القديم', uiMore: 'المزيد', itSelB: 'تحديد', itSelN: 'محدد {0} من {1}', itSelHid: '{0} محدد من بحث سابق', itSelEnd: 'إنهاء التحديد', itSelCoT: 'حدد الشركة لـ {0} صنف', itSelPick: 'اختر الشركة', itSelNone: 'بدون شركة', itSelOk: 'اعتمد', itSelDone: 'انربط {0} صنف بـ {1}', itSelDone0: 'انشالت الشركة من {0} صنف', ivPayDone: 'تغيّر نوع الدفع إلى {0}', btAddBtn: 'إضافة نقل بين الفروع', prqAllBr: 'كل الفروع', coAllY: '✅ الكل', coAllN: '⬜ ولا شي',
     bfBy: 'أدخلها {0} — {1}', bfDocS: 'الفاتورة', bfGoodsS: 'البضاعة', bfNoCur: 'الصنف ما له تكلفة سابقة', bfHigher: 'أعلى من التكلفة الحالية {0} بـ {1}%', bfLower: 'أقل من التكلفة الحالية {0} بـ {1}%', bfSame: 'قريب من التكلفة الحالية', bfNewCost: 'التكلفة الجديدة بعد الخصم ({0})',
     bfApplyHint: 'بعد الاعتماد: التكلفة المرجعية للأصناف تصير سعر هذي الفاتورة (شامل الضريبة وبعد الخصم) — وقيمة المستودع ما تتغيّر.', sar: 'ريال', phRetake: 'إعادة التصوير',
     shopT: 'قائمة المشتريات', shopCnt: '{0} صنف · {1} شركة', shopAllOpen: 'المفتوح كله', shopStNew: 'مطلوب', shopStDone: 'وصل', shopOld: 'من 3 أيام وأكثر', shopCoN: '{0} صنف', shopOrdCo: 'طلبت كل أصناف {0}', shopOrdAll: 'طلبتها كلها', shopOrd: 'طلبته من المورد', shopUnord: 'رجّعه مطلوب', shopArrived: 'وصل',
