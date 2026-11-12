@@ -1291,6 +1291,12 @@ html[data-ui="v2"] #attBoardCard,html[data-ui="v2"] #attLogCard{background:none;
 html[data-ui="v2"] .cfhead{color:var(--palm);text-decoration:none;font-size:18px;text-align:start;margin:0 2px 8px}
 html[data-ui="v2"] #clKpis .kpi{border:0!important;border-inline-start:0!important;border-top:0!important;background:var(--surface)!important;box-shadow:none!important}
 html[data-ui="v2"] #clKpis .kpi.warn{background:#F6EAD0!important}
+
+/* 🖥️ الكمبيوتر: الصف الأخير يتعبّى (المربعات الباقية تتمدد) */
+@media (min-width:761px){
+  html[data-ui="v2"] .hometiles:not(.s4):not(.myedit):not(.lyedit):not(.secedit){display:flex;flex-wrap:wrap;gap:12px}
+  html[data-ui="v2"] .hometiles:not(.s4):not(.myedit):not(.lyedit):not(.secedit)>.ht{flex:1 1 calc(25% - 12px);min-width:170px;box-sizing:border-box}
+}
 </style>
 <script>
 (function () { try { var ic = document.querySelector('link[rel=icon]').href, m = { name: 'أبوشرحة للتمور', short_name: 'أبوشرحة', lang: 'ar', dir: 'rtl', display: 'standalone', start_url: location.href.split('#')[0], background_color: document.documentElement.getAttribute('data-ui') === 'v2' ? '#FFFFFF' : '#4e3622', theme_color: document.documentElement.getAttribute('data-ui') === 'v2' ? '#FFFFFF' : '#4e3622', icons: [{ src: ic, sizes: '192x192', type: 'image/png' }, { src: ic, sizes: '512x512', type: 'image/png' }] };
@@ -4569,7 +4575,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 169, APP_DATE = '2026-11-12';
+var APP_BUILD = 170, APP_DATE = '2026-11-12';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
