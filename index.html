@@ -1529,6 +1529,8 @@ html[data-ui="v2"] #psBox .psbtns{bottom:0;padding:6px 0 4px;margin:0}
 .gdhb{display:grid;grid-template-columns:92px 1fr auto;align-items:center;gap:8px;font-size:13px;margin:7px 0}.gdhb b{font-size:12.5px;white-space:nowrap}.gdtr{height:10px;background:var(--surface,#F4EFE6);border-radius:5px;overflow:hidden}.gdtr i{display:block;height:100%;border-radius:0 5px 5px 0}
 .gdleg{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;margin:4px 0}.gdleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:4px;vertical-align:-1px}.gdsvg{display:block}
 @media print{body.prgd .view:not(#v-guide),body.prgd header,body.prgd nav,body.prgd #bbar,body.prgd .noprint,body.prgd .banner{display:none!important}body.prgd #v-guide{display:block!important}}
+
+.xlexp{display:inline-flex;gap:4px;margin-inline-start:auto}.xlexp button{border:1px solid var(--line,#E4DACA);background:var(--card,#fff);border-radius:9px;padding:3px 8px;font-size:13px;line-height:1.2;cursor:pointer}.xlexp+.xlx{margin-inline-start:6px}
 </style>
 <script>
 (function () { try { var ic = document.querySelector('link[rel=icon]').href, m = { name: 'أبوشرحة للتمور', short_name: 'أبوشرحة', lang: 'ar', dir: 'rtl', display: 'standalone', start_url: location.href.split('#')[0], background_color: document.documentElement.getAttribute('data-ui') === 'v2' ? '#FFFFFF' : '#4e3622', theme_color: document.documentElement.getAttribute('data-ui') === 'v2' ? '#FFFFFF' : '#4e3622', icons: [{ src: ic, sizes: '192x192', type: 'image/png' }, { src: ic, sizes: '512x512', type: 'image/png' }] };
@@ -4818,7 +4820,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 196, APP_DATE = '2026-11-16';
+var APP_BUILD = 198, APP_DATE = '2026-11-16';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -9455,7 +9457,29 @@ function gdXlsx() {
   });
 }
 /* 📄 PDF: يطبع التبويب الحالي بس */
-function gdPdf() { document.body.classList.add('prgd'); setTimeout(function () { window.print(); setTimeout(function () { document.body.classList.remove('prgd'); }, 500); }, 50); }
+function printDoc(title, sub, inner) {
+  var css = ''; document.querySelectorAll('style').forEach(function (st) { css += st.textContent; }); var lg = document.querySelector('.brandlogo');
+  var html = '<!doctype html><html dir="rtl" lang="ar"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + esc(title + (sub ? ' — ' + sub : '')) + '</title><style>' + css + '\nhtml,body{background:#fff!important}body{padding:14px!important;margin:0}.view{display:block!important}.pdh{display:flex;align-items:center;gap:10px;border-bottom:3px solid #5A3A22;padding-bottom:8px;margin-bottom:10px}.pdh img{height:44px}.pdh h1{margin:0;font-size:20px;flex:1}.pdh small{display:block;color:#8A7663;font-size:12px;font-weight:400}.pdf{margin-top:14px;font-size:11px;color:#8A7663;border-top:1px solid #EFE7DA;padding-top:6px}.card,.gdrc,.gdkp,.gdsum,tr{break-inside:avoid}.xl .xlb,.xlb.fade{max-height:none!important;overflow:visible!important;-webkit-mask:none!important;mask:none!important}.tbl{overflow:visible!important}table{width:100%}@page{size:A4;margin:10mm}</style></head><body>' +
+    '<div class="pdh">' + (lg ? '<img src="' + lg.src + '">' : '') + '<h1>' + esc(title) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</h1><b>' + esc(t('appName') !== 'appName' ? '' : '') + '</b></div>' + inner +
+    '<div class="pdf">' + esc(t('gdPrinted', nmT(ME.name), fmtDT(nowR()))) + '</div><script>setTimeout(function(){try{window.focus();window.print();}catch(e){}},400);<\/script></body></html>';
+  var w = null; try { w = window.open('', '_blank'); } catch (e) { w = null; }
+  if (w && w.document) { w.document.open(); w.document.write(html); w.document.close(); return; }
+  try { var u = URL.createObjectURL(new Blob([html], { type: 'text/html' })), a = document.createElement('a'); a.href = u; a.target = '_blank'; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove(); return; } catch (e) { }
+  toast('⚠️ ' + t('pdfBlocked'), true);
+}
+function pdfClean(node) { var c = node.cloneNode(true); c.querySelectorAll('.noprint,button,.xlh,script').forEach(function (e) { e.remove(); }); c.querySelectorAll('select').forEach(function (e) { var o = e.options[e.selectedIndex], sp = document.createElement('span'); sp.textContent = o ? o.text : ''; e.replaceWith(sp); }); c.querySelectorAll('input').forEach(function (e) { var sp = document.createElement('span'); sp.textContent = e.type === 'checkbox' ? (e.checked ? '✓' : '') : e.value; e.replaceWith(sp); }); return c; }
+function gdPdf() { var src = $('v-guide'); if (!src) return; var tabN = { rec: 'gdTRec', sales: 'gdTSales', sup: 'gdTSup', emp: 'gdTEmp', mv: 'gdTMv', dmg: 'gdTDmg' }[GD.tab]; printDoc(t('guide') + ' — ' + t(tabN), GD.ym, pdfClean(src).innerHTML); }
+/* 📄⬇️ أي سجل (xlt): PDF أو Excel بكل السطور حسب الفلتر */
+function xlTitle(el) { var tt = el.getAttribute('data-xt') || '', v = el.closest('.view'), vt = v && v.id ? viewTitle(v.id.replace(/^v-/, '')) : ''; return { t: tt || vt, s: tt && vt && vt !== tt ? vt : '' }; }
+function xlPdf(el) { var T = xlTitle(el); printDoc(T.t, T.s, pdfClean(el).outerHTML); }
+function xlXls(el) {
+  var T = xlTitle(el); upLoadLib(function () {
+    var c = pdfClean(el), tb = c.tagName === 'TABLE' ? c : c.querySelector('table'), ws;
+    if (tb) ws = XLSX.utils.table_to_sheet(tb, { raw: false });
+    else { document.body.appendChild(c); c.style.cssText = 'position:absolute;left:-9999px;top:0'; var rows = Array.prototype.map.call(c.children, function (ch) { return String(ch.innerText || ch.textContent || '').split('\n').map(function (x) { return x.trim(); }).filter(Boolean); }); c.remove(); ws = XLSX.utils.aoa_to_sheet(rows); }
+    var wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, String(T.t || 'Sheet').replace(/[\\\/?*\[\]:]/g, '').slice(0, 30) || 'Sheet'); XLSX.writeFile(wb, (T.t || 'export') + ' ' + todayS() + '.xlsx');
+  });
+}
 
 function safeRender() {
   var box = $('safeBox'); if (!box) return; if (!isMgr()) { box.innerHTML = ''; return; }
@@ -9532,9 +9556,10 @@ function xlifyAll(root) {
     el.setAttribute('data-xd', '1'); var k = el.getAttribute('data-xk') || '', n = el.querySelectorAll(':scope > table > tbody > tr:not(.ivdet):not(.wtot)').length || el.querySelectorAll(':scope > .qrow').length || el.children.length;
     var box = document.createElement('div'); box.className = 'xl xlmid' + (XLFULL['x' + k] ? ' full' : '');
     var big = n > 8, hd = document.createElement('div'); hd.className = 'xlh';
-    hd.innerHTML = '📋 ' + esc(el.getAttribute('data-xt') || '') + ' <b class="xln">' + n + '</b>' + (big ? '<button type="button" class="xlx">' + (XLFULL['x' + k] ? '▲ ' + esc(t('xlLess')) : '▼ ' + esc(t('xlAll'))) + '</button>' : '');
+    hd.innerHTML = '📋 ' + esc(el.getAttribute('data-xt') || '') + ' <b class="xln">' + n + '</b><span class="xlexp"><button type="button" class="xlp" title="PDF">📄</button><button type="button" class="xle" title="Excel">⬇️</button></span>' + (big ? '<button type="button" class="xlx">' + (XLFULL['x' + k] ? '▲ ' + esc(t('xlLess')) : '▼ ' + esc(t('xlAll'))) + '</button>' : '');
     var bd = document.createElement('div'); bd.className = 'xlb' + (big ? ' fade' : '');
     el.parentNode.insertBefore(box, el); box.appendChild(hd); box.appendChild(bd); bd.appendChild(el);
+    hd.querySelector('.xlp').onclick = function () { xlPdf(el); }; hd.querySelector('.xle').onclick = function () { xlXls(el); };
     var bt = hd.querySelector('.xlx'); if (bt) bt.onclick = function () { XLFULL['x' + k] = !XLFULL['x' + k]; box.classList.toggle('full', !!XLFULL['x' + k]); bt.textContent = XLFULL['x' + k] ? '▲ ' + t('xlLess') : '▼ ' + t('xlAll'); };
   });
 }
@@ -13033,7 +13058,7 @@ function mrCalc(data, ym, items) {
     gdDmgH: 'النسبة = التالف ÷ مبيعات الفرع.',
     gdDmgItT: 'أكثر الأصناف تلف',
     gdTimes: 'مرات',
-    gdLv: 'الدرجة',
+    gdPrinted: 'طُبع بواسطة: {0} — {1}', pdfBlocked: 'المتصفح منع فتح نافذة الطباعة — اسمح بالنوافذ المنبثقة وجرّب مرة ثانية', gdLv: 'الدرجة',
     gdRecT: 'التوصية',
     gdFind: 'وش لاحظ',
     gdDo: 'وش تسوي',
