@@ -4823,7 +4823,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 202, APP_DATE = '2026-11-17';
+var APP_BUILD = 203, APP_DATE = '2026-11-18';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -9264,15 +9264,16 @@ function postMark(ids, on) {
 /* ===================== 🏦 مطابقة الخزنة =====================
    المتوقع في الخزنة = الرصيد السابق + الكاش من الإقفالات − (مشتريات نقدي + سداد آجل نقدي + فواتير الفروع نقدي − مرتجع نقدي) − المشتريات الاستهلاكية − المصاريف */
 var SF = { from: '', to: '', loc: '', open: null, bopen: null, actual: '', bactual: '', note: '', tab: 'c' };
-function safeLast() { var L = (DB.safeCounts || []).filter(function (k) { return !k.loc; }).slice().sort(function (a, b) { var x = String(a.at || a.to), y = String(b.at || b.to); return x < y ? -1 : x > y ? 1 : 0; }); return L[L.length - 1] || null; }
+function safeLast() { var L = (DB.safeCounts || []).filter(function (k) { return !k.loc; }).slice().sort(function (a, b) { var x = sfN(a.at || a.to), y = sfN(b.at || b.to); return x < y ? -1 : x > y ? 1 : 0; }); return L[L.length - 1] || null; }
 /* كل حركة فلوس في الفترة: الكاش (الصندوق) والبنك (مدى/فيزا/ماستر + التحويل والشبكة) */
 /* ⏱️ المطابقة بالوقت: بعد آخر مطابقة (cut = ساعة العدّ) تدخل أي حركة انسجلت بعدها، حتى لو تاريخها نفس اليوم.
    وقت الحركة: الإقفال = وقت تسجيله (وقت تسليم الكاش)، والباقي = وقت التسجيل لو بنفس يوم الحركة، وإلا آخر يوم الحركة */
-function sfTs(d, cr) { d = String(d || ''); cr = String(cr || ''); if (d.length > 10) return d.slice(0, 16); var d0 = d.slice(0, 10); if (cr && cr.slice(0, 10) === d0) return cr.slice(0, 16); return d0 + ' 23:59'; }
+function sfN(v) { if (v === null || v === undefined || v === '') return ''; if (v instanceof Date) return fmtDT(v); var s0 = String(v); if (/^\d{4}-\d\d-\d\d/.test(s0)) return s0.replace('T', ' ').slice(0, 16); var d0 = new Date(s0); return isNaN(d0) ? s0 : fmtDT(d0); }
+function sfTs(d, cr) { d = sfN(d); cr = sfN(cr); if (d.length > 10) return d.slice(0, 16); var d0 = d.slice(0, 10); if (cr && cr.slice(0, 10) === d0) return cr.slice(0, 16); return d0 + ' 23:59'; }
 function safeCalc(f, to, loc, cutTs) {
   var lo = cutTs ? String(cutTs).slice(0, 16) : '', inR = function (d, ts) { d = String(d || '').slice(0, 10); if (d > to) return false; if (lo) return String(ts || d + ' 23:59') > lo; return d >= f; }, okL = function (c) { return !loc || (c || MAINLOC) === loc; };
   var E = { c: [], b: [] }, bank = function (m) { return m === 'تحويل' || m === 'شبكة'; }, add = function (acc, k, d, txt, a, ts) { if (a > 0.0001) E[acc].push({ k: k, d: String(d).slice(0, 10), s: String(ts || String(d).slice(0, 10) + ' 23:59'), t: txt, a: a }); };
-  (DB.dailyClose || []).forEach(function (c) { var ts = c.created ? String(c.created).slice(0, 16) : String(c.date).slice(0, 10) + ' 23:59'; if (c.status === 'مُعاد' || !inR(c.date, ts) || !okL(c.loc)) return; var who = ln(c.loc) + ' — ' + nmT(c.cashier || c.user) + (c.status === 'معتمد' ? '' : ' ⏳');
+  (DB.dailyClose || []).forEach(function (c) { var ts = c.created ? sfN(c.created) : sfN(c.date).slice(0, 10) + ' 23:59'; if (c.status === 'مُعاد' || !inR(c.date, ts) || !okL(c.loc)) return; var who = ln(c.loc) + ' — ' + nmT(c.cashier || c.user) + (c.status === 'معتمد' ? '' : ' ⏳');
     add('c', 'cash', c.date, who, Number(c.cash) || 0, ts); add('b', 'bsale', c.date, who + ' (' + t('sfBankSub') + ')', (Number(c.mada) || 0) + (Number(c.visa) || 0) + (Number(c.master) || 0), ts); });
   (DB.invoices || []).forEach(function (x) {
     var ts = sfTs(x.date, x.created); if (x.status || !inR(x.date, ts) || x.invType === OB_TYPE || !okL(x.loc)) return;
@@ -9502,8 +9503,8 @@ function xlXls(el) {
 function safeRender() {
   var box = $('safeBox'); if (!box) return; if (!isMgr()) { box.innerHTML = ''; return; }
   var last = safeLast();
-  if (!SF.from) SF.from = last ? String(last.at || last.to).slice(0, 10) : todayS().slice(0, 8) + '01';
-  var sfCut = last && !SF.loc && last.at && SF.from === String(last.at).slice(0, 10) ? String(last.at).slice(0, 16) : '';
+  var lastAt = last ? sfN(last.at) : ''; if (!SF.from) SF.from = last ? (lastAt || sfN(last.to)).slice(0, 10) : todayS().slice(0, 8) + '01';
+  var sfCut = last && !SF.loc && lastAt && SF.from === lastAt.slice(0, 10) ? lastAt : '';
   if (!SF.to) SF.to = SF.from > todayS() ? SF.from : todayS();
   if (SF.open === null) SF.open = last && !last.loc ? String(last.actual) : '0';
   if (SF.bopen === null) SF.bopen = last && !last.loc && last.bank ? String(last.bank.actual !== '' && last.bank.actual !== undefined ? last.bank.actual : last.bank.expected) : '0';
@@ -9526,7 +9527,7 @@ function safeRender() {
     '<p class="hint" style="margin:6px 0 10px">' + esc(t('sfHint2')) + '</p>' +
     '<div class="form"><label><span>' + esc(t('hrFrom')) + '</span><input type="date" value="' + esc(SF.from) + '" onchange="SF.from=this.value;safeRender()"></label><label><span>' + esc(t('hrTo')) + '</span><input type="date" value="' + esc(SF.to) + '" onchange="SF.to=this.value;safeRender()"></label>' +
     '<label><span>' + esc(t('clBranch')) + '</span><select onchange="SF.loc=this.value;safeRender()">' + locO + '</select></label></div>' +
-    (last ? '<p class="muted" style="margin:4px 0 0;font-size:12.5px">' + esc(sfCut ? t('sfLastAt', last.id, shortDate(last.at), num(last.actual)) : t('sfLast', last.id, last.to, num(last.actual))) + '</p>' : '') +
+    (last ? '<p class="muted" style="margin:4px 0 0;font-size:12.5px">' + esc(sfCut ? t('sfLastAt', last.id, lastAt.slice(5).replace(' ', ' — '), num(last.actual)) : t('sfLast', last.id, last.to, num(last.actual))) + '</p>' : '') +
     (SF.loc ? '<p class="mr2warn" style="margin:8px 0 0">' + esc(t('sfLocNote')) + '</p>' : '') +
     (V2 ? '<div class="seg2 sfseg"><button type="button" class="' + (SF.col !== 'b' ? 'on' : '') + '" onclick="SF.col=\'c\';safeRender()">' + svgI('cash', 16) + ' ' + esc(t('sfCashT')) + '</button><button type="button" class="' + (SF.col === 'b' ? 'on' : '') + '" onclick="SF.col=\'b\';safeRender()">' + svgI('safe', 16) + ' ' + esc(t('sfBankT')) + '</button></div>' : '') +
     '<div class="sfcols' + (V2 ? (SF.col === 'b' ? ' showb' : ' showc') : '') + '">' + col('c', '💵 ' + esc(t('sfCashT')), SF.open, ce, 'actual', 'sfResC') + col('b', '🏦 ' + esc(t('sfBankT')), SF.bopen, be, 'bactual', 'sfResB') + '</div>' +
