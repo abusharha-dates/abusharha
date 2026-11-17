@@ -570,7 +570,7 @@ body.staffUI #tabs{display:none!important}
 .xlh .xlx{margin-inline-start:auto;border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:3px 12px;font-size:12.5px;cursor:pointer;font-weight:700;color:var(--ink)}
 .xl.xlmid .xlb{max-height:440px}.xlb>.tbl{border:0;border-radius:0;overflow:visible}.xlb>.qlist{margin-top:0!important;padding:6px}
 .xlb>.elist{padding:6px}
-.xlb{max-height:290px;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.xl.full .xlb{max-height:none}
+.xlb{max-height:290px;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:auto}.xl.full .xlb{max-height:none}
 .xlb table{width:100%;border-collapse:collapse}.xlb thead th{position:sticky;top:0;z-index:1;background:var(--surface2)}
 .xlb tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--surface2) 35%,transparent)}
 .xlb.fade{mask-image:linear-gradient(#000 85%,transparent);-webkit-mask-image:linear-gradient(#000 85%,transparent)}.xl.full .xlb.fade{mask-image:none;-webkit-mask-image:none}
@@ -4820,7 +4820,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 198, APP_DATE = '2026-11-16';
+var APP_BUILD = 200, APP_DATE = '2026-11-17';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -10306,11 +10306,20 @@ function bcSend() {
 }
 function bcCnt(r) { var c = 0, h0 = 0; (r.lines || []).forEach(function (l) { if (l.k === 'h') h0++; else c++; }); return [c, h0]; }
 function bcStH(r) { if (!can('bconvRev')) return r.status === 'مُدرج' ? '<span class="st ok">✅ ' + esc(t('bcUsOk')) + '</span>' : r.status === 'مرفوض' ? '<span class="st bad">' + esc(t('bcSt2')) + '</span>' : '<span class="st warn">⏳ ' + esc(t('bcUsPend')) + '</span>'; return r.status === 'مُدرج' ? '<span class="st ok">' + esc(t('bcSt1')) + '</span>' : r.status === 'مرفوض' ? '<span class="st bad">' + esc(t('bcSt2')) + '</span>' : '<span class="st warn">' + esc(t('bcSt0')) + '</span>'; }
-function bcLineH(l, i, edV) {
+/* 🍵 قيمة الضيافة المقترحة: آخر سعر للوحدة لنفس الصنف، وإلا التكلفة المرجعية × الكمية */
+function bcUnitF(it, u) { if (!it) return null; u = String(u || ''); var per = Number(it.perCtn) > 1 ? Number(it.perCtn) : 1; if (!u || u === it.unit || (u === 'كجم' && it.unit === 'كيلو') || (u === 'كيلو' && it.unit === 'كجم')) return 1; if (u === (it.bigU || 'كرتون')) return per; if (it.midU && u === it.midU && Number(it.midN) > 0) return Number(it.midN); return null; }
+function bcSugg(l, rid) {
+  var it = IM[l.item], f = bcUnitF(it, l.unit), q0 = Number(l.qty) || 0; if (!q0) return null; var best = null;
+  (DB.bconv || []).forEach(function (r) { if (r.id === rid) return; (r.lines || []).forEach(function (x) { if (x.k !== 'h' || String(x.item) !== String(l.item) || x.value === '' || x.value === undefined || !(Number(x.qty) > 0)) return; var fx = bcUnitF(it, x.unit); if (fx === null && x.unit !== l.unit) return; var ub = Number(x.value) / (Number(x.qty) * (fx || 1)), at = String(r.doneAt || r.created || ''); if (!best || at > best.at) best = { at: at, ub: ub }; }); });
+  if (best) { var v = best.ub * q0 * (f || 1); return { v: Math.round(v * 100) / 100, src: 'last' }; }
+  if (f === null) return null; var d0 = prDef(it); if (d0.p === '') return null; return { v: Math.round(d0.p / d0.per * q0 * f * 100) / 100, src: d0.src === 'ref' ? 'ref' : 'wh' };
+}
+function bcLineH(l, i, edV, rid) {
   var ph = (l.photos || []).map(function (u) { return '<img src="' + esc(photoSrc(u)) + '" alt="" loading="lazy" onclick="showPhoto(' + esc(q(u)) + ')">'; }).join('');
   var tx = '<span class="bccode">' + esc(l.item) + '</span> ' + ihtml(l.item, l.itemName) + ' × <b>' + esc(l.qty + ' ' + bcUL(l.unit)) + '</b>' + (l.k === 'c' ? '<br>⬇️ <span class="bccode">' + esc(l.to) + '</span> ' + ihtml(l.to, l.toName) + ' = <b>' + esc(l.toQty + ' ' + bcUL(l.toUnit)) + '</b>' : '');
   var nv = l.value === '' || l.value === undefined || l.value === null;
-  var val = l.k !== 'h' ? '' : edV ? '<label class="bcvl">' + esc(t('bcValL')) + ' <input type="number" min="0" step="any" inputmode="decimal" class="bcval" data-i="' + i + '" value="' + (nv ? '' : esc(l.value)) + '"> ر.س</label>' : '<div class="bcvl">' + esc(t('bcValL')) + ': <b>' + (nv ? '—' : money2(l.value)) + '</b></div>';
+  var sg = l.k === 'h' && edV && nv ? bcSugg(l, rid) : null;
+  var val = l.k !== 'h' ? '' : edV ? '<label class="bcvl">' + esc(t('bcValL')) + ' <input type="number" min="0" step="any" inputmode="decimal" class="bcval" data-i="' + i + '" value="' + (nv ? (sg ? esc(sg.v) : '') : esc(l.value)) + '"> ر.س' + (sg ? ' <small class="muted">' + esc(sg.src === 'last' ? t('bcSgLast') : sg.src === 'ref' ? t('bcSgRef') : t('bcSgWh')) + '</small>' : '') + '</label>' : '<div class="bcvl">' + esc(t('bcValL')) + ': <b>' + (nv ? '—' : money2(l.value)) + '</b></div>';
   return '<div class="bcl2"><span class="bctag ' + l.k + '">' + esc(t('bcK_' + l.k)) + '</span><div>' + tx + '</div><div class="dmgph2">' + ph + '</div>' + val + '</div>';
 }
 function bcRevHTML() {
@@ -10322,7 +10331,7 @@ function bcRevHTML() {
   h += L.length ? L.slice(0, 150).map(function (r) {
     var c = bcCnt(r), pend = r.status === 'بانتظار الإدراج';
     return '<details class="bcrec" id="bcrec_' + esc(r.id) + '"' + (pend && L.length <= 3 ? ' open' : '') + '><summary><b>' + esc(r.id) + ' · ' + esc(ln(r.loc)) + '</b>' + bcStH(r) + '<small class="sub2"><bdi>' + esc(nmT(r.by)) + '</bdi> · ' + esc(shortDate(r.created)) + ' ' + esc(attH12(String(r.created).slice(11, 16))) + ' · ' + (c[0] ? '🔄 ' + c[0] + ' ' : '') + (c[1] ? '🍵 ' + c[1] : '') + '</small></summary>' +
-      (r.lines || []).map(function (l, i) { return bcLineH(l, i, pend); }).join('') +
+      (r.lines || []).map(function (l, i) { return bcLineH(l, i, pend, r.id); }).join('') +
       (r.rejReason ? '<p class="st bad" style="display:block">❌ ' + esc(r.rejReason) + '</p>' : '') + (r.doneBy ? '<small class="sub2">' + esc(t(r.status === 'مُدرج' ? 'bcDoneBy' : 'bcRejBy', nmT(r.doneBy), shortDate(r.doneAt))) + '</small>' : '') +
       (r.hist && r.hist.length ? '<small class="sub2">📝 ' + r.hist.map(function (x) { return esc(nmT(x.by) + ' ' + shortDate(x.at) + ': ' + (x.ch || '') + ' — ' + x.why); }).join('<br>') + '</small>' : '') +
       (ME.readonly ? '' : '<div class="ivact">' + (pend ? '<button class="primary sm" type="button" onclick="bcDone(' + esc(q(r.id)) + ')">✅ ' + esc(t('bcDone')) + '</button><button class="ghost sm" type="button" onclick="bcEdit(' + esc(q(r.id)) + ')">✏️ ' + esc(t('bcEdit')) + '</button><button class="ghost sm" type="button" onclick="bcRej(' + esc(q(r.id)) + ')">↩️ ' + esc(t('bcRej')) + '</button>' : r.status === 'مُدرج' && c[1] ? '<button class="ghost sm" type="button" onclick="bcVals(' + esc(q(r.id)) + ')">✏️ ' + esc(t('bcValEdit')) + '</button>' : '') + '</div>') + '</details>';
@@ -10932,7 +10941,7 @@ function atEmpFilter(SC) {
 }
 function atEmpTog(n) { var i = ATEMP.indexOf(n); if (i > -1) ATEMP.splice(i, 1); else ATEMP.push(n); renderAtt(); }
 function renderAtt() {
-  attTabsRender(); attGeoRender(); renderAttSched(); renderAttBoard();
+  attTabsRender(); attGeoRender(); var asc = $('attSchedCard'); if (!(asc && asc.innerHTML && (ASE && ASE.dirty || asc.contains(document.activeElement)))) renderAttSched(); renderAttBoard();
   var today = todayS(), SC = attSchedOf(DB.settings), nA0 = attNowA();
   var rg = attRange($('atPeriod').value), absOnly = $('atAbs').checked, okE = atEmpFilter(SC);
   var rows = attStatusRows({ attendance: DB.attendance, workers: DB.workers, attDaily: DB.attDaily }, rg[0], rg[1], today);
@@ -11050,17 +11059,21 @@ function asPers(n, k, d0) {
   return L.map(function (p, i) { var a = q(n) + ',' + q(k) + ',' + i; return '<div class="asp"><label><small>' + esc(t('asFrom')) + '</small><input type="time" value="' + esc(p.f) + '" onchange="asSet(' + a + ',\'f\',this.value)"></label><label><small>' + esc(t('asTo')) + '</small><input type="time" value="' + esc(p.t) + '" onchange="asSet(' + a + ',\'t\',this.value)"></label><label><small>' + esc(t('asLoc')) + '</small><select onchange="asSet(' + a + ',\'loc\',this.value)">' + asLocOpts(p.loc) + '</select></label>' + (L.length > 1 || d0 ? '<button class="ghost sm" type="button" onclick="asDel(' + a + ')">✕</button>' : '') + '</div>'; }).join('') +
     (L.length < 3 ? '<button class="ghost sm asadd" type="button" onclick="asAddP(' + q(n) + ',' + q(k) + ')">' + esc(t('asAdd')) + '</button>' : '');
 }
+var ASOPEN = {};
 function renderAttSched() {
   var c = $('attSchedCard'); if (!c) return; c.hidden = !isMgr() || !!ME.readonly; if (c.hidden) return;
+  var sy = window.scrollY, ib0 = c.querySelector('.xlb'), ibs = ib0 ? ib0.scrollTop : 0;
+  setTimeout(function () { if (Math.abs(window.scrollY - sy) > 2) window.scrollTo(0, sy); var ib1 = c.querySelector('.xlb'); if (ib1 && ibs) ib1.scrollTop = ibs; }, 0);
   if (!ASE) asInit();
   var today = todayS(), empty = !Object.keys(ASE.emp).some(function (n) { return ASE.emp[n].mode; });
   var h = '<h2>🗓️ ' + esc(t('asT')) + '</h2>' + hlp(t('asHint')) + '<div class="asgr"><label><span>' + esc(t('asGrace')) + '</span><input type="number" min="0" max="120" inputmode="numeric" value="' + esc(ASE.grace) + '" oninput="ASE.grace=this.value;asDirty()"></label>' + '<button class="btn" type="button" onclick="asPreset2()">' + esc(t('asPreset2')) + '</button>' + '</div>' + asLateHTML() + (ASE.fri && !ASE.fri.on && Object.keys(ASE.emp).some(function (n) { return ASE.emp[n].mode === 'wk2'; }) ? '' : asFriHTML()) + '<div class="asl">';
+  if (XLFULL.asched === undefined) XLFULL.asched = true;
   var SL = attStaff(); h += '<div style="height:10px"></div>' + xlBox('asched', '👥 ' + esc(t('asEmpT')), SL.length, '<div class="aslist">' + SL.map(function (w) {
     var e = ASE.emp[w.name] || { mode: '' }, m = e.mode === 'flex' ? '' : e.mode || '';
     var hd = '<div class="asn"><span class="av">' + esc(nmT(w.name).charAt(0)) + '</span><div class="asnm"><b><bdi>' + esc(nmT(w.name)) + '</bdi></b><small>' + esc(w.off ? t('asOffD', v(w.off)) : t('asNoOff')) + '</small></div><select onchange="asMode(' + q(w.name) + ',this.value)">' + [['', 'asModeFlex'], ['fixed', 'asModeFixed'], ['rot', 'asModeRot'], ['wk2', 'asModeWk2']].map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === m ? ' selected' : '') + '>' + esc(t(o[1])) + '</option>'; }).join('') + '</select></div>';
     var body = '';
     if (m === 'fixed') body = '<div class="aswk one">' + asPers(w.name, 'A') + '</div>';
-    if (m === 'wk2') { var z2 = attWk2(e, today), tg2 = ' <span class="st ok">' + esc(t('asThis')) + '</span>'; body = ['A', 'B'].map(function (W) { return '<details class="aswk2' + (z2.wk === W ? ' on' : '') + '"' + (z2.wk === W ? ' open' : '') + '><summary><b>' + esc(t(W === 'A' ? 'asWkA' : 'asWkB')) + '</b>' + (z2.wk === W ? tg2 : '') + '</summary>' + [0, 1, 2, 3, 4, 5, 6].map(function (i) { return '<div class="asday' + (z2.wk === W && z2.i === i ? ' today' : '') + (i === 6 ? ' fri' : '') + '"><b class="asdn">' + esc(t('asD' + i)) + '</b><div class="asdp">' + asPers(w.name, 'd' + W + i, true) + '</div></div>'; }).join('') + '<button class="ghost sm" type="button" onclick="asCopySat(' + q(w.name) + ',\'' + W + '\')">' + esc(t('asCopySat')) + '</button></details>'; }).join('') + '<button class="ghost sm" type="button" onclick="asFlip(' + q(w.name) + ')">' + esc(t('asFlip')) + '</button>'; }
+    if (m === 'wk2') { var z2 = attWk2(e, today), tg2 = ' <span class="st ok">' + esc(t('asThis')) + '</span>'; body = ['A', 'B'].map(function (W) { var ok0 = w.name + '|' + W, op0 = ASOPEN[ok0] !== undefined ? ASOPEN[ok0] : z2.wk === W; return '<details class="aswk2' + (z2.wk === W ? ' on' : '') + '"' + (op0 ? ' open' : '') + ' ontoggle="ASOPEN[' + esc(q(ok0)) + ']=this.open"><summary><b>' + esc(t(W === 'A' ? 'asWkA' : 'asWkB')) + '</b>' + (z2.wk === W ? tg2 : '') + '</summary>' + [0, 1, 2, 3, 4, 5, 6].map(function (i) { return '<div class="asday' + (z2.wk === W && z2.i === i ? ' today' : '') + (i === 6 ? ' fri' : '') + '"><b class="asdn">' + esc(t('asD' + i)) + '</b><div class="asdp">' + asPers(w.name, 'd' + W + i, true) + '</div></div>'; }).join('') + '<button class="ghost sm" type="button" onclick="asCopySat(' + q(w.name) + ',\'' + W + '\')">' + esc(t('asCopySat')) + '</button></details>'; }).join('') + '<button class="ghost sm" type="button" onclick="asFlip(' + q(w.name) + ')">' + esc(t('asFlip')) + '</button>'; }
     if (m === 'rot') { var wk = attWeek(e, today), tag = ' <span class="st ok">' + esc(t('asThis')) + '</span>'; body = '<div class="asrot"><div class="aswk' + (wk === 'A' ? ' on' : '') + '"><h4>' + esc(t('asWkA')) + (wk === 'A' ? tag : '') + '</h4>' + asPers(w.name, 'A') + '</div><div class="aswk' + (wk === 'B' ? ' on' : '') + '"><h4>' + esc(t('asWkB')) + (wk === 'B' ? tag : '') + '</h4>' + asPers(w.name, 'B') + '</div></div><button class="ghost sm" type="button" onclick="asFlip(' + q(w.name) + ')">' + esc(t('asFlip')) + '</button>'; }
     return '<div class="asr m-' + (m || 'flex') + '">' + hd + body + '</div>';
   }).join('') + '</div>') + '</div>';
@@ -13062,6 +13075,7 @@ function mrCalc(data, ym, items) {
     gdRecT: 'التوصية',
     gdFind: 'وش لاحظ',
     gdDo: 'وش تسوي',
+    bcSgLast: '🕘 آخر سعر', bcSgRef: '📋 من الملف', bcSgWh: '📦 من المستودع',
     cl_floatS: 'العهدة', cl_countS: 'الفواتير', sfDepB: 'عهدة مسلّمة (تحويل)', acsUpd: 'جاري التحديث بالأرقام الكاملة…', asModeWk2: 'جدول أسبوعين بالأيام', asFlexLoc: 'مرن — أي فرع', asCopySat: 'انسخ السبت للأحد–الأربعاء', asCopied: 'انتسخ', asPreset2: '📥 عبّي جدول الأسبوعين من ملف الدوام', asD0: 'السبت', asD1: 'الأحد', asD2: 'الاثنين', asD3: 'الثلاثاء', asD4: 'الأربعاء', asD5: 'الخميس', asD6: 'الجمعة', auNoNotes: 'ما في ملاحظات',
     coItems: 'صنف', coDone: '{0} مربوط من قبل', coAsNew: 'إضافة «{0}» كشركة جديدة', coShow: 'عرض الأصناف', coNoneN: '{0} صنف ما انقرأت له شركة من اسمه — تحددها من ✏️ لو تبغى.', coApply: 'اعتمد الشركات', coNothing: 'ما فيه شي جديد', coSaved: 'انربط {0} صنف بشركاته', coSaved2: 'انربط {0} صنف · وانشالت الشركة من {1}', prqByBr: 'حسب الفرع', trqAddBtn: 'إضافة طلب من المستودع', uiErr: 'صار خطأ في عرض القائمة — صوّر هالرسالة', ivMoreF: 'فلاتر أكثر', monOff: 'موقوف', monNoUser: 'رقم غير موجود', ivRcT: 'الفاتورة رقم {0} — وش تبغى تسوي؟', ivRcFix: 'إعادة للتصحيح — ترجع للعامل يصلّحها ويرسلها', ivRcCancel: 'إلغاء نهائي — تنلغي وتبقى في السجل', ivRcCancelled: 'انلغت الفاتورة رقم {0}', bbClose: 'الإقفال', bbTrq: 'النقل', bbTasks: 'مهامي', bbAtt: 'حضوري', stpReq: 'طلب', stpWay: 'بالطريق', stpGot: 'استلم', pxBtn: 'استلام بالنيابة', pxQ: 'الاستلام شغلة {0}. متأكد تبغى تستلم بالنيابة عنهم؟', lvTitle: 'نظرة سريعة', lvOpen: 'افتح', lvAttT: 'حضور اليوم', lvPres: 'حاضر', lvLate: 'متأخر', lvAbs: 'غايب', lvLastLate: 'آخر متأخر', lvHrT: 'تنبيهات الموظفين', lvExpired: 'انتهت', lvDaysLeft: 'باقي {0} يوم', lvAllOk: 'ما فيه تنبيهات', lvOblT: 'الالتزامات', lvOblMonth: 'التزامات هالشهر', lvOblN: 'عدد الالتزامات', lvTrqT: 'طلبات النقل', lvTrqMine: 'تنتظر إجراءك', lvTrqOpen: 'الجارية', lvPrq: 'مشتريات مطلوبة', lvInvT: 'آخر الفواتير', lvWaitT: 'بانتظار الاعتماد', lvClT: 'إقفالات اليوم', lvClOk: 'معتمد', lvClIn: 'وصل', lvClNot: 'لسا', lvMtT: 'النظافة والصيانة', lvMtOk: 'ما فيه شي اليوم', lvExpT: 'مصاريف آخر 7 أيام', lvNone: 'ما فيه', lvMineT: 'شغلي', lvMyTrq: 'طلبي {0}', lvMyCl: 'آخر إقفال ({0})', lvMyBc: 'تحويل {0}', lvMyTasks: 'مهامي الجديدة', foldN: '{0} طلب', bcUsOk: 'معتمد', bcUsPend: 'بانتظار الاعتماد', secWh: 'المستودع', secUi: 'التصميم وإخفاء المربعات', secBr: 'الفروع', secHr: 'الموارد البشرية', secHrS: 'الموارد', secShort: 'اختصاراتي', secN: '{0} شاشات', secCfg: 'تخصيص الأقسام', secCfgHint: 'اختر القسم، واضغط على أي مربع عشان تنقله أو ترتّبه أو تخفيه', secEmpty: 'ما فيه مربعات هنا', secMoveT: 'انقل «{0}» إلى:', secUp: 'قدّمه', secDown: 'أخّره', secHideB: 'أخفه', secShowB: 'أظهره', secMoved: 'انتقل إلى {0}', uiT: 'التصميم', uiNew: 'الجديد', uiOld: 'القديم', uiMore: 'المزيد', itSelB: 'تحديد', itSelN: 'محدد {0} من {1}', itSelHid: '{0} محدد من بحث سابق', itSelEnd: 'إنهاء التحديد', itSelCoT: 'حدد الشركة لـ {0} صنف', itSelPick: 'اختر الشركة', itSelNone: 'بدون شركة', itSelOk: 'اعتمد', itSelDone: 'انربط {0} صنف بـ {1}', itSelDone0: 'انشالت الشركة من {0} صنف', ivPayDone: 'تغيّر نوع الدفع إلى {0}', btAddBtn: 'إضافة نقل بين الفروع', prqAllBr: 'كل الفروع', coAllY: '✅ الكل', coAllN: '⬜ ولا شي',
     bfBy: 'أدخلها {0} — {1}', bfDocS: 'الفاتورة', bfGoodsS: 'البضاعة', bfNoCur: 'الصنف ما له تكلفة سابقة', bfHigher: 'أعلى من التكلفة الحالية {0} بـ {1}%', bfLower: 'أقل من التكلفة الحالية {0} بـ {1}%', bfSame: 'قريب من التكلفة الحالية', bfNewCost: 'التكلفة الجديدة بعد الخصم ({0})',
