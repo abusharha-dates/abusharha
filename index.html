@@ -4828,7 +4828,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 205, APP_DATE = '2026-11-18';
+var APP_BUILD = 206, APP_DATE = '2026-11-18';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -5126,7 +5126,10 @@ function stripForStaff(o, name, can) {
 }
 var Demo = (function () {
   var KEY = 'tamr-inv-demo-v17', D;
-  function reload() { var s = store(KEY); if (s) { try { D = JSON.parse(s); return; } catch (e) { } } D = buildDemoData(nowR()); }
+  function reload() {
+    /* 🛡️ على السيرفر: لو تعذّرت قراءة ملف البيانات نوقف العملية — ولا نبني بيانات تجريبية ونحفظها فوق الحقيقية أبداً */
+    if (typeof __readData_ === 'function') { var sv = __readData_(); if (sv) { D = JSON.parse(sv); if (!D || !Array.isArray(D.workers) || !D.workers.length) throw new Error('e_datafile'); return; } if (__props_().getProperty('DATA_ID')) throw new Error('e_datafile'); D = buildDemoData(nowR()); return; }
+    var s = store(KEY); if (s) { try { D = JSON.parse(s); return; } catch (e) { } } D = buildDemoData(nowR()); }
   function save() { store(KEY, JSON.stringify(D)); }
   function now() { return fmtDT(nowR()); }
   function find(item, loc) { return D.stock.find(function (s) { return String(s.item) === String(item) && s.loc === loc; }); }
