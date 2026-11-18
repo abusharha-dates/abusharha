@@ -1533,6 +1533,7 @@ html[data-ui="v2"] #psBox .psbtns{bottom:0;padding:6px 0 4px;margin:0}
 .xlexp{display:inline-flex;gap:4px;margin-inline-start:auto}.xlexp button{border:1px solid var(--line,#E4DACA);background:var(--card,#fff);border-radius:9px;padding:3px 8px;font-size:13px;line-height:1.2;cursor:pointer}.xlexp+.xlx{margin-inline-start:6px}
 
 .mprow{display:flex;justify-content:space-between;gap:8px;align-items:center;border:1px solid var(--line,#EFE7DA);border-radius:12px;padding:8px 10px;margin-bottom:6px}.mprow.rej{cursor:pointer;border-color:#E9B7A8}.mpr{text-align:left;display:flex;flex-direction:column;gap:3px;align-items:flex-end}
+#clCashSel{width:100%;max-width:100%;min-width:0;box-sizing:border-box}#clCashHint{display:block;margin-top:4px;white-space:normal;line-height:1.5}#clRCash td{min-width:0}
 </style>
 <script>
 (function () { try { var ic = document.querySelector('link[rel=icon]').href, m = { name: 'أبوشرحة للتمور', short_name: 'أبوشرحة', lang: 'ar', dir: 'rtl', display: 'standalone', start_url: location.href.split('#')[0], background_color: document.documentElement.getAttribute('data-ui') === 'v2' ? '#FFFFFF' : '#4e3622', theme_color: document.documentElement.getAttribute('data-ui') === 'v2' ? '#FFFFFF' : '#4e3622', icons: [{ src: ic, sizes: '192x192', type: 'image/png' }, { src: ic, sizes: '512x512', type: 'image/png' }] };
@@ -1853,7 +1854,7 @@ html[data-ui="v2"] #psBox .psbtns{bottom:0;padding:6px 0 4px;margin:0}
         <tr id="clRMeta" style="display:none"><td colspan="2"><div id="clMeta" class="clmeta"></div></td></tr>
         <tr id="clRLoc"><td class="lb" data-t="clBranch"></td><td><select id="clLoc"></select></td></tr>
         <tr id="clRDate"><td class="lb" data-t="date"></td><td><input id="clDate" type="date"></td></tr>
-        <tr id="clRCash"><td class="lb" data-t="clCashier"></td><td><b id="clCashier"></b></td></tr>
+        <tr id="clRCash"><td class="lb" data-t="clCashier"></td><td><b id="clCashier"></b><select id="clCashSel" hidden></select><small id="clCashHint" class="sub2" hidden></small></td></tr>
         <tr class="th"><th data-t="clDetails"></th><th data-t="clAmount"></th></tr>
         <tr><td class="lb" data-t="cl_mada"></td><td><input id="clMada" type="number" min="0" step="any" inputmode="decimal" placeholder="0"></td></tr>
         <tr><td class="lb" data-t="cl_visa"></td><td><input id="clVisa" type="number" min="0" step="any" inputmode="decimal" placeholder="0"></td></tr>
@@ -4828,7 +4829,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 206, APP_DATE = '2026-11-18';
+var APP_BUILD = 207, APP_DATE = '2026-11-19';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -6740,15 +6741,16 @@ var Demo = (function () {
         if (x.photoBal && x.photoBal.url) c.photoBal = x.photoBal.url; if (x.photoSys && x.photoSys.url) c.photoSys = x.photoSys.url;
         var kp = Array.isArray(x.photosKeep) ? x.photosKeep.filter(function (p) { return (c.photosEx || []).indexOf(p) > -1; }) : (c.photosEx || []);
         c.photosEx = kp.concat((x.photosEx || []).filter(function (p) { return p && p.url; }).map(function (p) { return p.url; })).slice(0, 4);
-        if (!c.photoBal || !c.photoSys) throw new Error('e_clphotos'); c.edited = now() + ' — ' + w.name; if (!isM) { c.status = 'معلق'; c.edNtf = 1; closeNtf(w.name); }
+        if (!isM && (!c.photoBal || !c.photoSys)) throw new Error('e_clphotos'); c.edited = now() + ' — ' + w.name; if (!isM) { c.status = 'معلق'; c.edNtf = 1; closeNtf(w.name); }
         c.log = lg(c.log, act, 'الإجمالي ' + oldT + ' ← ' + n.total + (reason ? ' — ' + reason : ''));
         aud(w.name, isM ? 'تعديل إقفال' : 'إعادة إرسال إقفال', id + ' — ' + lname(n.loc) + ' ' + n.date + ': الإجمالي من ' + oldT + ' إلى ' + n.total + (reason ? ' — السبب: ' + reason : ''));
       } else {
         if (dupN(D.dailyClose, x.nonce)) return allFor(w);
-        x.cashier = w.name; var n2 = closeNormalize(x); if (x.sysOcr !== undefined) n2.sysOcr = x.sysOcr === '' ? '' : Math.round(Number(x.sysOcr) * 100) / 100;
+        var onB = isM && x.cashier && x.cashier !== w.name && D.workers.some(function (k) { return k.name === String(x.cashier) && k.active !== 'موقوف'; }) ? String(x.cashier) : '';
+        x.cashier = onB || w.name; var n2 = closeNormalize(x); if (x.sysOcr !== undefined) n2.sysOcr = x.sysOcr === '' ? '' : Math.round(Number(x.sysOcr) * 100) / 100;
         if (!D.locations.some(function (l) { return l.code === n2.loc && l.active !== 'محذوف'; })) throw new Error('e_chooseloc');
-        if (!x.photoBal || !x.photoBal.url || !x.photoSys || !x.photoSys.url) throw new Error('e_clphotos'); n2.photoBal = x.photoBal.url; n2.photoSys = x.photoSys.url; n2.photosEx = (x.photosEx || []).filter(function (p) { return p && p.url; }).map(function (p) { return p.url; }).slice(0, 4);
-        n2.id = 'C' + Date.now(); n2.user = w.name; n2.created = now(); n2.edited = ''; n2.status = 'معلق'; n2.log = lg('', 'إدخال', 'الإجمالي ' + n2.total); D.dailyClose.push(n2); setN(D.dailyClose, x.nonce);
+        if (!isM && (!x.photoBal || !x.photoBal.url || !x.photoSys || !x.photoSys.url)) throw new Error('e_clphotos'); n2.photoBal = x.photoBal && x.photoBal.url || ''; n2.photoSys = x.photoSys && x.photoSys.url || ''; n2.photosEx = (x.photosEx || []).filter(function (p) { return p && p.url; }).map(function (p) { return p.url; }).slice(0, 4);
+        n2.id = 'C' + Date.now(); n2.user = onB || w.name; n2.created = now(); n2.edited = ''; n2.status = 'معلق'; if (onB) n2.byMgr = w.name; n2.log = lg('', onB ? 'إدخال من المدير نيابةً عن ' + onB : 'إدخال', 'الإجمالي ' + n2.total); D.dailyClose.push(n2); setN(D.dailyClose, x.nonce);
         closeNtf(w.name);
       }
       save(); return allFor(w);
@@ -9091,6 +9093,11 @@ function renderClose() {
   if (!$('clDate').value) $('clDate').value = clDay();
   if (!CL_EDIT && $('clFloat').value === '') $('clFloat').value = '200'; // 💵 العهدة جاهزة 200 — يقدر يغيّرها
   $('clCashier').textContent = cur ? (cur.cashier || cur.user) : ME.name;
+  /* ✍️ المدير يدخل الإقفال نيابةً عن الكاشير (اختيار الاسم) — الصور اختيارية له */
+  var cSel = $('clCashSel'), cBy = mg && !CL_EDIT; cSel.hidden = !cBy; $('clCashier').hidden = cBy; $('clCashHint').hidden = !cBy;
+  if (cBy) { var cKeep = cSel.value || ME.name, cW = (DB.workers || []).filter(function (w) { return w.active !== 'موقوف'; }).map(function (w) { return w.name; });
+    if (cW.indexOf(ME.name) < 0) cW.unshift(ME.name); cSel.innerHTML = cW.map(function (n) { return '<option value="' + esc(n) + '">' + esc(nmT(n)) + (n === ME.name ? ' (' + esc(t('clMe')) + ')' : '') + '</option>'; }).join(''); cSel.value = cW.indexOf(cKeep) > -1 ? cKeep : ME.name;
+    $('clCashHint').textContent = t('clOnBehalf'); }
   /* 📅 الموظف: الفرع والتاريخ والكاشير سطر واحد فوق — التاريخ يتغيّر بس إذا ضغط عليه */
   var clS = !mg && !CL_EDIT, cl1 = clS && myLocs().length === 1, dv = $('clDate').value;
   $('clRMeta').style.display = clS ? '' : 'none'; $('clRLoc').style.display = cl1 ? 'none' : ''; $('clRDate').style.display = clS && !CL_DOPEN ? 'none' : ''; $('clRCash').style.display = clS ? 'none' : '';
@@ -9629,10 +9636,10 @@ function clDay() { return fmtDT(new Date(nowR().getTime() - 2 * 3600e3)).slice(0
 function clClear() { CL_EDIT = null; CL_FORM = false; CL_OCR = null; CL_OCRN++; clOcrMsg(''); CLPH = { bal: null, sys: null, ex: [], keep: null }; CLF.forEach(function (f) { $(f[0]).value = ''; }); $('clSys').value = ''; $('clCount').value = ''; $('clFloat').value = ''; $('clNotes').value = ''; $('clDate').value = clDay(); renderClose(); }
 function clDel(id) { ask({ title: t('clDelQ'), reason: true, danger: true, ok: t('delBtn') }).then(function (r) { if (r) run('deleteClose', [id, r], t('clDeleted')); }); }
 function clSave() {
-  var x = { id: CL_EDIT || '', loc: $('clLoc').value, date: $('clDate').value, cashier: $('clCashier').textContent, sys: $('clSys').value, sysOcr: CLPH.sys ? (CL_OCR === null ? '' : CL_OCR) : undefined, count: $('clCount').value, float: $('clFloat').value, notes: $('clNotes').value.trim() };
+  var x = { id: CL_EDIT || '', loc: $('clLoc').value, date: $('clDate').value, cashier: !$('clCashSel').hidden && $('clCashSel').value ? $('clCashSel').value : $('clCashier').textContent, sys: $('clSys').value, sysOcr: CLPH.sys ? (CL_OCR === null ? '' : CL_OCR) : undefined, count: $('clCount').value, float: $('clFloat').value, notes: $('clNotes').value.trim() };
   CLF.forEach(function (f) { x[f[1]] = $(f[0]).value; });
   var oldC = CL_EDIT ? DB.dailyClose.find(function (z) { return z.id === CL_EDIT; }) || {} : {};
-  if (!(CLPH.bal || oldC.photoBal) || !(CLPH.sys || oldC.photoSys)) { toast('⚠️ ' + t('e_clphotos'), true); $('clPhBalBox').scrollIntoView({ block: 'center' }); return; }
+  if (!isMgr() && (!(CLPH.bal || oldC.photoBal) || !(CLPH.sys || oldC.photoSys))) { toast('⚠️ ' + t('e_clphotos'), true); $('clPhBalBox').scrollIntoView({ block: 'center' }); return; }
   x.photoBal = clPhPayload(CLPH.bal); x.photoSys = clPhPayload(CLPH.sys); x.photosEx = (CLPH.ex || []).map(clPhPayload); x.photosKeep = CLPH.keep;
   try { closeNormalize(x); } catch (e) { toast('⚠️ ' + tErr(e), true); var fe = /e_clcount/.test(e.message) ? 'clCount' : /e_clfloat/.test(e.message) ? 'clFloat' : /e_clsys/.test(e.message) ? 'clSys' : ''; if (fe) $(fe).focus(); return; }
   if (CL_EDIT && isMgr()) { ask({ title: t('clEditQ'), reason: true, ok: t('ivSaveEdit') }).then(function (r) { if (r) run('saveClose', [x, r], t('clEdited'), clClear); }); }
@@ -13109,6 +13116,7 @@ function mrCalc(data, ym, items) {
     bcSgLast: '🕘 آخر سعر', bcSgRef: '📋 من الملف', bcSgWh: '📦 من المستودع',
     sfLastAt: 'من بعد آخر مطابقة {0} ({1}) — الفعلي وقتها {2}. أي حركة انسجلت بعد هالوقت تنحسب هنا، حتى لو بنفس اليوم.',
     ivReopenBtn: 'أرجعها للتعميد', ivReopenQ: 'إرجاع الفاتورة {0} للتعميد؟', ivReopenMsg: 'ترجع «بانتظار التعميد» وتقدر تعدّلها وتعتمدها — اكتب السبب', ivReopenDone: 'رجعت الفاتورة {0} بانتظار التعميد', myPendT: 'فواتيري بانتظار التعميد', myPendRej: 'مرفوضة — صحّحها', myPendResent: 'انرسلت مصحّحة — بانتظار التعميد', myPendH: 'تختفي من هنا بعد ما يعتمدها المدير.', bfResentPend: 'انرسلت الفاتورة {0} للمدير — بانتظار التعميد',
+    clMe: 'أنا', clOnBehalf: '✍️ تقدر تختار الكاشير — ينحفظ باسمه ويدخل في تقريره وخصوماته. الصور اختيارية لك',
     cl_floatS: 'العهدة', cl_countS: 'الفواتير', sfDepB: 'عهدة مسلّمة (تحويل)', acsUpd: 'جاري التحديث بالأرقام الكاملة…', asModeWk2: 'جدول أسبوعين بالأيام', asFlexLoc: 'مرن — أي فرع', asCopySat: 'انسخ السبت للأحد–الأربعاء', asCopied: 'انتسخ', asPreset2: '📥 عبّي جدول الأسبوعين من ملف الدوام', asD0: 'السبت', asD1: 'الأحد', asD2: 'الاثنين', asD3: 'الثلاثاء', asD4: 'الأربعاء', asD5: 'الخميس', asD6: 'الجمعة', auNoNotes: 'ما في ملاحظات',
     coItems: 'صنف', coDone: '{0} مربوط من قبل', coAsNew: 'إضافة «{0}» كشركة جديدة', coShow: 'عرض الأصناف', coNoneN: '{0} صنف ما انقرأت له شركة من اسمه — تحددها من ✏️ لو تبغى.', coApply: 'اعتمد الشركات', coNothing: 'ما فيه شي جديد', coSaved: 'انربط {0} صنف بشركاته', coSaved2: 'انربط {0} صنف · وانشالت الشركة من {1}', prqByBr: 'حسب الفرع', trqAddBtn: 'إضافة طلب من المستودع', uiErr: 'صار خطأ في عرض القائمة — صوّر هالرسالة', ivMoreF: 'فلاتر أكثر', monOff: 'موقوف', monNoUser: 'رقم غير موجود', ivRcT: 'الفاتورة رقم {0} — وش تبغى تسوي؟', ivRcFix: 'إعادة للتصحيح — ترجع للعامل يصلّحها ويرسلها', ivRcCancel: 'إلغاء نهائي — تنلغي وتبقى في السجل', ivRcCancelled: 'انلغت الفاتورة رقم {0}', bbClose: 'الإقفال', bbTrq: 'النقل', bbTasks: 'مهامي', bbAtt: 'حضوري', stpReq: 'طلب', stpWay: 'بالطريق', stpGot: 'استلم', pxBtn: 'استلام بالنيابة', pxQ: 'الاستلام شغلة {0}. متأكد تبغى تستلم بالنيابة عنهم؟', lvTitle: 'نظرة سريعة', lvOpen: 'افتح', lvAttT: 'حضور اليوم', lvPres: 'حاضر', lvLate: 'متأخر', lvAbs: 'غايب', lvLastLate: 'آخر متأخر', lvHrT: 'تنبيهات الموظفين', lvExpired: 'انتهت', lvDaysLeft: 'باقي {0} يوم', lvAllOk: 'ما فيه تنبيهات', lvOblT: 'الالتزامات', lvOblMonth: 'التزامات هالشهر', lvOblN: 'عدد الالتزامات', lvTrqT: 'طلبات النقل', lvTrqMine: 'تنتظر إجراءك', lvTrqOpen: 'الجارية', lvPrq: 'مشتريات مطلوبة', lvInvT: 'آخر الفواتير', lvWaitT: 'بانتظار الاعتماد', lvClT: 'إقفالات اليوم', lvClOk: 'معتمد', lvClIn: 'وصل', lvClNot: 'لسا', lvMtT: 'النظافة والصيانة', lvMtOk: 'ما فيه شي اليوم', lvExpT: 'مصاريف آخر 7 أيام', lvNone: 'ما فيه', lvMineT: 'شغلي', lvMyTrq: 'طلبي {0}', lvMyCl: 'آخر إقفال ({0})', lvMyBc: 'تحويل {0}', lvMyTasks: 'مهامي الجديدة', foldN: '{0} طلب', bcUsOk: 'معتمد', bcUsPend: 'بانتظار الاعتماد', secWh: 'المستودع', secUi: 'التصميم وإخفاء المربعات', secBr: 'الفروع', secHr: 'الموارد البشرية', secHrS: 'الموارد', secShort: 'اختصاراتي', secN: '{0} شاشات', secCfg: 'تخصيص الأقسام', secCfgHint: 'اختر القسم، واضغط على أي مربع عشان تنقله أو ترتّبه أو تخفيه', secEmpty: 'ما فيه مربعات هنا', secMoveT: 'انقل «{0}» إلى:', secUp: 'قدّمه', secDown: 'أخّره', secHideB: 'أخفه', secShowB: 'أظهره', secMoved: 'انتقل إلى {0}', uiT: 'التصميم', uiNew: 'الجديد', uiOld: 'القديم', uiMore: 'المزيد', itSelB: 'تحديد', itSelN: 'محدد {0} من {1}', itSelHid: '{0} محدد من بحث سابق', itSelEnd: 'إنهاء التحديد', itSelCoT: 'حدد الشركة لـ {0} صنف', itSelPick: 'اختر الشركة', itSelNone: 'بدون شركة', itSelOk: 'اعتمد', itSelDone: 'انربط {0} صنف بـ {1}', itSelDone0: 'انشالت الشركة من {0} صنف', ivPayDone: 'تغيّر نوع الدفع إلى {0}', btAddBtn: 'إضافة نقل بين الفروع', prqAllBr: 'كل الفروع', coAllY: '✅ الكل', coAllN: '⬜ ولا شي',
     bfBy: 'أدخلها {0} — {1}', bfDocS: 'الفاتورة', bfGoodsS: 'البضاعة', bfNoCur: 'الصنف ما له تكلفة سابقة', bfHigher: 'أعلى من التكلفة الحالية {0} بـ {1}%', bfLower: 'أقل من التكلفة الحالية {0} بـ {1}%', bfSame: 'قريب من التكلفة الحالية', bfNewCost: 'التكلفة الجديدة بعد الخصم ({0})',
