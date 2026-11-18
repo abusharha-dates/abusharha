@@ -3514,6 +3514,11 @@ function attLateMonth(SC, recs, name, ym, untilT) {
   (recs || []).filter(function (a) { return a.name === name && a.type === 'حضور' && a.ps && String(a.date).slice(0, 7) === ym && (!untilT || String(a.time) <= untilT); })
     .sort(function (a, b) { return String(a.time) < String(b.time) ? -1 : 1; })
     .forEach(function (a) { var k = String(a.date).slice(0, 10) + '|' + a.ps; if (seen[k]) return; seen[k] = 1; var lt = a.ltO !== undefined && a.ltO !== null ? Number(a.ltO) || 0 : a.lt !== undefined ? Number(a.lt) || 0 : Number(a.lm) || 0; if (lt > 0) L.push({ date: String(a.date).slice(0, 10), ps: a.ps, lt: lt, big: lt > G }); });
+  /* 🚪 الخروج قبل نهاية الدوام: ينحسب مثل التأخير بالضبط ويدخل في المسارين (طلب المدير) */
+  (recs || []).filter(function (a) { return a.name === name && a.type === 'انصراف' && a.pe && String(a.date).slice(0, 7) === ym && (!untilT || String(a.time) <= untilT); })
+    .sort(function (a, b) { return String(a.time) < String(b.time) ? -1 : 1; })
+    .forEach(function (a) { var k = 'E|' + String(a.date).slice(0, 10) + '|' + a.pe; if (seen[k]) return; seen[k] = 1; var em = a.emO !== undefined && a.emO !== null ? Number(a.emO) || 0 : a.ee !== undefined ? Number(a.ee) || 0 : Number(a.em) || 0; if (em > 0) L.push({ date: String(a.date).slice(0, 10), ps: a.pe, lt: em, big: em > G, early: true }); });
+  L.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
   var tot = 0, bigN = 0; L.forEach(function (x) { tot += x.lt; if (x.big) bigN++; });
   var bigDed = C.on ? Math.max(0, bigN - C.warn) * C.big : 0, over = Math.max(0, tot - C.bank), blocks = C.on && over > 0 ? Math.ceil(over / C.block) : 0, sumDed = blocks * C.amt;
   return { L: L, tot: tot, bigN: bigN, bigDed: bigDed, over: over, blocks: blocks, sumDed: sumDed, ded: bigDed + sumDed, cfg: C, grace: G };
@@ -4823,7 +4828,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 203, APP_DATE = '2026-11-18';
+var APP_BUILD = 205, APP_DATE = '2026-11-18';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -5293,7 +5298,7 @@ var Demo = (function () {
         if (C.length) {
           if (!geo || !isFinite(Number(geo.lat)) || !isFinite(Number(geo.lng)) || (!Number(geo.lat) && !Number(geo.lng))) throw new Error('e_attgeo');
           var best = null; C.forEach(function (c) { var d0 = geoDist(Number(geo.lat), Number(geo.lng), G.locs[c].lat, G.locs[c].lng); if (!best || d0 - G.locs[c].r < best.d - best.r) best = { c: c, d: d0, r: G.locs[c].r }; });
-          var tol = best.r, hard = Math.max(300, best.r);
+          var tol = best.r, hard = best.r; /* 📍 صارم: برا النطاق المسجّل للفرع = مرفوض (بطلب المدير — ما في هامش 300 م) */
           /* 📍 داخل النطاق (150 م) = طبيعي. من النطاق لحد 300 م = ينقبل بعلامة ⚠️ وتنبيه للمدير (GPS داخل المحل يغلط). أبعد من 300 م = مرفوض */
           if (best.d > tol && best.d <= hard) {
             rec.far = Math.round(best.d); rec.acc = Math.round(Number(geo.acc) || 0);
@@ -5321,9 +5326,9 @@ var Demo = (function () {
       }
       if (PLX && type === 'انصراف') {
         var pe = PLX.filter(function (p) { return p.s < nA; }).pop();
-        if (pe) { var el = pe.e - nA; rec.em = el > SC.grace ? el : 0; rec.pe = pe.t; info.pt = pe.t; info.em = rec.em; info.ploc = pe.loc ? lname(pe.loc) : ''; var nxp = PLX.find(function (p) { return p.s > nA; }); if (nxp) { info.next = nxp.f; info.nloc = nxp.loc ? lname(nxp.loc) : ''; } }
+        if (pe) { var el = pe.e - nA; rec.em = el > SC.grace ? el : 0; rec.ee = el > 0 ? el : 0; rec.pe = pe.t; info.pt = pe.t; info.em = rec.em; info.ploc = pe.loc ? lname(pe.loc) : ''; var nxp = PLX.find(function (p) { return p.s > nA; }); if (nxp) { info.next = nxp.f; info.nloc = nxp.loc ? lname(nxp.loc) : ''; } }
       }
-      var ym0 = String(rec.date).slice(0, 7), stB = rec.lt > 0 ? attLateMonth(SC, D.attendance, w.name, ym0) : null;
+      var ym0 = String(rec.date).slice(0, 7), stB = rec.lt > 0 || rec.ee > 0 ? attLateMonth(SC, D.attendance, w.name, ym0) : null;
       D.attendance.push(rec); if (qd) aud(w.name, 'تسجيل ' + type + ' أُرسل لاحقاً', 'وقت التسجيل ' + tm + ' — وصل ' + qd + ' (ضعف النت)');
       if (stB) { var stA = attLateMonth(SC, D.attendance, w.name, ym0); if (stA.L.length > stB.L.length) lateNotify(w, rec, stB, stA); }
       if (type === 'انصراف') { var ev0 = attEval(SC, w, rec.date, D.attendance, nA); info.worked = 0; ev0.S.forEach(function (x) { if (x.o !== null) info.worked += x.o - x.i; }); }
@@ -5332,12 +5337,15 @@ var Demo = (function () {
   }
   /* 📨 رسائل التأخير للعامل بلغته + نسخة للمدراء */
   var LTX = {
+    e1: ['⚠️ تنبيه أول: طلعت قبل نهاية دوامك ({1}) بـ {0} دقيقة.', '⚠️ پہلی وارننگ: آپ ڈیوٹی ({1}) ختم ہونے سے {0} منٹ پہلے نکلے۔', '⚠️ पहली चेतावनी: आप ड्यूटी ({1}) खत्म होने से {0} मिनट पहले निकले।', '⚠️ প্রথম সতর্কতা: আপনি ডিউটি ({1}) শেষ হওয়ার {0} মিনিট আগে বের হয়েছেন।'],
+    e2: ['⚠️ تنبيه ثاني: طلعت قبل نهاية دوامك ({1}) بـ {0} دقيقة.\nالمرة الجاية بيتم الخصم من راتبك.', '⚠️ دوسری وارننگ: آپ ڈیوٹی ({1}) ختم ہونے سے {0} منٹ پہلے نکلے۔\nاگلی بار تنخواہ سے کٹوتی ہوگی۔', '⚠️ दूसरी चेतावनी: आप ड्यूटी ({1}) खत्म होने से {0} मिनट पहले निकले।\nअगली बार वेतन से कटौती होगी।', '⚠️ দ্বিতীয় সতর্কতা: আপনি ডিউটি ({1}) শেষ হওয়ার {0} মিনিট আগে বের হয়েছেন।\nপরের বার বেতন থেকে কাটা হবে।'],
+    eD: ['❌ طلعت قبل نهاية دوامك ({1}) بـ {0} دقيقة.\nسيتم الخصم من راتبك.', '❌ آپ ڈیوٹی ({1}) ختم ہونے سے {0} منٹ پہلے نکلے۔\nآپ کی تنخواہ سے کٹوتی ہوگی۔', '❌ आप ड्यूटी ({1}) खत्म होने से {0} मिनट पहले निकले।\nआपके वेतन से कटौती होगी।', '❌ আপনি ডিউটি ({1}) শেষ হওয়ার {0} মিনিট আগে বের হয়েছেন।\nআপনার বেতন থেকে কাটা হবে।'],
     big1: ['⚠️ تنبيه أول: تأخرت {0} دقيقة عن دوامك ({1}).', '⚠️ پہلی وارننگ: آپ اپنی ڈیوٹی ({1}) پر {0} منٹ لیٹ آئے۔', '⚠️ पहली चेतावनी: आप अपनी ड्यूटी ({1}) पर {0} मिनट देर से आए।', '⚠️ প্রথম সতর্কতা: আপনি আপনার ডিউটিতে ({1}) {0} মিনিট দেরিতে এসেছেন।'],
     big2: ['⚠️ تنبيه ثاني: تأخرت {0} دقيقة عن دوامك ({1}).\nالتأخير الجاي بيتم خصمه من راتبك.', '⚠️ دوسری وارننگ: آپ اپنی ڈیوٹی ({1}) پر {0} منٹ لیٹ آئے۔\nاگلی تاخیر پر تنخواہ سے کٹوتی ہوگی۔', '⚠️ दूसरी चेतावनी: आप अपनी ड्यूटी ({1}) पर {0} मिनट देर से आए।\nअगली देरी पर वेतन से कटौती होगी।', '⚠️ দ্বিতীয় সতর্কতা: আপনি আপনার ডিউটিতে ({1}) {0} মিনিট দেরিতে এসেছেন।\nপরের দেরিতে বেতন থেকে কাটা হবে।'],
     bigD: ['❌ تأخرت {0} دقيقة عن دوامك ({1}).\nسيتم الخصم من راتبك.', '❌ آپ اپنی ڈیوٹی ({1}) پر {0} منٹ لیٹ آئے۔\nآپ کی تنخواہ سے کٹوتی ہوگی۔', '❌ आप अपनी ड्यूटी ({1}) पर {0} मिनट देर से आए।\nआपके वेतन से कटौती होगी।', '❌ আপনি আপনার ডিউটিতে ({1}) {0} মিনিট দেরিতে এসেছেন।\nআপনার বেতন থেকে কাটা হবে।'],
-    sum1: ['⏰ تنبيه أول: مجموع تأخيرك هذا الشهر {0} دقيقة.', '⏰ پہلی وارننگ: اس مہینے آپ کی کل تاخیر {0} منٹ ہو گئی۔', '⏰ पहली चेतावनी: इस महीने आपकी कुल देरी {0} मिनट हो गई।', '⏰ প্রথম সতর্কতা: এই মাসে আপনার মোট দেরি {0} মিনিট।'],
-    sum2: ['⏰ تنبيه ثاني: مجموع تأخيرك هذا الشهر {0} دقيقة.\nإذا استمر التأخير سيتم الخصم من راتبك.', '⏰ دوسری وارننگ: اس مہینے آپ کی کل تاخیر {0} منٹ ہو گئی۔\nاگر تاخیر جاری رہی تو تنخواہ سے کٹوتی ہوگی۔', '⏰ दूसरी चेतावनी: इस महीने आपकी कुल देरी {0} मिनट हो गई।\nअगर देरी जारी रही तो वेतन से कटौती होगी।', '⏰ দ্বিতীয় সতর্কতা: এই মাসে আপনার মোট দেরি {0} মিনিট।\nদেরি চলতে থাকলে বেতন থেকে কাটা হবে।'],
-    sumD: ['❌ مجموع تأخيرك هذا الشهر تعدّى الحد.\nسيتم الخصم من راتبك.', '❌ اس مہینے آپ کی کل تاخیر حد سے بڑھ گئی۔\nآپ کی تنخواہ سے کٹوتی ہوگی۔', '❌ इस महीने आपकी कुल देरी सीमा से ज़्यादा हो गई।\nआपके वेतन से कटौती होगी।', '❌ এই মাসে আপনার মোট দেরি সীমা ছাড়িয়ে গেছে।\nআপনার বেতন থেকে কাটা হবে।'],
+    sum1: ['⏰ تنبيه أول: مجموع تأخيرك وخروجك المبكر هذا الشهر {0} دقيقة.', '⏰ پہلی وارننگ: اس مہینے آپ کی کل تاخیر {0} منٹ ہو گئی۔', '⏰ पहली चेतावनी: इस महीने आपकी कुल देरी {0} मिनट हो गई।', '⏰ প্রথম সতর্কতা: এই মাসে আপনার মোট দেরি {0} মিনিট।'],
+    sum2: ['⏰ تنبيه ثاني: مجموع تأخيرك وخروجك المبكر هذا الشهر {0} دقيقة.\nإذا استمر سيتم الخصم من راتبك.', '⏰ دوسری وارننگ: اس مہینے آپ کی کل تاخیر {0} منٹ ہو گئی۔\nاگر تاخیر جاری رہی تو تنخواہ سے کٹوتی ہوگی۔', '⏰ दूसरी चेतावनी: इस महीने आपकी कुल देरी {0} मिनट हो गई।\nअगर देरी जारी रही तो वेतन से कटौती होगी।', '⏰ দ্বিতীয় সতর্কতা: এই মাসে আপনার মোট দেরি {0} মিনিট।\nদেরি চলতে থাকলে বেতন থেকে কাটা হবে।'],
+    sumD: ['❌ مجموع تأخيرك وخروجك المبكر هذا الشهر تعدّى الحد.\nسيتم الخصم من راتبك.', '❌ اس مہینے آپ کی کل تاخیر حد سے بڑھ گئی۔\nآپ کی تنخواہ سے کٹوتی ہوگی۔', '❌ इस महीने आपकी कुल देरी सीमा से ज़्यादा हो गई।\nआपके वेतन से कटौती होगी।', '❌ এই মাসে আপনার মোট দেরি সীমা ছাড়িয়ে গেছে।\nআপনার বেতন থেকে কাটা হবে।'],
     /* ✅ رسائل التصحيح (تنرسل بس لما المدير يضغط «أرسل») */
     fx0: ['✅ تصحيح: التأخير المسجل عليك يوم {0} (دوام {1}) كان بسبب خلل في النظام، وتم إلغاؤه.', '✅ درستگی: {0} (ڈیوٹی {1}) کو آپ پر درج تاخیر سسٹم کی خرابی کی وجہ سے تھی، اسے ختم کر دیا گیا ہے۔', '✅ सुधार: {0} (ड्यूटी {1}) को आप पर दर्ज देरी सिस्टम की गड़बड़ी की वजह से थी, उसे रद्द कर दिया गया है।', '✅ সংশোধন: {0} (ডিউটি {1}) তারিখে আপনার নামে লেখা দেরি সিস্টেমের ত্রুটির কারণে ছিল, তা বাতিল করা হয়েছে।'],
     fx1: ['✅ تصحيح: التأخير المسجل عليك يوم {0} (دوام {1}) كان بسبب خلل في النظام، وتم تعديله إلى {2} دقيقة.', '✅ درستگی: {0} (ڈیوٹی {1}) کو آپ پر درج تاخیر سسٹم کی خرابی کی وجہ سے تھی، اسے {2} منٹ کر دیا گیا ہے۔', '✅ सुधार: {0} (ड्यूटी {1}) को आप पर दर्ज देरी सिस्टम की गड़बड़ी की वजह से थी, उसे {2} मिनट कर दिया गया है।', '✅ সংশোধন: {0} (ডিউটি {1}) তারিখে আপনার নামে লেখা দেরি সিস্টেমের ত্রুটির কারণে ছিল, তা {2} মিনিট করা হয়েছে।'],
@@ -5368,17 +5376,17 @@ var Demo = (function () {
   }
   function lateNotify(w, rec, B, A) {
     /* للعامل: تنبيه/سيتم الخصم بس — بدون مبالغ ولا قواعد. للمدراء: التفاصيل كاملة */
-    var C = A.cfg; if (!C.on) return; var sh = attH12(rec.ps), msgs = [], mg = [], stp = C.step || 40;
-    if (rec.lt > A.grace) { var n = A.bigN;
-      if (n === 1 && C.warn >= 1) msgs.push(tl(w, 'big1', [rec.lt, sh]));
-      else if (n <= C.warn) msgs.push(tl(w, 'big2', [rec.lt, sh]));
-      else msgs.push(tl(w, 'bigD', [rec.lt, sh]));
+    var C = A.cfg; if (!C.on) return; var ea = !(rec.lt > 0) && rec.ee > 0, mn = ea ? rec.ee : rec.lt, sh = attH12(ea ? rec.pe : rec.ps), msgs = [], mg = [], stp = C.step || 40, kp = ea ? 'e' : 'big';
+    if (mn > A.grace) { var n = A.bigN;
+      if (n === 1 && C.warn >= 1) msgs.push(tl(w, kp + '1', [mn, sh]));
+      else if (n <= C.warn) msgs.push(tl(w, kp + '2', [mn, sh]));
+      else msgs.push(tl(w, kp + 'D', [mn, sh]));
       mg.push('مسار ١ (أكثر من ' + A.grace + ' د): المرة ' + n + (n > C.warn ? ' — خصم ' + C.big + ' ريال' : ' — تنبيه')); }
     if (A.blocks > B.blocks) { msgs.push(tl(w, 'sumD', [A.tot])); mg.push('مسار ٢: المجموع ' + A.tot + ' د (الرصيد ' + C.bank + ') — خصم ' + ((A.blocks - B.blocks) * C.amt) + ' ريال، إجمالي خصم الرصيد ' + A.sumDed); }
     else if (!A.blocks && A.tot >= 2 * stp && B.tot < 2 * stp) { msgs.push(tl(w, 'sum2', [A.tot])); mg.push('مسار ٢: المجموع ' + A.tot + ' د — تنبيه ثاني'); }
     else if (!A.blocks && A.tot >= stp && B.tot < stp) { msgs.push(tl(w, 'sum1', [A.tot])); mg.push('مسار ٢: المجموع ' + A.tot + ' د — تنبيه أول'); }
     if (msgs.length) ntf([w.name], msgs.join('\n\n'));
-    if (mg.length) ntf(mgrsN(), '💸 تأخير ' + w.name + ' — ' + rec.lt + ' د (الدوام ' + sh + ')\n' + mg.join('\n') + '\nخصم التأخير هذا الشهر لين الحين: ' + A.ded + ' ريال', w.name);
+    if (mg.length) ntf(mgrsN(), '💸 ' + (ea ? 'خروج قبل الدوام ' : 'تأخير ') + w.name + ' — ' + mn + ' د (' + (ea ? 'الدوام ينتهي ' : 'الدوام ') + sh + ')\n' + mg.join('\n') + '\nخصم التأخير هذا الشهر لين الحين: ' + A.ded + ' ريال', w.name);
   }
 
   function whoCan(p) { return D.workers.filter(function (x) { return x.active !== 'موقوف' && userCan(x, p); }).map(function (x) { return x.name; }); }
@@ -5823,7 +5831,7 @@ var Demo = (function () {
       var hrs = (attAbs(tmo) - attAbs(last.time)) / 60; if (hrs > 20) throw new Error('e_attfixlong');
       if (tmo > now()) throw new Error('e_attfuture');
       var rec = { date: date, name: name, type: 'انصراف', time: tmo, man: w.name, manAt: now(), manNote: reason };
-      var SC = attSchedOf(D.settings), PL = attPlan(SC, x, date), nA = attAbs(tmo); if (PL) { var pe = PL.filter(function (p) { return p.s < nA; }).pop(); if (pe) { var el = pe.e - nA; rec.em = el > SC.grace ? el : 0; rec.pe = pe.t; } }
+      var SC = attSchedOf(D.settings), PL = attPlan(SC, x, date), nA = attAbs(tmo); if (PL) { var pe = PL.filter(function (p) { return p.s < nA; }).pop(); if (pe) { var el = pe.e - nA; rec.em = el > SC.grace ? el : 0; rec.ee = el > 0 ? el : 0; rec.pe = pe.t; } }
       D.attendance.push(rec);
       aud(w.name, 'إضافة انصراف يدوي', name + ' — ' + date + ' — حضر ' + String(last.time).slice(11) + ' وانصرف ' + tmo.slice(11) + ' — السبب: ' + reason);
       ntf([name], '✍️ سجّل المدير انصرافك ليوم ' + date + ' الساعة ' + attH12(tmo.slice(11)) + '\nالسبب: ' + reason + '\nلا تنسى تسجل انصرافك بنفسك 🙏', w.name);
