@@ -4910,7 +4910,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 215, APP_DATE = '2026-11-19';
+var APP_BUILD = 216, APP_DATE = '2026-11-19';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -7035,7 +7035,7 @@ var Demo = (function () {
       supChk(sup, w); var h = null;
       var resend = false;
       if (x.id) { h = D.invoices.find(function (v) { return String(v.id) === String(x.id); }); if (!h || h.invType !== BR_TYPE) throw new Error('e_noinv');
-        if (invRejQ(h) && h.user === w.name) resend = true; else { mgr(w); if (h.status) throw new Error('e_invcancelled'); } }
+        if (invRejQ(h) && h.user === w.name) resend = true; else { mgr(w); if (h.status && h.status !== 'بانتظار التعميد') throw new Error('e_invcancelled'); } }
       if (resend) {
         var old0 = lname(h.loc) + ' ' + h.supplier + ' ' + h.total, rs0 = h.rejReason || String(h.status).replace(/^مرفوضة — /, '');
         h.rejHist = (h.rejHist || []).concat([{ reason: rs0, by: h.apprBy || '', at: h.apprAt || '' }]);
