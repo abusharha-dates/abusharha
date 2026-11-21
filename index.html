@@ -1606,6 +1606,14 @@ select.icuNeed{border-color:#D9826B!important;background:#FFF6F2}
 .bcit input{width:84px;font-size:17px;text-align:center;padding:7px 4px}.bcit.dn{background:rgba(47,143,78,.06)}.bcit.rd{border-inline-start:4px solid #d08a00}
 .bcz{font-size:12px;padding:6px 8px;border-radius:8px;border:1px dashed #b9b2a5;background:transparent;color:inherit;white-space:nowrap}.bcok{color:#2f8f4e;font-weight:800;width:38px;text-align:center}
 #bkConf{width:100%;margin-top:12px}
+
+/* 💵 سجل السداد — سطور مختصرة تدخل في الجوال */
+.pyl{margin-top:6px;border:1px solid var(--line,#e3ddd2);border-radius:10px;overflow:hidden}
+.pyr{padding:8px 10px;border-bottom:1px solid var(--line,#eee)}.pyr:last-child{border-bottom:0}
+.pyr1{display:flex;align-items:center;gap:8px}.pyd{white-space:nowrap;font-size:13.5px}.pya{margin-inline-start:auto;font-size:15px}
+.pym{font:inherit;font-size:13px;padding:3px 10px;border-radius:99px;border:1px solid #c9bfae;background:#fff8ec;color:inherit;white-space:nowrap;cursor:pointer}.pym.ro{background:transparent;border-color:transparent;padding:3px 0}
+.pyx{padding:2px 9px!important}.pyr2{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--muted,#7a6f60);margin-top:3px}
+.pyn{display:block;font-size:12px;color:var(--muted,#7a6f60);margin-top:2px}
 </style>
 <script>
 (function () { try { var ic = document.querySelector('link[rel=icon]').href, m = { name: 'أبوشرحة للتمور', short_name: 'أبوشرحة', lang: 'ar', dir: 'rtl', display: 'standalone', start_url: location.href.split('#')[0], background_color: document.documentElement.getAttribute('data-ui') === 'v2' ? '#FFFFFF' : '#4e3622', theme_color: document.documentElement.getAttribute('data-ui') === 'v2' ? '#FFFFFF' : '#4e3622', icons: [{ src: ic, sizes: '192x192', type: 'image/png' }, { src: ic, sizes: '512x512', type: 'image/png' }] };
@@ -4122,6 +4130,10 @@ var I18N = {
   move: ['حركة بضاعة', 'سامان کی نقل و حرکت', 'सामान की आवाजाही', 'মাল চলাচল'],
   tasks: ['المهام', 'کام', 'काम', 'কাজ'],
   count: ['الجرد', 'گنتی', 'गिनती', 'গণনা'],
+  pyEdT: ['✏️ تعديل سند {0} ريال', '✏️ {0} ریال کی رسید میں ترمیم', '✏️ {0} रियाल रसीद बदलें', '✏️ {0} রিয়াল রসিদ সম্পাদনা'],
+  pyEdWas: ['كان {0} — عدّله {1}', 'پہلے {0} — {1} نے بدلا', 'पहले {0} — {1} ने बदला', 'আগে {0} — {1} বদলেছে'],
+  pyEdPosted: ['السند مُدرج — بعد الحفظ ينشال الإدراج، صحّحه في النظام الرئيسي وعلّم عليه مُدرج من جديد', '', '', ''],
+  pyEdDone: ['تعدّل السند', '', '', ''],
   bcount: ['جرد الأقسام', 'سیکشن گنتی', 'सेक्शन गिनती', 'বিভাগ গণনা'],
   bkKg: ['بالكيلو (مثال 2.5)', 'کلو میں (مثلاً 2.5)', 'किलो में (जैसे 2.5)', 'কেজিতে (যেমন 2.5)'],
   bkIn: ['العدّ بالـ{0}', '{0} میں گنیں', '{0} में गिनें', '{0} হিসাবে গুনুন'],
@@ -4999,7 +5011,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 218, APP_DATE = '2026-11-20';
+var APP_BUILD = 219, APP_DATE = '2026-11-20';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -7067,6 +7079,17 @@ var Demo = (function () {
       D.invPays.push({ id: 'PY' + Date.now(), invId: h.id, date: /^\d{4}-\d\d-\d\d$/.test(String(p.date || '')) ? p.date : now().slice(0, 10), amount: amt, method: method, note: String(p.note || '').trim(), user: w.name, created: now() });
       aud(w.name, 'سداد آجل', 'فاتورة رقم ' + invId + ' (' + h.supplier + '): دفع ' + amt + ' ريال ' + method + ' — المتبقي ' + Math.round((rem - amt) * 100) / 100); save(); return allFor(w);
     },
+    /* ✏️ تعديل طريقة/تاريخ سند سداد (المبلغ ما يتغير) — القديم ينحفظ في السند والسجل، والإدراج ينشال لو تغيّر شي */
+    editInvPayment: function (tok, payId, x) {
+      var w = wuser(tok); mgr(w); x = x || {}; needReason(x.reason);
+      var p = D.invPays.find(function (v) { return v.id === payId; }); if (!p) throw new Error('e_nopay');
+      var m = PAY_METHODS.indexOf(normPay(x.method)) > -1 ? normPay(x.method) : p.method, d = /^\d{4}-\d\d-\d\d$/.test(String(x.date || '')) ? x.date : p.date;
+      if (m === p.method && d === p.date) throw new Error('e_nochange');
+      var old = { method: p.method, date: p.date }, wasP = p.posted;
+      p.eds = p.eds || []; p.eds.push({ at: now(), by: w.name, from: old, to: { method: m, date: d }, reason: String(x.reason).trim(), posted: wasP || '' });
+      p.method = m; p.date = d; if (wasP) p.posted = '';
+      aud(w.name, 'تعديل دفعة آجل', 'فاتورة رقم ' + p.invId + ': ' + p.amount + ' ريال — ' + (old.method !== m ? old.method + ' ← ' + m : '') + (old.date !== d ? ' تاريخ ' + old.date + ' ← ' + d : '') + (wasP ? ' — انشال الإدراج' : '') + ' — السبب: ' + String(x.reason).trim()); save(); return allFor(w);
+    },
     deleteInvPayment: function (tok, payId, reason) {
       var w = wuser(tok); mgr(w); needReason(reason);
       var x = D.invPays.find(function (v) { return v.id === payId; }); if (!x) throw new Error('e_nopay');
@@ -8907,10 +8930,18 @@ function invPayDel(pid) { ask({ title: t('pyDelQ'), msg: t('pyDelMsg'), reason: 
 function payBadge(p) { return '<span class="st ' + (p === 'آجل' ? 'bad' : p === 'نقدي' ? 'ok' : 'info') + '">' + esc(v(p)) + '</span>'; }
 function crBadge(x) { var c = creditInfo(x); if (c.st === 'ours') return '<span class="ours">' + esc(t('crOurs', num(-c.rem))) + '</span>' + (c.cr ? '<small class="crsm">' + esc(t('crOursUsed', num(c.cr))) + '</small>' : ''); return '<span class="st ' + (c.st === 'paid' ? 'ok' : c.st === 'part' ? 'warn' : 'bad') + '">' + esc(t('cr_' + c.st)) + '</span><small class="crsm">' + esc(t('crPaidRem', num(c.paid), num(c.rem)) + (c.cr ? ' · ' + t('crOursCut', num(c.cr)) : '')) + '</small>'; }
 function payHist(x) {
-  var P = DB.invPays.filter(function (p) { return String(p.invId) === String(x.id); }).sort(function (a, b) { return a.date < b.date ? -1 : 1; }), c = creditInfo(x);
-  return '<div class="payh"><b>💵 ' + esc(t('pyHist')) + '</b> <small class="muted">' + esc(t('crPaidRem', num(c.paid), num(c.rem))) + '</small>' + (P.length ? '<table class="sub"><thead><tr><th>' + esc(t('pyDate')) + '</th><th>' + esc(t('pyAmount')) + '</th><th>' + esc(t('pyMethod')) + '</th><th>' + esc(t('note')) + '</th><th>' + esc(t('ivBy')) + '</th><th></th></tr></thead><tbody>' + P.map(function (p) {
-    return '<tr><td>' + esc(p.date) + '</td><td class="n"><b>' + num(p.amount) + '</b></td><td>' + esc(v(p.method)) + '</td><td class="wrap">' + esc(p.note || '—') + '</td><td><bdi>' + esc(nmT(p.user)) + '</bdi>' + (p.id ? postChip('pay', p.id, p.posted) : '') + '</td><td><button class="ghost sm" onclick="invPayDel(' + q(p.id) + ')">✕</button></td></tr>';
-  }).join('') + '</tbody></table>' : '<p class="muted" style="margin:6px 0 0">' + esc(t('pyNone')) + '</p>') + '</div>';
+  var P = DB.invPays.filter(function (p) { return String(p.invId) === String(x.id); }).sort(function (a, b) { return a.date < b.date ? -1 : 1; }), c = creditInfo(x), mg = isMgr();
+  return '<div class="payh"><b>💵 ' + esc(t('pyHist')) + '</b> <small class="muted">' + esc(t('crPaidRem', num(c.paid), num(c.rem))) + '</small>' + (P.length ? '<div class="pyl">' + P.map(function (p) {
+    var ed = (p.eds || []).slice(-1)[0];
+    return '<div class="pyr"><div class="pyr1"><span class="pyd">' + esc(p.date) + '</span>' + (mg && p.id ? '<button type="button" class="pym" onclick="event.stopPropagation();invPayEd(' + q(p.id) + ')">' + esc(v(p.method)) + ' ▾</button>' : '<span class="pym ro">' + esc(v(p.method)) + '</span>') + '<b class="pya">' + num(p.amount) + '</b>' + (mg && p.id ? '<button type="button" class="ghost sm pyx" onclick="event.stopPropagation();invPayDel(' + q(p.id) + ')">✕</button>' : '') + '</div>' +
+      '<div class="pyr2"><bdi>' + esc(nmT(p.user)) + '</bdi>' + (p.id ? postChip('pay', p.id, p.posted) : '') + '</div>' + (p.note ? '<small class="pyn">' + esc(p.note) + '</small>' : '') + (ed ? '<small class="pyn">✏️ ' + esc(t('pyEdWas', [ed.from.method !== ed.to.method ? v(ed.from.method) : '', ed.from.date !== ed.to.date ? ed.from.date : ''].filter(Boolean).join(' · '), nmT(ed.by))) + '</small>' : '') + '</div>';
+  }).join('') + '</div>' : '<p class="muted" style="margin:6px 0 0">' + esc(t('pyNone')) + '</p>') + '</div>';
+}
+function invPayEd(pid) {
+  var p = (DB.invPays || []).find(function (k) { return k.id === pid; }); if (!p) return;
+  ask({ title: t('pyEdT', num(p.amount)), html: '<b>' + esc(t('pyMethod')) + ':</b><span class="mpick">' + PAY_METHODS.map(function (m) { return '<label class="pchk"><input type="radio" name="pyEdM" value="' + esc(m) + '"' + (m === p.method ? ' checked' : '') + '> ' + esc(v(m)) + '</label>'; }).join('') + '</span><label style="display:block;margin-top:8px"><b>' + esc(t('pyDate')) + ':</b> <input type="date" id="pyEdD" value="' + esc(p.date) + '"></label>' + (p.posted ? '<p class="mr2warn" style="margin:8px 0 0">⚠️ ' + esc(t('pyEdPosted')) + '</p>' : ''), reason: true, ok: '💾 ' + t('save'),
+    collect: function () { var m = (document.querySelector('input[name="pyEdM"]:checked') || {}).value, d = $('pyEdD').value; if (m === p.method && d === p.date) return t('e_nochange'); return { method: m, date: d }; } })
+    .then(function (r) { if (r && r.v) run('editInvPayment', [pid, { method: r.v.method, date: r.v.date, reason: r.reason }], '✅ ' + t('pyEdDone')); });
 }
 function renderCreditCard() {
   var S = {}; creditOpen().forEach(function (x) { var c = creditInfo(x), s = S[x.supplier] || (S[x.supplier] = { n: 0, rem: 0, total: 0, oldest: '' }); s.n++; s.rem += c.rem; s.total += x.total; if (!s.oldest || x.date < s.oldest) s.oldest = x.date; });
