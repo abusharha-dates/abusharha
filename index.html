@@ -5053,7 +5053,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 220, APP_DATE = '2026-11-24';
+var APP_BUILD = 221, APP_DATE = '2026-11-24';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -9823,7 +9823,7 @@ function gdDayInfo(R) {
   var n = R.ym === gdYM(todayS()) ? R.lastDay : gdDays(R.ym), today = todayS(), cnt = {}, D0 = [], late = {};
   R.BR.forEach(function (b) { cnt[b] = 0; }); Object.keys(R.days).forEach(function (d) { Object.keys(R.days[d]).forEach(function (b) { cnt[b]++; }); });
   var act = R.BR.filter(function (b) { return cnt[b] >= Math.min(3, Math.max(1, Math.floor(n / 4))); });
-  (DB.dailyClose || []).forEach(function (c) { var d = String(c.date || '').slice(0, 10); if (d.slice(0, 7) !== R.ym || c.status === 'مُعاد') return; var cd = String(c.created || '').slice(0, 10); if (cd && cd > d) { (late[d] = late[d] || []); if (late[d].indexOf(c.loc) < 0) late[d].push(c.loc); } });
+  (DB.dailyClose || []).forEach(function (c) { var d = String(c.date || '').slice(0, 10); if (d.slice(0, 7) !== R.ym || c.status === 'مُعاد') return; var cr = String(c.created || ''), lim = sdAdd(d, 1) + ' 02:00'; if (cr.length >= 16 && cr.slice(0, 16) > lim) { (late[d] = late[d] || []); if (late[d].indexOf(c.loc) < 0) late[d].push(c.loc); } });
   for (var i = 1; i <= n; i++) { var k = R.ym + '-' + ('0' + i).slice(-2), row = R.days[k] || {}, s = 0; Object.keys(row).forEach(function (b) { s += row[b]; });
     var miss = act.filter(function (b) { return !row[b]; }); D0.push({ d: k, i: i, v: s, br: row, miss: k >= today ? [] : miss, late: late[k] || [], today: k === today, ok: k < today && !miss.length && s > 0 }); }
   var okD = D0.filter(function (x) { return x.ok; }), avg = okD.length ? okD.reduce(function (s, x) { return s + x.v; }, 0) / okD.length : 0, best = null, worst = null;
