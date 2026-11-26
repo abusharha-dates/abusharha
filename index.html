@@ -5063,7 +5063,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 223, APP_DATE = '2026-11-26';
+var APP_BUILD = 224, APP_DATE = '2026-11-26';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -5742,7 +5742,7 @@ var Demo = (function () {
     if (!isM) { o.uploads = []; o.dayCost = []; o.obligations = []; o.oblBills = []; o.pfTransfers = []; o.safeCounts = []; o.imports = []; var myLb = String(w.locs || '').split(',').filter(Boolean); o.brTrans = (o.brTrans || []).filter(function (k) { return k.user === w.name || (k.lines && myLb.indexOf(k.to) > -1 && userCan(w, 'brTrans')); }).slice(-60).map(function (k) { return k.lines ? Object.assign({}, k, { amount: '', lines: k.lines.map(function (l) { var o2 = { item: l.item, itemName: l.itemName, qty: l.qty }; if (l.rqty !== undefined) o2.rqty = l.rqty; return o2; }) }) : k; }); }
     o.countSessions = (o.countSessions || []).filter(function (k) { return isM || k.worker === w.name; }).slice(-150);
     var myBL = isM ? null : String(w.locs || '').split(',').filter(Boolean);
-    if (!isM) { delete o.debtAdj; delete o.mvNotes; delete o.gdCfg; delete o.dayProfit; }
+    if (!isM) { delete o.debtAdj; delete o.mvNotes; delete o.gdCfg; }
     try { var dps = (D.settings || []).find(function (x) { return x.key === 'dpStores'; }); o.dpStores = JSON.parse((dps && dps.value) || '{}') || {}; } catch (e) { o.dpStores = {}; }
     o.bcounts = (o.bcounts || []).filter(function (c) { return isM || !myBL.length || myBL.indexOf(c.loc) > -1; }).slice(-300).map(function (c) { if (isM) return c; var en = (c.ents || []).indexOf(w.name) > -1, r = Object.assign({}, c, { hist: [], edits: [] }); if (!en && c.status !== 'draft') r.vals = {}; if (!en && c.mis) r.mis = c.verifier === w.name ? c.mis : []; if (en) { r.ver = {}; r.sample = c.status === 'confirmed' ? [] : c.sample; } else r.ver = {}; return r; });
     if (!isM) { o.hrAbsOv = []; o.hrEmp = []; o.hrAdv = []; o.hrLeave = []; o.hrDed = []; o.hrDocs = []; o.hrPayroll = []; }
@@ -9889,11 +9889,11 @@ var GD_MN = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو',
 function gdMName(ym, y) { var p = ym.split('-'); return GD_MN[Number(p[1]) - 1] + (y ? ' ' + p[0] : ''); }
 function gdPurchOf(x) { if (x.status || x.invType === OB_TYPE) return 0; var a = Number(x.total) || 0; return x.invType === 'مرتجع مشتريات' ? -a : a; }
 /* 💹 الأرباح اليومية — ملف DigitalPro (كشف المبيعات تجميعي حسب الصنف) لكل المخازن، والتاريخ تختاره إنت */
-var DP = { d: '', rows: null, file: '', ym: '' };
+var DP = { d: '', rows: null, file: '', ym: '' }, MC_OPEN = false;
 function dpLocOf(st) { st = String(st); var L = (DB.locations || []).filter(function (l) { return String(bcStoreOf(l.code)) === st; }); return L.length ? L[0].code : ''; }
 function dpCloseOf(d, loc) { var s = 0, n = 0; (DB.dailyClose || []).forEach(function (c) { if (String(c.date).slice(0, 10) === d && c.loc === loc && c.status !== 'مُعاد') { s += Number(c.total) || 0; n++; } }); return n ? s : null; }
 function dpParse(f) {
-  DP.file = f.name; DP.rows = 'loading'; renderGuide();
+  DP.file = f.name; DP.rows = 'loading'; renderUpload();
   upLoadLib(function () { var fr = new FileReader(); fr.onload = function (e) { try {
     var wb = XLSX.read(e.target.result, { type: 'array' }), ws = wb.Sheets[wb.SheetNames[0]], A = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: '' }), hi = -1, H = null;
     for (var i = 0; i < Math.min(A.length, 30); i++) { var r = A[i].map(function (x) { return String(x).replace(/\s+/g, ' ').trim(); }); if (r.indexOf('مخزن') > -1 && r.some(function (x) { return /صافي تكلف/.test(x); }) && r.some(function (x) { return /هامش ربح/.test(x); })) { hi = i; H = r; break; } }
@@ -9902,32 +9902,36 @@ function dpParse(f) {
     A.slice(hi + 1).forEach(function (r) { var st = r[cS]; if (st === '' || st === null || isNaN(Number(st)) || r[0] === '' || isNaN(Number(r[0]))) return; var o = S[st] = S[st] || { st: String(Number(st)), cost: 0, prof: 0, fT: 0, n: 0 }; o.cost += Number(r[cC]) || 0; o.prof += Number(r[cP]) || 0; if (cT > -1) o.fT += Number(r[cT]) || 0; o.n++; });
     var R = Object.keys(S).map(function (k) { var o = S[k]; o.cost = Math.round(o.cost * 100) / 100; o.prof = Math.round(o.prof * 100) / 100; o.loc = dpLocOf(o.st); return o; }).sort(function (a, b) { return Number(a.st) - Number(b.st); });
     if (!R.length) throw new Error(t('dpBadFile')); DP.rows = R;
-  } catch (er) { DP.rows = null; toast('⚠️ ' + (er.message || er), true); } renderGuide(); }; fr.readAsArrayBuffer(f); });
+  } catch (er) { DP.rows = null; toast('⚠️ ' + (er.message || er), true); } renderUpload(); }; fr.readAsArrayBuffer(f); });
 }
 function dpCheck(o, d) { var net = o.cost + o.prof, vat = Math.round(net * 0.15 * 100) / 100, tot = Math.round((net + vat) * 100) / 100, cl = o.loc ? dpCloseOf(d, o.loc) : null, df = cl === null ? null : Math.round((tot - cl) * 100) / 100; return { net: net, vat: vat, tot: tot, cl: cl, df: df, ok: df !== null && Math.abs(df) <= Math.max(1, cl * 0.002) }; }
-function dpH() {
+function dpUpH() {
   if (!DP.d) DP.d = sdAdd(todayS(), -1); var h = '<div class="card"><h3>💹 ' + esc(t('dpT')) + '</h3><p class="hint">' + esc(t('dpH')) + '</p>';
-  h += '<div class="dprow"><label><b>📅 ' + esc(t('dpDay')) + '</b><input type="date" value="' + esc(DP.d) + '" max="' + esc(todayS()) + '" onchange="DP.d=this.value;renderGuide()"></label><span class="dpwd">' + esc(GD_WD[sdParse(DP.d).getDay()]) + '</span>' +
+  h += '<div class="dprow"><label><b>📅 ' + esc(t('dpDay')) + '</b><input type="date" value="' + esc(DP.d) + '" max="' + esc(todayS()) + '" onchange="DP.d=this.value;renderUpload()"></label><span class="dpwd">' + esc(GD_WD[sdParse(DP.d).getDay()]) + '</span>' +
     '<label class="btn dpup">📤 ' + esc(t('dpPick')) + '<input type="file" accept=".xlsx,.xls" hidden onchange="if(this.files[0])dpParse(this.files[0]);this.value=\'\'"></label></div>';
-  var have = (DB.dayProfit || []).filter(function (x) { return x.d === DP.d; });
+  var have = (DB.dayCost || []).filter(function (x) { return x.date === DP.d && x.profit !== '' && x.profit !== undefined; });
   if (have.length && !DP.rows) h += '<div class="gdtip">✅ ' + esc(t('dpHave', have.map(function (x) { return ln(x.loc); }).join('، '))) + '</div>';
   if (DP.rows === 'loading') h += '<p class="muted"><span class="ldot sm"></span> ' + esc(t('upReading')) + '</p>';
   else if (DP.rows) { var allOk = true, any = false;
-    h += '<div class="upfile">📄 <b>' + esc(DP.file) + '</b> <button type="button" class="ghost sm" onclick="DP.rows=null;renderGuide()">' + esc(t('upClear')) + '</button></div><div class="tbl"><table class="gdt"><thead><tr><th>' + esc(t('dpBr')) + '</th><th>' + esc(t('dpCost')) + '</th><th>' + esc(t('dpProf')) + '</th><th>' + esc(t('dpVat')) + '</th><th>' + esc(t('dpTot')) + '</th><th>' + esc(t('dpCl')) + '</th><th></th></tr></thead><tbody>' + DP.rows.map(function (o) { var c = dpCheck(o, DP.d); if (o.loc) { any = true; if (!c.ok) allOk = false; }
+    h += '<div class="upfile">📄 <b>' + esc(DP.file) + '</b> <button type="button" class="ghost sm" onclick="DP.rows=null;renderUpload()">' + esc(t('upClear')) + '</button></div><div class="tbl"><table class="gdt"><thead><tr><th>' + esc(t('dpBr')) + '</th><th>' + esc(t('dpCost')) + '</th><th>' + esc(t('dpProf')) + '</th><th>' + esc(t('dpVat')) + '</th><th>' + esc(t('dpTot')) + '</th><th>' + esc(t('dpCl')) + '</th><th></th></tr></thead><tbody>' + DP.rows.map(function (o) { var c = dpCheck(o, DP.d); if (o.loc) { any = true; if (!c.ok) allOk = false; }
       return '<tr><td><b>' + esc(o.loc ? ln(o.loc) : t('dpNoLoc')) + '</b><small class="sub2">' + esc(t('bkStoreN', o.st)) + ' · ' + esc(t('dpLines', o.n)) + '</small></td><td class="n">' + num(o.cost) + '</td><td class="n"><b>' + num(o.prof) + '</b><small class="sub2">' + (c.net ? Math.round(o.prof / c.net * 1000) / 10 : 0) + '%</small></td><td class="n">' + num(c.vat) + '</td><td class="n"><b>' + num(c.tot) + '</b></td><td class="n">' + (c.cl === null ? '<span class="muted">' + esc(t('dpNoCl')) + '</span>' : num(c.cl)) + '</td><td>' + (!o.loc ? '<span class="gdtg wr">' + esc(t('dpSetStore')) + '</span>' : c.cl === null ? '<span class="gdtg wr">⚠️ ' + esc(t('dpNoClT')) + '</span>' : c.ok ? '<span class="gdtg up">✅ ' + esc(t('dpOk')) + '</span>' : '<span class="gdtg dn">⚠️ ' + esc(t('dpDiff', num(c.df))) + '</span>') + '</td></tr>'; }).join('') + '</tbody></table></div>' +
       '<div class="gdtip">' + esc(t('dpRule')) + (allOk ? '' : '<br>⚠️ ' + esc(t('dpWarn'))) + '</div><button type="button" class="primary big" style="width:100%;margin-top:10px"' + (any ? '' : ' disabled') + ' onclick="dpSave()">💾 ' + esc(t('dpSave', GD_WD[sdParse(DP.d).getDay()] + ' ' + DP.d)) + '</button>';
   }
   h += '</div>';
+  return h;
+}
+function dpH() {
+  var h = '';
   /* 📒 سجل الأرباح للشهر */
-  var ym = GD.ym || gdYM(todayS()), BR = BRANCHES.filter(function (b) { return (DB.dayProfit || []).some(function (x) { return x.loc === b; }) || (DB.dailyClose || []).some(function (c) { return c.loc === b && String(c.date).slice(0, 7) === ym; }); }), P = {}, n = ym === gdYM(todayS()) ? Number(todayS().slice(8, 10)) - 1 : gdDays(ym);
-  (DB.dayProfit || []).forEach(function (x) { if (x.d.slice(0, 7) === ym) P[x.d + '|' + x.loc] = x; });
+  var ym = GD.ym || gdYM(todayS()), BR = BRANCHES.filter(function (b) { return (DB.dayCost || []).some(function (x) { return x.loc === b; }) || (DB.dailyClose || []).some(function (c) { return c.loc === b && String(c.date).slice(0, 7) === ym; }); }), P = {}, n = ym === gdYM(todayS()) ? Number(todayS().slice(8, 10)) - 1 : gdDays(ym);
+  (DB.dayCost || []).forEach(function (k) { if (String(k.date).slice(0, 7) !== ym || k.profit === '' || k.profit === undefined) return; var cst = Number(k.cost) || 0, pr = Number(k.profit) || 0, cl = dpCloseOf(k.date, k.loc), tt = (cst + pr) * 1.15; P[k.date + '|' + k.loc] = { cost: cst, prof: pr, ok: cl !== null && Math.abs(tt - cl) <= Math.max(1, cl * 0.002) }; });
   var tot = {}, tP = 0, tN = 0, rows = '';
-  for (var i = n; i >= 1; i--) { var d = ym + '-' + ('0' + i).slice(-2), sP = 0, sN = 0, cells = BR.map(function (b) { var x = P[d + '|' + b], cl = dpCloseOf(d, b); if (x) { sP += x.prof; sN += x.cost + x.prof; tot[b] = (tot[b] || 0) + x.prof; return '<td class="n' + (x.ok ? '' : ' wrn') + '">' + num(gdR(x.prof)) + (x.ok ? '' : ' ⚠️') + '</td>'; } return '<td class="n">' + (cl ? '<button type="button" class="gdedb wr" onclick="DP.d=\'' + d + '\';DP.rows=null;renderGuide();window.scrollTo(0,0)">' + esc(t('dpMiss')) + '</button>' : '<span class="muted">—</span>') + '</td>'; }).join('');
+  for (var i = n; i >= 1; i--) { var d = ym + '-' + ('0' + i).slice(-2), sP = 0, sN = 0, cells = BR.map(function (b) { var x = P[d + '|' + b], cl = dpCloseOf(d, b); if (x) { sP += x.prof; sN += x.cost + x.prof; tot[b] = (tot[b] || 0) + x.prof; return '<td class="n' + (x.ok ? '' : ' wrn') + '">' + num(gdR(x.prof)) + (x.ok ? '' : ' ⚠️') + '</td>'; } return '<td class="n">' + (cl ? '<button type="button" class="gdedb wr" onclick="DP.d=\'' + d + '\';DP.rows=null;show(\'upl\');window.scrollTo(0,0)">' + esc(t('dpMiss')) + '</button>' : '<span class="muted">—</span>') + '</td>'; }).join('');
     tP += sP; tN += sN; rows += '<tr><td>' + esc(GD_WD[sdParse(d).getDay()] + ' ' + i) + '</td>' + cells + '<td class="n"><b>' + (sP ? num(gdR(sP)) : '—') + '</b></td><td class="n">' + (sN ? Math.round(sP / sN * 1000) / 10 + '%' : '') + '</td></tr>'; }
   h += '<div class="card"><h3>📒 ' + esc(t('dpLogT', gdMName(ym, 1))) + '</h3><p class="hint">' + esc(t('dpLogH')) + '</p><div class="tbl"><table class="gdt" data-gd="dprof"><thead><tr><th>' + esc(t('gdToday0')) + '</th>' + BR.map(function (b) { return '<th>' + esc(ln(b)) + '</th>'; }).join('') + '<th>' + esc(t('dpDayP')) + '</th><th>%</th></tr></thead><tbody>' + rows + '<tr class="gdtot"><td><b>' + esc(t('dpMonT')) + '</b></td>' + BR.map(function (b) { return '<td class="n"><b>' + num(gdR(tot[b] || 0)) + '</b></td>'; }).join('') + '<td class="n"><b>' + num(gdR(tP)) + '</b></td><td class="n"><b>' + (tN ? Math.round(tP / tN * 1000) / 10 + '%' : '') + '</b></td></tr></tbody></table></div><div class="gdtip">✅ ' + esc(t('dpToDebt')) + '</div></div>';
   return h;
 }
-function dpSave() { var R = DP.rows.filter(function (o) { return o.loc; }).map(function (o) { var c = dpCheck(o, DP.d); return { loc: o.loc, st: o.st, cost: o.cost, prof: o.prof, cl: c.cl, ok: c.ok ? 1 : 0 }; }); run('gdOp', ['dprof', { d: DP.d, file: DP.file, rows: R }], '✅ ' + t('dpSaved'), function () { DP.rows = null; DP.d = sdAdd(DP.d, 1) > todayS() ? DP.d : DP.d; renderGuide(); }); }
+function dpSave() { var R = DP.rows.filter(function (o) { return o.loc; }).map(function (o) { return { date: DP.d, loc: o.loc, cost: o.cost, profit: o.prof }; }); run('setDayCostBatch', [R], '✅ ' + t('dpSaved'), function () { DP.rows = null; renderUpload(); }); }
 function gdDebtCalc() {
   var cur = gdYM(todayS()), C = DB.gdCfg || {}, PF = C.profit || {}, mxP = Number(C.max) || 5000, mnP = Math.min(Number(C.min) || 3000, mxP), S = {}, P = {}, M = [], i;
   (DB.dailyClose || []).forEach(function (c) { if (c.status === 'مُعاد') return; var m = gdYM(c.date); S[m] = (S[m] || 0) + (Number(c.total) || 0); });
@@ -9935,7 +9939,7 @@ function gdDebtCalc() {
   for (i = 1; i <= 6 && M.length < 3; i++) { var m = gdPrevYM(cur, i); if (S[m]) M.push({ ym: m, s: S[m], p: P[m] || 0 }); }
   var proj = false; if (!M.length && S[cur]) { var dd = Number(todayS().slice(8, 10)) || 1, f = gdDays(cur) / dd; M.push({ ym: cur, s: S[cur] * f, p: (P[cur] || 0) * f }); proj = true; }
   /* نسبة الأرباح التقريبية = متوسط الشهور اللي أدخلتها، وإلا النسبة اللي كتبتها */
-  var DPM = {}; (DB.dayProfit || []).forEach(function (x) { var m = x.d.slice(0, 7), o = DPM[m] = DPM[m] || { p: 0, s: 0, n: {} }; o.p += Number(x.prof) || 0; o.s += ((Number(x.cost) || 0) + (Number(x.prof) || 0)) * 1.15; o.n[x.d] = 1; });
+  var DPM = {}; (DB.dayCost || []).forEach(function (x) { if (x.profit === '' || x.profit === undefined) return; var m = String(x.date).slice(0, 7), o = DPM[m] = DPM[m] || { p: 0, s: 0, n: {} }; o.p += Number(x.profit) || 0; o.s += ((Number(x.cost) || 0) + (Number(x.profit) || 0)) * 1.15; o.n[x.date] = 1; });
   var pcs = Object.keys(DPM).filter(function (k) { return !(PF[k] && PF[k].amt >= 0) && DPM[k].s; }).map(function (k) { return DPM[k].p / DPM[k].s * 100; }).concat(Object.keys(PF).map(function (k) { var e = PF[k]; return S[k] && e && e.amt >= 0 ? e.amt / S[k] * 100 : null; })).filter(function (v) { return v !== null; }), apx = pcs.length ? pcs.reduce(function (a, b) { return a + b; }, 0) / pcs.length : (Number(C.pct) > 0 ? Number(C.pct) : null);
   M.forEach(function (m) { var e = PF[m.ym], dm = DPM[m.ym]; if (e && e.amt >= 0) { m.pr = Number(e.amt); m.ent = 1; } else if (dm && dm.s) { m.pr = m.s * dm.p / dm.s; m.days = Object.keys(dm.n).length; } else if (apx !== null) m.pr = m.s * apx / 100; else m.pr = null; m.pct = m.pr === null ? null : m.pr / m.s * 100; m.g = m.pr === null ? null : m.s - m.pr; m.x = m.g === null ? null : m.g - m.p; }); M.reverse();
   var n = M.length || 1, av = function (k) { return M.reduce(function (s, m) { return s + (m[k] || 0); }, 0) / n; }, noPr = M.some(function (m) { return m.pr === null; }), weak = noPr ? null : M.slice().sort(function (a, b) { return a.x - b.x; })[0], inst = weak ? Math.max(0, Math.floor(weak.x / 100) * 100) : 0;
@@ -14113,7 +14117,9 @@ function mrCalc(data, ym, items) {
     gdToday0: 'اليوم',
     gdTProf: 'الأرباح',
     dpT: 'الأرباح اليومية — ملف DigitalPro',
-    dpH: 'صدّر «كشف المبيعات تجميعي حسب الصنف» ليوم واحد لكل المخازن، اختر اليوم وارفع الملف — النظام يقسمه على الفروع ويطابقه مع الإقفالات',
+    dpH: 'من DigitalPro صدّر «كشف المبيعات تجميعي حسب الصنف» ليوم واحد لكل المخازن، اختر اليوم وارفع الملف — النظام يقسمه على الفروع ويطابقه مع الإقفالات',
+    dpManual: 'إدخال يدوي أو استيراد دفتر الشهر',
+    dpUpGo: 'ارفعها من «رفع البيانات»',
     dpDay: 'يوم الملف',
     dpPick: 'رفع ملف الإكسل',
     dpHave: 'هذا اليوم مرفوع من قبل: {0} — لو رفعت ملف ثاني ينحفظ القديم في السجل',
@@ -14135,7 +14141,7 @@ function mrCalc(data, ym, items) {
     dpSave: 'حفظ أرباح {0}',
     dpSaved: 'انحفظت الأرباح',
     dpLogT: 'سجل الأرباح — {0}',
-    dpLogH: 'ربح كل فرع كل يوم · «ارفع» = اليوم فيه إقفال وما انرفع ملفه · ⚠️ = ما طابق الإقفال',
+    dpLogH: 'ربح كل فرع كل يوم (من رفع البيانات) · «ارفع» = اليوم فيه إقفال وما انرفع ملفه · ⚠️ = ما طابق الإقفال',
     dpMiss: 'ارفع',
     dpDayP: 'ربح اليوم',
     dpMonT: 'مجموع الشهر',
@@ -15394,45 +15400,8 @@ function upSet(k, v) {
 }
 function upSetMatch(i, v) { UP.match[UP.names[i]] = v; renderUpload(); }
 function renderUpload() {
-  var h = '<div class="card"><h2>' + esc(t('upT')) + '</h2><p class="hint" style="margin-top:0">' + esc(t('upHint2')) + '</p>';
-  if (UP && UP.batch) { h += pbView() + '</div>'; }
-  else if (!UP || UP.loading) {
-    h += '<label class="updrop" id="upDrop" ondragover="event.preventDefault();this.classList.add(\'over\')" ondragleave="this.classList.remove(\'over\')" ondrop="event.preventDefault();this.classList.remove(\'over\');upOnFiles(event.dataTransfer.files)">' +
-      '<input type="file" accept=".xlsx,.xls,.csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,.pdf,application/pdf,image/*" multiple hidden onchange="upOnFiles(this.files)">' +
-      '<span class="upic">📤</span><b>' + esc(UP && UP.loading ? t('upReading') : t('upPick')) + '</b><small>' + esc(t('upTypes')) + '</small></label></div>';
-  } else if (UP.img) {
-    if (UP.ocrBusy) h += '<div class="upfile">🖼️ <b>' + esc(UP.file) + '</b></div><div class="upimg"><img src="' + esc(UP.img.url) + '" alt=""><p class="muted" style="font-weight:700"><span class="ldot sm"></span> ' + esc(t('psOcr')) + '</p></div></div>';
-    else if (UP.ps) h += '<div class="upfile">🖼️ <b>' + esc(UP.file) + '</b> <button class="ghost sm" onclick="UP=null;renderUpload()">' + esc(t('upClear')) + '</button> <button class="ghost sm" onclick="UP.ps=null;renderUpload()">' + esc(t('upImgManual')) + '</button></div><div class="upimg"><img src="' + esc(UP.img.url) + '" alt="" onclick="showPhoto(' + q(UP.img.url) + ')"><div>' + psView() + '</div></div></div>';
-    else h += upImgView() + '</div>';
-  } else if (!UP.batch && ((UP.ps === undefined && psDetect(UP.pdf ? pdfRaw(UP.pdf) : upRows())) || UP.ps)) {
-    h += '<div class="upfile">📄 <b>' + esc(UP.file) + '</b> <button class="ghost sm" onclick="UP=null;renderUpload()">' + esc(t('upClear')) + '</button></div>' + psView() + '</div>';
-  } else if (!UP.batch) {
-    UP.ps = null;
-    var R = upRows(), H = (R[UP.head] || []), M = UP.map;
-    function colSel(k, lbl, opt) { return '<label><span>' + esc(t(lbl)) + '</span><select onchange="upSet(\'m_' + k + '\',this.value)">' + (opt ? '<option value="-1">' + esc(t('upNone')) + '</option>' : '<option value="-1">' + esc(t('choose')) + '</option>') + H.map(function (c, i) { return '<option value="' + i + '"' + (M[k] === i ? ' selected' : '') + '>' + esc(String(c).trim() || ('#' + (i + 1))) + '</option>'; }).join('') + '</select></label>'; }
-    h += '<div class="upfile">📄 <b>' + esc(UP.file) + '</b> <button class="ghost sm" onclick="UP=null;renderUpload()">' + esc(t('upClear')) + '</button></div>';
-    h += '<div class="form">' + (UP.wb && UP.wb.SheetNames.length > 1 ? '<label><span>' + esc(t('upSheet')) + '</span><select onchange="upSet(\'sheet\',this.value)">' + UP.wb.SheetNames.map(function (n) { return '<option' + (n === UP.sheet ? ' selected' : '') + '>' + esc(n) + '</option>'; }).join('') + '</select></label>' : '') +
-      '<label><span>' + esc(t('upHead')) + '</span><select onchange="upSet(\'head\',this.value)">' + R.slice(0, 25).map(function (r, i) { return '<option value="' + i + '"' + (i === UP.head ? ' selected' : '') + '>' + (i + 1) + ': ' + esc(r.filter(function (c) { return String(c).trim(); }).slice(0, 4).join(' | ').slice(0, 60)) + '</option>'; }).join('') + '</select></label>' +
-      '<label><span>' + esc(t('upMonth')) + '</span><input type="month" value="' + esc(UP.month) + '" onchange="upSet(\'month\',this.value)"><small class="muted">' + esc(t('upMonthNote')) + '</small></label></div>';
-    h += '<h3 class="subh">' + esc(t('upMap')) + '</h3><div class="form">' + colSel('sales', 'upColSales') + colSel('cost', 'upColCost', true) + colSel('profit', 'upColProfit', true) + colSel('loc', 'upColLoc', true) + colSel('date', 'upColDate', true) +
-      (M.loc < 0 ? '<label><span>' + esc(t('upOneLoc')) + '</span><select onchange="upSet(\'locFix\',this.value)">' + DB.locations.map(function (l) { return '<option value="' + esc(l.code) + '"' + (l.code === UP.locFix ? ' selected' : '') + '>' + esc(ln(l.code)) + '</option>'; }).join('') + '</select></label>' : '') + '</div>';
-    var C = M.sales > -1 ? upCompute() : { rows: [], read: 0, skip: 0 };
-    if (M.loc > -1 && UP.names && UP.names.length) h += '<h3 class="subh">' + esc(t('upLocMatch')) + '</h3><div class="upmatch">' + UP.names.map(function (n, i) {
-      var v0 = UP.match[n] || ''; return '<label><b>' + esc(n) + '</b><span>←</span><select class="' + (v0 ? '' : 'bad') + '" onchange="upSetMatch(' + i + ',this.value)"><option value="">' + esc(t('choose')) + '</option>' + DB.locations.map(function (l) { return '<option value="' + esc(l.code) + '"' + (l.code === v0 ? ' selected' : '') + '>' + esc(ln(l.code)) + '</option>'; }).join('') + '<option value="__skip"' + (v0 === '__skip' ? ' selected' : '') + '>' + esc(t('upSkip')) + '</option></select></label>';
-    }).join('') + '</div>';
-    h += '<h3 class="subh">' + esc(t('upPreview')) + '</h3>';
-    if (M.sales < 0) h += '<p class="empty">' + esc(t('upNeedSales')) + '</p>';
-    else if (!C.rows.length) h += '<p class="empty">' + esc(t('upNoData')) + '</p>';
-    else {
-      var T = { sales: 0, cost: 0, profit: 0 }; C.rows.forEach(function (r) { T.sales += r.sales; T.cost += r.cost; T.profit += r.profit; });
-      h += '<p class="muted" style="margin:0 0 8px">' + esc(t('upRowsRead', C.read, C.skip)) + (M.profit < 0 ? ' — ' + esc(t('upProfitCalc')) : '') + '</p><div class="tbl"><table><thead><tr><th>' + esc(t('upMonth')) + '</th><th>' + esc(t('clBranch')) + '</th><th>' + esc(t('mrSales')) + '</th><th>' + esc(t('mrCost')) + '</th><th>' + esc(t('mrProfit')) + '</th></tr></thead><tbody>' +
-        C.rows.map(function (r) { var ex = (DB.uploads || []).some(function (u) { return u.month === r.month && u.loc === r.loc; }); return '<tr><td>' + esc(monthName(r.month)) + ' ' + esc(r.month.slice(0, 4)) + '</td><td><b>' + esc(ln(r.loc)) + '</b>' + (ex ? ' <span class="st warn">' + esc(t('upReplace')) + '</span>' : '') + '</td><td class="n">' + num(r.sales) + '</td><td class="n">' + num(r.cost) + '</td><td class="n"><b class="' + (r.profit < 0 ? 'amt-neg' : 'amt-pos') + '">' + num(r.profit) + '</b></td></tr>'; }).join('') +
-        '<tr><td colspan="2"><b>' + esc(t('mrTotal')) + '</b></td><td class="n"><b>' + num(T.sales) + '</b></td><td class="n"><b>' + num(T.cost) + '</b></td><td class="n"><b>' + num(T.profit) + '</b></td></tr></tbody></table></div>' +
-        '<button class="primary big" style="margin-top:12px" onclick="upSave()">' + esc(t('upSave')) + '</button>';
-    }
-    h += '</div>';
-  }
-  h += impCard() + pbHist() + mcCard();
+  var h = dpUpH();
+  h += pbHist() + '<div class="card"><button type="button" class="btn" style="width:100%" onclick="MC_OPEN=!MC_OPEN;renderUpload()">' + (MC_OPEN ? '➖ ' : '➕ ') + esc(t('dpManual')) + '</button></div>' + (MC_OPEN ? mcCard() + impCard() : '');
   /* بطاقة «ربط أرقام الآلات بالفروع» محذوفة بطلب المستخدم */
   /* السجل */
   var U = (DB.uploads || []).slice().sort(function (a, b) { var x = a.from || a.month, y = b.from || b.month; return x < y ? 1 : x > y ? -1 : (a.loc < b.loc ? -1 : 1); });
