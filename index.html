@@ -1656,6 +1656,16 @@ select.icuNeed{border-color:#D9826B!important;background:#FFF6F2}
 .gdlr{cursor:pointer}.gdlr:hover td{background:rgba(110,79,49,.05)}
 .gdjr{display:flex;flex-direction:column;gap:0;margin:10px 0}.gdjr>div{border-inline-start:4px solid #d9c9ae;padding:6px 12px 10px}.gdjr b{display:block;font-size:14px}.gdjr small{opacity:.75;font-size:12.5px}.gdjr .r{border-color:#b3412e}.gdjr .y{border-color:#c9952f}.gdjr .b{border-color:#2c6a9a}.gdjr .g{border-color:#23704a}
 .wr{color:#99600b}
+
+.gdfb.pr{background:#f8ecd2;border-color:#e7cf9c}.gdfb.pr b{color:#99600b}.gdedb.ok{background:#dcefe3;border-color:#b9dcc6;color:#1e6b47}.gdedb.wr{background:#f8ecd2;border-color:#e7cf9c;color:#99600b;font-weight:700}
+.gdgoal{display:flex;gap:12px;align-items:center;background:#dcefe3;border:1px solid #b9dcc6;border-radius:16px;padding:12px 16px;margin-top:10px}.gdgoal .ic{font-size:28px}.gdgoal small{display:block;opacity:.75;font-size:12px}.gdgoal b{font-size:23px;color:#1e6b47}.gdgoal .r{margin-inline-start:auto;text-align:end}.gdgoal .r b{color:inherit;font-size:20px}
+.gdms{display:flex;margin-top:14px;overflow-x:auto}.gdms>div{flex:1;min-width:84px;text-align:center;position:relative;padding-top:24px}.gdms>div:before{content:'';position:absolute;top:8px;right:0;left:0;height:4px;background:#d9c9ae}.gdms>div:after{content:'';position:absolute;top:1px;right:50%;width:14px;height:14px;margin-right:-7px;border-radius:50%;background:#fff;border:4px solid #6e4f31}
+.gdms>div.d:after{background:#23704a;border-color:#23704a}.gdms b{display:block;font-size:13px}.gdms span{display:block;font-size:12px;opacity:.75}.gdms em{font-style:normal;font-size:12px;color:#1e6b47;font-weight:700}
+.gdp{display:flex;align-items:center;gap:8px;background:var(--card,#fff);border-radius:12px;padding:9px 12px;margin-top:7px;flex-wrap:wrap}.gdp .nm{flex:1;min-width:140px}.gdp .nm b{display:block;font-size:14.5px}.gdp .nm small{opacity:.7;font-size:11.5px}.gdp .a{font-size:17px;color:#9a5a2c}.gdp .a s{opacity:.55;font-weight:400;font-size:12px}
+.gdpt{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:13.5px;padding:0 4px}.gdset{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;background:var(--card,#fff);border-radius:12px;padding:8px 10px;font-size:12.5px}
+.gdmo{background:var(--card,#fff);border-radius:12px;padding:9px 12px;margin-top:7px}.gdmo .h{display:flex;justify-content:space-between;align-items:baseline}.gdmo .h span{font-size:12.5px;opacity:.75}.gdmo .ch{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}.gdmo .ch span{font-size:12px;border:1px solid var(--line,#e2d4be);border-radius:99px;padding:2px 9px}.gdmo .ch span.c{background:#dcefe3;border-color:#b9dcc6;color:#1e6b47;font-weight:700}
+@media (max-width:640px){.gdopr{display:none}.gdfb{min-width:calc(50% - 6px)}.gdfb.res,.gdfb.neg{min-width:100%}}
+.dprow{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin:8px 0}.dprow label b{display:block;font-size:13px;margin-bottom:4px}.dpwd{font-weight:700;padding-bottom:8px}.dpup{margin-inline-start:auto;cursor:pointer}td.wrn{color:#99600b}tr.gdtot td{border-top:2px solid var(--line,#e2d4be)}
 </style>
 <script>
 (function () { try { var ic = document.querySelector('link[rel=icon]').href, m = { name: 'أبوشرحة للتمور', short_name: 'أبوشرحة', lang: 'ar', dir: 'rtl', display: 'standalone', start_url: location.href.split('#')[0], background_color: document.documentElement.getAttribute('data-ui') === 'v2' ? '#FFFFFF' : '#4e3622', theme_color: document.documentElement.getAttribute('data-ui') === 'v2' ? '#FFFFFF' : '#4e3622', icons: [{ src: ic, sizes: '192x192', type: 'image/png' }, { src: ic, sizes: '512x512', type: 'image/png' }] };
@@ -5053,7 +5063,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 221, APP_DATE = '2026-11-24';
+var APP_BUILD = 223, APP_DATE = '2026-11-26';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -5732,7 +5742,7 @@ var Demo = (function () {
     if (!isM) { o.uploads = []; o.dayCost = []; o.obligations = []; o.oblBills = []; o.pfTransfers = []; o.safeCounts = []; o.imports = []; var myLb = String(w.locs || '').split(',').filter(Boolean); o.brTrans = (o.brTrans || []).filter(function (k) { return k.user === w.name || (k.lines && myLb.indexOf(k.to) > -1 && userCan(w, 'brTrans')); }).slice(-60).map(function (k) { return k.lines ? Object.assign({}, k, { amount: '', lines: k.lines.map(function (l) { var o2 = { item: l.item, itemName: l.itemName, qty: l.qty }; if (l.rqty !== undefined) o2.rqty = l.rqty; return o2; }) }) : k; }); }
     o.countSessions = (o.countSessions || []).filter(function (k) { return isM || k.worker === w.name; }).slice(-150);
     var myBL = isM ? null : String(w.locs || '').split(',').filter(Boolean);
-    if (!isM) { delete o.debtAdj; delete o.mvNotes; delete o.gdCfg; }
+    if (!isM) { delete o.debtAdj; delete o.mvNotes; delete o.gdCfg; delete o.dayProfit; }
     try { var dps = (D.settings || []).find(function (x) { return x.key === 'dpStores'; }); o.dpStores = JSON.parse((dps && dps.value) || '{}') || {}; } catch (e) { o.dpStores = {}; }
     o.bcounts = (o.bcounts || []).filter(function (c) { return isM || !myBL.length || myBL.indexOf(c.loc) > -1; }).slice(-300).map(function (c) { if (isM) return c; var en = (c.ents || []).indexOf(w.name) > -1, r = Object.assign({}, c, { hist: [], edits: [] }); if (!en && c.status !== 'draft') r.vals = {}; if (!en && c.mis) r.mis = c.verifier === w.name ? c.mis : []; if (en) { r.ver = {}; r.sample = c.status === 'confirmed' ? [] : c.sample; } else r.ver = {}; return r; });
     if (!isM) { o.hrAbsOv = []; o.hrEmp = []; o.hrAdv = []; o.hrLeave = []; o.hrDed = []; o.hrDocs = []; o.hrPayroll = []; }
@@ -7080,7 +7090,13 @@ var Demo = (function () {
     /* 🧭 المرشد: المصاريف الشهرية، تعديل قسط مورد، ملاحظات سجل التوفير */
     gdOp: function (tok, op, x) {
       var w = wuser(tok); mgr(w); x = x || {}; D.gdCfg = D.gdCfg || {}; D.debtAdj = D.debtAdj || []; D.mvNotes = D.mvNotes || {}; var tm = now();
-      if (op === 'exp') { var v = Number(x.v); if (!(v >= 0)) throw new Error('e_qty'); var o0 = D.gdCfg.exp || 0; D.gdCfg.exp = Math.round(v); aud(w.name, 'المرشد: المصاريف الشهرية', o0 + ' ← ' + D.gdCfg.exp); }
+      if (op === 'dprof') { var dd0 = String(x.d || ''); if (!/^\d{4}-\d\d-\d\d$/.test(dd0)) throw new Error('e_reason'); D.dayProfit = D.dayProfit || []; (x.rows || []).forEach(function (r) { var loc = String(r.loc || ''); if (!D.locations.some(function (l) { return l.code === loc; })) return; var cst = Math.round(Number(r.cost) * 100) / 100, prf = Math.round(Number(r.prof) * 100) / 100; if (isNaN(cst) || isNaN(prf)) return; var ex = D.dayProfit.find(function (k) { return k.d === dd0 && k.loc === loc; });
+          if (ex) { ex.hist = ex.hist || []; ex.hist.push({ cost: ex.cost, prof: ex.prof, by: ex.by, at: ex.at, file: ex.file }); ex.cost = cst; ex.prof = prf; ex.cl = r.cl; ex.ok = r.ok ? 1 : 0; ex.by = w.name; ex.at = tm; ex.file = String(x.file || '').slice(0, 80); } else D.dayProfit.push({ d: dd0, loc: loc, st: String(r.st || ''), cost: cst, prof: prf, cl: r.cl, ok: r.ok ? 1 : 0, by: w.name, at: tm, file: String(x.file || '').slice(0, 80) }); });
+        aud(w.name, 'الأرباح اليومية: رفع ملف', dd0 + ' — ' + (x.rows || []).map(function (r) { return r.loc + ': ربح ' + r.prof + ' / تكلفة ' + r.cost + (r.ok ? ' ✅' : ' ⚠️'); }).join(' · ')); }
+      else if (op === 'profit') { var ym0 = String(x.ym || ''); if (!/^\d{4}-\d\d$/.test(ym0)) throw new Error('e_reason'); var v0 = Number(x.v); if (!(v0 >= 0)) throw new Error('e_qty'); var S0 = 0; (D.dailyClose || []).forEach(function (c) { if (c.status !== 'مُعاد' && String(c.date).slice(0, 7) === ym0) S0 += Number(c.total) || 0; }); var amt0 = x.mode === 'pct' ? Math.round(S0 * v0 / 100) : Math.round(v0); D.gdCfg.profit = D.gdCfg.profit || {}; var was = D.gdCfg.profit[ym0]; D.gdCfg.profit[ym0] = { amt: amt0, by: w.name, at: tm, pct: x.mode === 'pct' ? v0 : '' }; aud(w.name, 'المرشد: صافي أرباح ' + ym0, (was ? was.amt + ' ← ' : '') + amt0 + (x.mode === 'pct' ? ' (' + v0 + '%)' : '')); }
+      else if (op === 'pct') { var p0 = Number(x.v); if (!(p0 >= 0 && p0 < 100)) throw new Error('e_qty'); aud(w.name, 'المرشد: نسبة الأرباح التقريبية', (D.gdCfg.pct || '—') + ' ← ' + p0 + '%'); D.gdCfg.pct = p0; }
+      else if (op === 'lim') { var mx0 = Math.round(Number(x.max)), mn0 = Math.round(Number(x.min)); if (!(mx0 > 0) || !(mn0 >= 0) || mn0 > mx0) throw new Error('e_qty'); aud(w.name, 'خطة الديون: حدود القسط', (D.gdCfg.max || 5000) + '/' + (D.gdCfg.min || 3000) + ' ← ' + mx0 + '/' + mn0); D.gdCfg.max = mx0; D.gdCfg.min = mn0; }
+      else if (op === 'exp') { var v = Number(x.v); if (!(v >= 0)) throw new Error('e_qty'); var o0 = D.gdCfg.exp || 0; D.gdCfg.exp = Math.round(v); aud(w.name, 'المرشد: المصاريف الشهرية', o0 + ' ← ' + D.gdCfg.exp); }
       else if (op === 'adj' || op === 'clr') {
         var sup = String(x.sup || ''), ym = /^\d{4}-\d\d$/.test(String(x.ym || '')) ? x.ym : String(tm).slice(0, 7);
         D.debtAdj.forEach(function (a) { if (a.sup === sup && a.ym === ym && !a.off) { a.off = tm; a.offBy = w.name; } });
@@ -9872,61 +9888,124 @@ function gdMonAdd(ym, k) { var p = ym.split('-'), d = new Date(Number(p[0]), Num
 var GD_MN = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
 function gdMName(ym, y) { var p = ym.split('-'); return GD_MN[Number(p[1]) - 1] + (y ? ' ' + p[0] : ''); }
 function gdPurchOf(x) { if (x.status || x.invType === OB_TYPE) return 0; var a = Number(x.total) || 0; return x.invType === 'مرتجع مشتريات' ? -a : a; }
+/* 💹 الأرباح اليومية — ملف DigitalPro (كشف المبيعات تجميعي حسب الصنف) لكل المخازن، والتاريخ تختاره إنت */
+var DP = { d: '', rows: null, file: '', ym: '' };
+function dpLocOf(st) { st = String(st); var L = (DB.locations || []).filter(function (l) { return String(bcStoreOf(l.code)) === st; }); return L.length ? L[0].code : ''; }
+function dpCloseOf(d, loc) { var s = 0, n = 0; (DB.dailyClose || []).forEach(function (c) { if (String(c.date).slice(0, 10) === d && c.loc === loc && c.status !== 'مُعاد') { s += Number(c.total) || 0; n++; } }); return n ? s : null; }
+function dpParse(f) {
+  DP.file = f.name; DP.rows = 'loading'; renderGuide();
+  upLoadLib(function () { var fr = new FileReader(); fr.onload = function (e) { try {
+    var wb = XLSX.read(e.target.result, { type: 'array' }), ws = wb.Sheets[wb.SheetNames[0]], A = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: '' }), hi = -1, H = null;
+    for (var i = 0; i < Math.min(A.length, 30); i++) { var r = A[i].map(function (x) { return String(x).replace(/\s+/g, ' ').trim(); }); if (r.indexOf('مخزن') > -1 && r.some(function (x) { return /صافي تكلف/.test(x); }) && r.some(function (x) { return /هامش ربح/.test(x); })) { hi = i; H = r; break; } }
+    if (hi < 0) throw new Error(t('dpBadFile'));
+    var cS = H.indexOf('مخزن'), cC = H.findIndex(function (x) { return /صافي تكلف/.test(x); }), cP = H.findIndex(function (x) { return /هامش ربح/.test(x); }), cT = H.findIndex(function (x) { return /صافي البيع الكلي/.test(x); }), S = {};
+    A.slice(hi + 1).forEach(function (r) { var st = r[cS]; if (st === '' || st === null || isNaN(Number(st)) || r[0] === '' || isNaN(Number(r[0]))) return; var o = S[st] = S[st] || { st: String(Number(st)), cost: 0, prof: 0, fT: 0, n: 0 }; o.cost += Number(r[cC]) || 0; o.prof += Number(r[cP]) || 0; if (cT > -1) o.fT += Number(r[cT]) || 0; o.n++; });
+    var R = Object.keys(S).map(function (k) { var o = S[k]; o.cost = Math.round(o.cost * 100) / 100; o.prof = Math.round(o.prof * 100) / 100; o.loc = dpLocOf(o.st); return o; }).sort(function (a, b) { return Number(a.st) - Number(b.st); });
+    if (!R.length) throw new Error(t('dpBadFile')); DP.rows = R;
+  } catch (er) { DP.rows = null; toast('⚠️ ' + (er.message || er), true); } renderGuide(); }; fr.readAsArrayBuffer(f); });
+}
+function dpCheck(o, d) { var net = o.cost + o.prof, vat = Math.round(net * 0.15 * 100) / 100, tot = Math.round((net + vat) * 100) / 100, cl = o.loc ? dpCloseOf(d, o.loc) : null, df = cl === null ? null : Math.round((tot - cl) * 100) / 100; return { net: net, vat: vat, tot: tot, cl: cl, df: df, ok: df !== null && Math.abs(df) <= Math.max(1, cl * 0.002) }; }
+function dpH() {
+  if (!DP.d) DP.d = sdAdd(todayS(), -1); var h = '<div class="card"><h3>💹 ' + esc(t('dpT')) + '</h3><p class="hint">' + esc(t('dpH')) + '</p>';
+  h += '<div class="dprow"><label><b>📅 ' + esc(t('dpDay')) + '</b><input type="date" value="' + esc(DP.d) + '" max="' + esc(todayS()) + '" onchange="DP.d=this.value;renderGuide()"></label><span class="dpwd">' + esc(GD_WD[sdParse(DP.d).getDay()]) + '</span>' +
+    '<label class="btn dpup">📤 ' + esc(t('dpPick')) + '<input type="file" accept=".xlsx,.xls" hidden onchange="if(this.files[0])dpParse(this.files[0]);this.value=\'\'"></label></div>';
+  var have = (DB.dayProfit || []).filter(function (x) { return x.d === DP.d; });
+  if (have.length && !DP.rows) h += '<div class="gdtip">✅ ' + esc(t('dpHave', have.map(function (x) { return ln(x.loc); }).join('، '))) + '</div>';
+  if (DP.rows === 'loading') h += '<p class="muted"><span class="ldot sm"></span> ' + esc(t('upReading')) + '</p>';
+  else if (DP.rows) { var allOk = true, any = false;
+    h += '<div class="upfile">📄 <b>' + esc(DP.file) + '</b> <button type="button" class="ghost sm" onclick="DP.rows=null;renderGuide()">' + esc(t('upClear')) + '</button></div><div class="tbl"><table class="gdt"><thead><tr><th>' + esc(t('dpBr')) + '</th><th>' + esc(t('dpCost')) + '</th><th>' + esc(t('dpProf')) + '</th><th>' + esc(t('dpVat')) + '</th><th>' + esc(t('dpTot')) + '</th><th>' + esc(t('dpCl')) + '</th><th></th></tr></thead><tbody>' + DP.rows.map(function (o) { var c = dpCheck(o, DP.d); if (o.loc) { any = true; if (!c.ok) allOk = false; }
+      return '<tr><td><b>' + esc(o.loc ? ln(o.loc) : t('dpNoLoc')) + '</b><small class="sub2">' + esc(t('bkStoreN', o.st)) + ' · ' + esc(t('dpLines', o.n)) + '</small></td><td class="n">' + num(o.cost) + '</td><td class="n"><b>' + num(o.prof) + '</b><small class="sub2">' + (c.net ? Math.round(o.prof / c.net * 1000) / 10 : 0) + '%</small></td><td class="n">' + num(c.vat) + '</td><td class="n"><b>' + num(c.tot) + '</b></td><td class="n">' + (c.cl === null ? '<span class="muted">' + esc(t('dpNoCl')) + '</span>' : num(c.cl)) + '</td><td>' + (!o.loc ? '<span class="gdtg wr">' + esc(t('dpSetStore')) + '</span>' : c.cl === null ? '<span class="gdtg wr">⚠️ ' + esc(t('dpNoClT')) + '</span>' : c.ok ? '<span class="gdtg up">✅ ' + esc(t('dpOk')) + '</span>' : '<span class="gdtg dn">⚠️ ' + esc(t('dpDiff', num(c.df))) + '</span>') + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+      '<div class="gdtip">' + esc(t('dpRule')) + (allOk ? '' : '<br>⚠️ ' + esc(t('dpWarn'))) + '</div><button type="button" class="primary big" style="width:100%;margin-top:10px"' + (any ? '' : ' disabled') + ' onclick="dpSave()">💾 ' + esc(t('dpSave', GD_WD[sdParse(DP.d).getDay()] + ' ' + DP.d)) + '</button>';
+  }
+  h += '</div>';
+  /* 📒 سجل الأرباح للشهر */
+  var ym = GD.ym || gdYM(todayS()), BR = BRANCHES.filter(function (b) { return (DB.dayProfit || []).some(function (x) { return x.loc === b; }) || (DB.dailyClose || []).some(function (c) { return c.loc === b && String(c.date).slice(0, 7) === ym; }); }), P = {}, n = ym === gdYM(todayS()) ? Number(todayS().slice(8, 10)) - 1 : gdDays(ym);
+  (DB.dayProfit || []).forEach(function (x) { if (x.d.slice(0, 7) === ym) P[x.d + '|' + x.loc] = x; });
+  var tot = {}, tP = 0, tN = 0, rows = '';
+  for (var i = n; i >= 1; i--) { var d = ym + '-' + ('0' + i).slice(-2), sP = 0, sN = 0, cells = BR.map(function (b) { var x = P[d + '|' + b], cl = dpCloseOf(d, b); if (x) { sP += x.prof; sN += x.cost + x.prof; tot[b] = (tot[b] || 0) + x.prof; return '<td class="n' + (x.ok ? '' : ' wrn') + '">' + num(gdR(x.prof)) + (x.ok ? '' : ' ⚠️') + '</td>'; } return '<td class="n">' + (cl ? '<button type="button" class="gdedb wr" onclick="DP.d=\'' + d + '\';DP.rows=null;renderGuide();window.scrollTo(0,0)">' + esc(t('dpMiss')) + '</button>' : '<span class="muted">—</span>') + '</td>'; }).join('');
+    tP += sP; tN += sN; rows += '<tr><td>' + esc(GD_WD[sdParse(d).getDay()] + ' ' + i) + '</td>' + cells + '<td class="n"><b>' + (sP ? num(gdR(sP)) : '—') + '</b></td><td class="n">' + (sN ? Math.round(sP / sN * 1000) / 10 + '%' : '') + '</td></tr>'; }
+  h += '<div class="card"><h3>📒 ' + esc(t('dpLogT', gdMName(ym, 1))) + '</h3><p class="hint">' + esc(t('dpLogH')) + '</p><div class="tbl"><table class="gdt" data-gd="dprof"><thead><tr><th>' + esc(t('gdToday0')) + '</th>' + BR.map(function (b) { return '<th>' + esc(ln(b)) + '</th>'; }).join('') + '<th>' + esc(t('dpDayP')) + '</th><th>%</th></tr></thead><tbody>' + rows + '<tr class="gdtot"><td><b>' + esc(t('dpMonT')) + '</b></td>' + BR.map(function (b) { return '<td class="n"><b>' + num(gdR(tot[b] || 0)) + '</b></td>'; }).join('') + '<td class="n"><b>' + num(gdR(tP)) + '</b></td><td class="n"><b>' + (tN ? Math.round(tP / tN * 1000) / 10 + '%' : '') + '</b></td></tr></tbody></table></div><div class="gdtip">✅ ' + esc(t('dpToDebt')) + '</div></div>';
+  return h;
+}
+function dpSave() { var R = DP.rows.filter(function (o) { return o.loc; }).map(function (o) { var c = dpCheck(o, DP.d); return { loc: o.loc, st: o.st, cost: o.cost, prof: o.prof, cl: c.cl, ok: c.ok ? 1 : 0 }; }); run('gdOp', ['dprof', { d: DP.d, file: DP.file, rows: R }], '✅ ' + t('dpSaved'), function () { DP.rows = null; DP.d = sdAdd(DP.d, 1) > todayS() ? DP.d : DP.d; renderGuide(); }); }
 function gdDebtCalc() {
-  var cur = gdYM(todayS()), exp = Number((DB.gdCfg || {}).exp) || 0, S = {}, P = {}, M = [], i;
+  var cur = gdYM(todayS()), C = DB.gdCfg || {}, PF = C.profit || {}, mxP = Number(C.max) || 5000, mnP = Math.min(Number(C.min) || 3000, mxP), S = {}, P = {}, M = [], i;
   (DB.dailyClose || []).forEach(function (c) { if (c.status === 'مُعاد') return; var m = gdYM(c.date); S[m] = (S[m] || 0) + (Number(c.total) || 0); });
   (DB.invoices || []).forEach(function (x) { var m = gdYM(x.date), a = gdPurchOf(x); if (a) P[m] = (P[m] || 0) + a; });
   for (i = 1; i <= 6 && M.length < 3; i++) { var m = gdPrevYM(cur, i); if (S[m]) M.push({ ym: m, s: S[m], p: P[m] || 0 }); }
   var proj = false; if (!M.length && S[cur]) { var dd = Number(todayS().slice(8, 10)) || 1, f = gdDays(cur) / dd; M.push({ ym: cur, s: S[cur] * f, p: (P[cur] || 0) * f }); proj = true; }
-  M.forEach(function (m) { m.x = m.s - m.p - exp; }); M.reverse();
-  var n = M.length || 1, avgS = M.reduce(function (s, m) { return s + m.s; }, 0) / n, avgP = M.reduce(function (s, m) { return s + m.p; }, 0) / n, weak = M.slice().sort(function (a, b) { return a.x - b.x; })[0], inst = weak ? Math.max(0, Math.floor(weak.x / 100) * 100) : 0;
-  /* الديون المفتوحة لكل مورد (الآجل + الأرصدة الافتتاحية) */
-  var SP = {}, paidM = {}, mStart = cur + '-01';
-  (DB.invoices || []).forEach(function (x) { if (x.payType !== 'آجل' || x.status || x.invType === 'مرتجع مشتريات') return; var c = creditInfo(x); if (!(c.rem > 1)) return; var o = SP[x.supplier] = SP[x.supplier] || { s: x.supplier, rem: 0, n: 0, old: '9999' }; o.rem += c.rem; o.n++; var d = String(x.date).slice(0, 10); if (d < o.old) o.old = d; });
-  var IV = {}; (DB.invoices || []).forEach(function (x) { IV[String(x.id)] = x; });
-  (DB.invPays || []).forEach(function (p) { if (String(p.date) < mStart) return; var x = IV[String(p.invId)]; if (!x || x.status) return; paidM[x.supplier] = (paidM[x.supplier] || 0) + (Number(p.amount) || 0); });
-  var L = Object.keys(SP).map(function (k) { var o = SP[k]; o.age = Math.round((sdParse(todayS()) - sdParse(o.old)) / 864e5); o.paid = paidM[k] || 0; o.base = o.rem + o.paid; return o; }).sort(function (a, b) { return a.old < b.old ? -1 : 1; });
-  var tot = L.reduce(function (s, o) { return s + o.rem; }, 0), ADJ = {}; (DB.debtAdj || []).forEach(function (a) { if (!a.off && a.ym === cur) ADJ[a.sup] = a; });
-  /* التوزيع: الأقدم ياخذ أكثر — الوزن = المتبقي × (1 + العمر/90) — والقسط ما ينزل عن 500 */
-  function alloc(rows, B) { var out = {}, w = 0; rows.forEach(function (o) { if (o.r > 0.5) w += o.r * (1 + o.a / 90); }); if (!w || B <= 0) return out;
-    rows.forEach(function (o) { if (!(o.r > 0.5)) return; var v = Math.round(B * o.r * (1 + o.a / 90) / w / 100) * 100; out[o.s] = Math.min(o.r, Math.max(Math.min(500, o.r), v)); });
-    var used = Object.keys(out).reduce(function (s, k) { return s + out[k]; }, 0), j;
-    for (j = rows.length - 1; used > B + 0.5 && j >= 0; j--) { var o = rows[j]; if (!out[o.s]) continue; var cut = Math.min(out[o.s], used - B); out[o.s] -= cut; used -= cut; if (out[o.s] < 1) delete out[o.s]; }
-    for (j = 0; used < B - 0.5 && j < rows.length; j++) { var o2 = rows[j], room = o2.r - (out[o2.s] || 0); if (room > 0.5) { var add = Math.min(room, B - used); out[o2.s] = (out[o2.s] || 0) + add; used += add; } }
-    return out; }
-  var rows = L.map(function (o) { return { s: o.s, r: o.base, a: o.age }; }), plan0 = alloc(rows, inst), sim = L.map(function (o) { return { s: o.s, r: o.rem, a: o.age, x: 0 }; }), cur0 = {}, fin = {}, line = [{ ym: '', v: tot }], mi;
-  L.forEach(function (o) { o.sug = plan0[o.s] || 0; o.adj = ADJ[o.s] || null; o.due = o.adj ? Math.max(0, Number(o.adj.amt) - o.paid) : Math.max(0, o.sug - o.paid); o.inst = o.adj ? Number(o.adj.amt) : o.sug; });
-  /* الشهر الحالي: الباقي من قسطه (أو المعدّل) — والفرق لو «الشهر الجاي» ينضاف عليه */
-  sim.forEach(function (q) { var o = L.find(function (k) { return k.s === q.s; }); q.r = Math.max(0, q.r - o.due); if (o.adj && o.adj.mode === 'next') q.x = Math.max(0, o.sug - Number(o.adj.amt)); if (q.r < 0.5) fin[q.s] = cur; });
-  var left = sim.reduce(function (s, q) { return s + q.r; }, 0); line.push({ ym: cur, v: left });
-  for (mi = 1; mi <= 36 && left > 0.5 && inst > 0; mi++) { var ym = gdMonAdd(cur, mi), A = alloc(sim, inst); sim.forEach(function (q) { var a = Math.min(q.r, (A[q.s] || 0) + (mi === 1 ? q.x : 0)); q.r -= a; if (q.r < 0.5 && !fin[q.s]) fin[q.s] = ym; if (mi === 1) { var o = L.find(function (k) { return k.s === q.s; }); o.next = a; } }); left = sim.reduce(function (s, q) { return s + q.r; }, 0); line.push({ ym: ym, v: left }); }
+  /* نسبة الأرباح التقريبية = متوسط الشهور اللي أدخلتها، وإلا النسبة اللي كتبتها */
+  var DPM = {}; (DB.dayProfit || []).forEach(function (x) { var m = x.d.slice(0, 7), o = DPM[m] = DPM[m] || { p: 0, s: 0, n: {} }; o.p += Number(x.prof) || 0; o.s += ((Number(x.cost) || 0) + (Number(x.prof) || 0)) * 1.15; o.n[x.d] = 1; });
+  var pcs = Object.keys(DPM).filter(function (k) { return !(PF[k] && PF[k].amt >= 0) && DPM[k].s; }).map(function (k) { return DPM[k].p / DPM[k].s * 100; }).concat(Object.keys(PF).map(function (k) { var e = PF[k]; return S[k] && e && e.amt >= 0 ? e.amt / S[k] * 100 : null; })).filter(function (v) { return v !== null; }), apx = pcs.length ? pcs.reduce(function (a, b) { return a + b; }, 0) / pcs.length : (Number(C.pct) > 0 ? Number(C.pct) : null);
+  M.forEach(function (m) { var e = PF[m.ym], dm = DPM[m.ym]; if (e && e.amt >= 0) { m.pr = Number(e.amt); m.ent = 1; } else if (dm && dm.s) { m.pr = m.s * dm.p / dm.s; m.days = Object.keys(dm.n).length; } else if (apx !== null) m.pr = m.s * apx / 100; else m.pr = null; m.pct = m.pr === null ? null : m.pr / m.s * 100; m.g = m.pr === null ? null : m.s - m.pr; m.x = m.g === null ? null : m.g - m.p; }); M.reverse();
+  var n = M.length || 1, av = function (k) { return M.reduce(function (s, m) { return s + (m[k] || 0); }, 0) / n; }, noPr = M.some(function (m) { return m.pr === null; }), weak = noPr ? null : M.slice().sort(function (a, b) { return a.x - b.x; })[0], inst = weak ? Math.max(0, Math.floor(weak.x / 100) * 100) : 0;
+  /* الديون المفتوحة لكل مورد */
+  var SP = {}, paidM = {}, mStart = cur + '-01', IV = {};
+  (DB.invoices || []).forEach(function (x) { IV[String(x.id)] = x; if (x.payType !== 'آجل' || x.status || x.invType === 'مرتجع مشتريات') return; var c = creditInfo(x); if (!(c.rem > 1)) return; var o = SP[x.supplier] = SP[x.supplier] || { s: x.supplier, rem: 0, n: 0, old: '9999' }; o.rem += c.rem; o.n++; var d = String(x.date).slice(0, 10); if (d < o.old) o.old = d; });
+  (DB.invPays || []).forEach(function (p) { if (String(p.date) < mStart) return; var x = IV[String(p.invId)]; if (!x || x.status || x.payType !== 'آجل') return; paidM[x.supplier] = (paidM[x.supplier] || 0) + (Number(p.amount) || 0); if (!SP[x.supplier]) SP[x.supplier] = { s: x.supplier, rem: 0, n: 0, old: String(x.date).slice(0, 10) }; });
+  var L = Object.keys(SP).map(function (k) { var o = SP[k]; o.age = Math.round((sdParse(todayS()) - sdParse(o.old)) / 864e5); o.paid = paidM[k] || 0; o.base = o.rem + o.paid; return o; }).filter(function (o) { return o.base > 1; });
+  var ADJ = {}; (DB.debtAdj || []).forEach(function (a) { if (!a.off && a.ym === cur) ADJ[a.sup] = a; });
+  /* ترتيب الأولوية: القديم (+60 يوم) الأقدم أول، بعدين الأصغر عشان يتقفل بسرعة */
+  function ord(a, b) { var oa = a.a > 60, ob = b.a > 60; if (oa !== ob) return oa ? -1 : 1; if (oa) return a.a > b.a ? -1 : 1; return a.r - b.r; }
+  function month(rows, B, force) { var out = {}; Object.keys(force || {}).forEach(function (k) { var q = rows.find(function (r) { return r.s === k; }); if (q && force[k] > 0) { out[k] = Math.min(q.r, force[k]); B -= out[k]; } });
+    rows.slice().sort(ord).forEach(function (q) { if (B < 1 || q.r < 0.5 || out[q.s]) return; var a = Math.min(q.r, mxP, B); if (a < Math.min(mnP, q.r) - 0.5) return; out[q.s] = Math.round(a); B -= out[q.s]; }); return out; }
+  var rows = L.map(function (o) { return { s: o.s, r: o.base, a: o.age }; }), m0 = month(rows, inst), now0 = [];
+  L.forEach(function (o) { o.sug = m0[o.s] || 0; o.adj = ADJ[o.s] || null; o.plan = o.adj ? Number(o.adj.amt) : o.sug; o.closes = o.plan > 0 && o.plan >= o.base - 0.5; o.done = o.paid > 0 && o.paid >= o.plan - 0.5; if (o.plan > 0 || o.paid > 0) now0.push(o); });
+  var sim = L.map(function (o) { return { s: o.s, r: Math.max(0, o.base - Math.max(o.plan, o.paid)), a: o.age }; }), carry = {}, fin = {}, MS = [], closedNow = L.filter(function (o) { return o.rem < 1; }).length, closedEnd = sim.filter(function (q) { return q.r < 0.5; }).length;
+  L.forEach(function (o) { if (o.adj && o.adj.mode === 'next' && o.sug > o.plan) carry[o.s] = o.sug - o.plan; });
+  sim.forEach(function (q) { if (q.r < 0.5) fin[q.s] = cur; });
+  MS.push({ ym: cur, amt: now0.reduce(function (s, o) { return s + Math.max(o.plan, o.paid); }, 0), pays: now0.map(function (o) { return { s: o.s, a: Math.max(o.plan, o.paid), c: o.closes || o.rem < 1 }; }), closed: closedEnd, cur: 1 });
+  var left = sim.reduce(function (s, q) { return s + q.r; }, 0);
+  for (i = 1; i <= 48 && left > 0.5 && inst > 0; i++) { var ym = gdMonAdd(cur, i), A = month(sim, inst, i === 1 ? carry : null), pays = [];
+    sim.forEach(function (q) { var a = A[q.s] || 0; if (!a) return; q.r -= a; var c = q.r < 0.5; if (c && !fin[q.s]) fin[q.s] = ym; pays.push({ s: q.s, a: a, c: c }); });
+    left = sim.reduce(function (s, q) { return s + q.r; }, 0); MS.push({ ym: ym, amt: pays.reduce(function (s, p) { return s + p.a; }, 0), pays: pays.sort(function (a, b) { return b.c - a.c; }), closed: sim.filter(function (q) { return q.r < 0.5; }).length }); }
+  var tot = L.reduce(function (s, o) { return s + o.rem; }, 0), allFin = L.every(function (o) { return fin[o.s]; }), lastFin = allFin ? MS[MS.length - 1].ym : '';
   L.forEach(function (o) { o.fin = fin[o.s] || ''; });
-  var lastFin = L.reduce(function (m, o) { return o.fin > m ? o.fin : m; }, ''), allFin = L.every(function (o) { return o.fin; });
-  return { M: M, proj: proj, exp: exp, avgS: avgS, avgP: avgP, surplus: avgS - avgP - exp, weak: weak, inst: inst, L: L, tot: tot, old60: L.filter(function (o) { return o.age > 60; }).reduce(function (s, o) { return s + o.rem; }, 0), paidM: L.reduce(function (s, o) { return s + o.paid; }, 0), line: line, lastFin: allFin ? lastFin : '', cur: cur };
+  return { M: M, proj: proj, apx: apx, noPr: noPr, avgS: av('s'), avgPr: av('pr'), avgG: av('g'), avgP: av('p'), avgX: av('x'), weak: weak, inst: inst, L: L, now0: now0.sort(function (a, b) { return b.closes - a.closes || b.plan - a.plan; }), MS: MS, tot: tot, N: L.length, closedNow: closedNow, lastFin: lastFin, cur: cur, mx: mxP, mn: mnP, C: C };
 }
 function gdDebtH() {
-  var X = gdDebtCalc(), h = '', mo = function (ym) { if (!ym) return '—'; var k = (Number(ym.slice(0, 4)) - Number(X.cur.slice(0, 4))) * 12 + Number(ym.slice(5)) - Number(X.cur.slice(5)); return gdMName(ym, 1) + '<small>' + esc(k <= 0 ? t('gdThisM') : t('gdInM', k)) + '</small>'; };
-  h += '<div class="card"><h3>💳 ' + esc(t('gdDebtT')) + '</h3><p class="hint">' + esc(X.proj ? t('gdDebtProj') : t('gdDebtH', X.M.map(function (m) { return gdMName(m.ym); }).join(' – '))) + '</p>' +
-    '<div class="gdflow"><div class="gdfb"><small>' + esc(t('gdFS')) + '</small><b>' + num(gdR(X.avgS)) + '</b><em>' + esc(t('gdFSH')) + '</em></div><span class="gdopr">−</span><div class="gdfb"><small>' + esc(t('gdFP')) + '</small><b>' + num(gdR(X.avgP)) + '</b><em>' + esc(t('gdFPH')) + '</em></div><span class="gdopr">−</span>' +
-    '<div class="gdfb"><small>' + esc(t('gdFE')) + '</small><b>' + num(gdR(X.exp)) + '</b><button type="button" class="gdedb noprint" onclick="gdExpEd()">✏️ ' + esc(t(X.exp ? 'gdFEEd' : 'gdFESet')) + '</button></div><span class="gdopr">=</span><div class="gdfb ' + (X.surplus > 0 ? 'res' : 'neg') + '"><small>' + esc(t('gdFX')) + '</small><b>' + num(gdR(X.surplus)) + '</b><em>' + esc(t('gdFXH')) + '</em></div></div>';
-  h += '<div class="gdmons">📊 ' + esc(t('gdMons')) + ' ' + X.M.map(function (m) { return '<span class="' + (X.weak && m.ym === X.weak.ym && X.M.length > 1 ? 'on' : '') + '">' + esc(gdMName(m.ym)) + ' <b>' + num(gdR(m.x)) + '</b>' + (X.weak && m.ym === X.weak.ym && X.M.length > 1 ? ' (' + esc(t('gdWeakest')) + ')' : '') + '</span>'; }).join('') + '<span class="gdinst">' + esc(t('gdInstL')) + ' <b>' + num(X.inst) + '</b> ' + esc(t('gdInstH')) + '</span></div>';
-  if (!X.inst) h += '<div class="gdrc bad" style="margin-top:10px"><div class="gdrh"><span class="gdri">⚠️</span><b>' + esc(t('gdNoSur')) + '</b></div><div class="gdra">💡 ' + esc(t('gdNoSurA')) + '</div></div>';
-  h += '<div class="gdkps" style="margin-top:12px">' + gdKp(t('gdDTot'), num(gdR(X.tot)), t('gdDTotH', X.L.length)) + gdKp(t('gdDOld'), '<span class="dn">' + num(gdR(X.old60)) + '</span>', t('gdDOldH')) + gdKp(t('gdDFin'), X.lastFin ? '<span class="up">' + esc(gdMName(X.lastFin, 1)) + '</span>' : '—', X.lastFin ? '' : t('gdDFinNo')) + gdKp(t('gdDPaid'), num(gdR(X.paidM)), X.inst ? t('gdDPaidH', num(X.inst), num(Math.max(0, gdR(X.inst - X.paidM)))) : '') + '</div></div>';
-  if (!X.L.length) return h + '<div class="card"><p class="empty">' + esc(t('gdNoDebt')) + '</p></div>';
-  var mxl = Math.max.apply(null, X.line.map(function (x) { return x.v; }).concat([1]));
-  h += '<div class="gdg2 gdg2w"><div class="card"><h3>' + esc(t('gdDSupT')) + '</h3><p class="hint">' + esc(t('gdDSupH')) + '</p><div class="gddl">' + X.L.map(function (o) {
-    var pct = o.base ? Math.round(o.paid / o.base * 100) : 0, tg = o.age > 60 ? '<span class="gdtg dn">' + esc(t('gdOldD', o.age)) + '</span>' : o.age > 30 ? '<span class="gdtg wr">' + esc(t('gdDays', o.age)) + '</span>' : '';
-    return '<div class="gdds"><div class="nm"><b>' + esc(nmO0(o.s)) + ' ' + tg + '</b><small>' + esc(t('gdDInv', o.n, o.old)) + '</small></div><div class="rm"><small>' + esc(t('gdRemain')) + '</small><b>' + num(gdR(o.rem)) + '</b></div><div class="in"><small>' + esc(t('gdInstM')) + '</small><b>' + (o.adj ? '<s>' + num(o.sug) + '</s>' : '') + num(gdR(o.inst)) + '</b>' + (o.adj ? '<span class="gdtg wr">' + esc(t('gdAdjT')) + '</span>' : '') + '<button type="button" class="gdedb noprint" onclick="gdAdjEd(' + esc(q(o.s)) + ')">✏️</button></div>' +
-      '<div class="fn"><small>' + esc(t('gdFinL')) + '</small><b>' + mo(o.fin) + '</b></div><div class="pd"><small>' + esc(t('gdPaidThis', num(gdR(o.paid)))) + '</small><div class="gdpr"><i style="width:' + pct + '%"></i></div></div>' + (o.adj ? '<div class="gdadjn">✏️ ' + esc(t('gdAdjN', o.adj.reason, o.adj.by)) + '</div>' : '') + '</div>'; }).join('') +
-    '<div class="gdds tot"><div class="nm"><b>' + esc(t('gdSum')) + '</b></div><div class="rm"><b>' + num(gdR(X.tot)) + '</b></div><div class="in"><b>' + num(gdR(X.L.reduce(function (s, o) { return s + o.inst; }, 0))) + '</b></div><div class="fn"></div><div class="pd"></div></div></div></div>' +
-    '<div class="card"><h3>' + esc(t('gdLineT')) + '</h3><p class="hint">' + esc(t('gdLineH')) + '</p><div class="gdln">' + X.line.slice(0, 12).map(function (x, j) { return '<div class="' + (x.v < 1 ? 'z' : '') + '"><span>' + (x.v < 1 ? '0 ✅' : gdK(x.v)) + '</span><i style="height:' + Math.max(3, x.v / mxl * 170).toFixed(0) + 'px"></i><em>' + esc(x.ym ? (j === 1 ? t('gdEndOf', gdMName(x.ym)) : gdMName(x.ym)) : t('gdNow')) + '</em></div>'; }).join('') + '</div>' +
-    '<div class="gdtip">📊 ' + esc(t('gdRule1')) + '<br>⚠️ ' + esc(t('gdRule2')) + '<br>📉 ' + esc(t('gdRule3')) + '</div></div></div>';
+  var X = gdDebtCalc(), h = '', mo = function (ym) { return (Number(ym.slice(0, 4)) - Number(X.cur.slice(0, 4))) * 12 + Number(ym.slice(5)) - Number(X.cur.slice(5)); };
+  /* 💰 مبيعاتك وكم يروح للديون */
+  h += '<div class="card"><h3>💰 ' + esc(t('gdD2T')) + '</h3><p class="hint">' + esc(X.proj ? t('gdDebtProj') : t('gdD2H')) + '</p>';
+  if (X.apx === null) h += '<div class="gdrc warn" style="margin:8px 0"><div class="gdrh"><span class="gdri">✏️</span><b>' + esc(t('gdPrNeed')) + '</b></div><div class="gdra"><button type="button" class="btn sm" onclick="gdPctEd()">✏️ ' + esc(t('gdPrPctB')) + '</button></div></div>';
+  var f = function (v) { return v === null || isNaN(v) ? '—' : num(gdR(v)); };
+  h += '<div class="gdflow"><div class="gdfb"><small>' + esc(t('gdFS')) + '</small><b>' + f(X.avgS) + '</b><em>' + esc(t('gdFSH')) + '</em></div><span class="gdopr">−</span>' +
+    '<div class="gdfb pr"><small>' + esc(t('gdFPr')) + '</small><b>' + (X.noPr ? '—' : f(X.avgPr)) + '</b><em>' + esc(X.noPr ? '' : (Math.round(X.avgPr / X.avgS * 1000) / 10) + '% · ') + esc(t('gdFPrH')) + '</em></div><span class="gdopr">=</span>' +
+    '<div class="gdfb"><small>' + esc(t('gdFG')) + '</small><b>' + (X.noPr ? '—' : f(X.avgG)) + '</b><em>' + esc(t('gdFGH')) + '</em></div><span class="gdopr">−</span>' +
+    '<div class="gdfb"><small>' + esc(t('gdFP')) + '</small><b>' + f(X.avgP) + '</b><em>' + esc(t('gdFPH')) + '</em></div><span class="gdopr">=</span>' +
+    '<div class="gdfb ' + (X.noPr ? '' : X.avgX > 0 ? 'res' : 'neg') + '"><small>' + esc(t('gdFX2')) + '</small><b>' + (X.noPr ? '—' : f(X.avgX)) + '</b><em>' + esc(t('gdFXH2')) + '</em></div></div>';
+  h += '<div class="tbl" style="margin-top:10px"><table class="gdt" data-gd="debtm"><thead><tr><th>' + esc(t('gdMonth')) + '</th><th>' + esc(t('gdFS')) + '</th><th>' + esc(t('gdFPr')) + '</th><th>%</th><th>' + esc(t('gdFP')) + '</th><th>' + esc(t('gdFX2')) + '</th><th></th></tr></thead><tbody>' + X.M.map(function (m) { var wk = X.weak && m.ym === X.weak.ym && X.M.length > 1;
+    return '<tr><td><b>' + esc(gdMName(m.ym, 1)) + '</b></td><td class="n">' + f(m.s) + '</td><td class="n">' + (m.pr === null ? '—' : (m.ent ? '' : '≈ ') + f(m.pr) + (m.days ? '<small class="sub2">💹 ' + esc(t('dpFromDays', m.days)) + '</small>' : '')) + '</td><td class="n">' + (m.pct === null ? '—' : (Math.round(m.pct * 10) / 10) + '%' + (m.ent ? '' : ' ' + esc(t('gdApx')))) + '</td><td class="n">' + f(m.p) + '</td><td class="n"><b class="' + (wk ? 'dn' : '') + '">' + f(m.x) + '</b>' + (wk ? ' <small class="dn">(' + esc(t('gdWeakest')) + ')</small>' : '') + '</td><td>' + (X.proj ? '' : '<button type="button" class="gdedb noprint ' + (m.ent ? 'ok' : 'wr') + '" onclick="gdProfEd(\'' + m.ym + '\')">' + (m.ent ? '✏️ ' + esc(t('gdEntered')) : '✏️ ' + esc(t('gdEnterPr'))) + '</button>') + '</td></tr>'; }).join('') + '</tbody></table></div>';
+  h += '<div class="gdtip">' + (X.apx !== null ? '📌 ' + esc(t('gdApxN', Math.round(X.apx * 10) / 10)) + ' <button type="button" class="gdedb noprint" onclick="gdPctEd()">✏️</button><br>' : '') + '📊 ' + esc(t('gdInstN', num(X.inst))) + '</div></div>';
+  /* 🎯 الخطة */
+  if (!X.N) return h + '<div class="card"><p class="empty">' + esc(t('gdNoDebt')) + '</p></div>';
+  var fm = X.lastFin ? mo(X.lastFin) : 0;
+  h += '<div class="card"><h3>🎯 ' + esc(t('gdPlanT')) + '</h3><p class="hint">' + esc(t('gdPlanH', X.N, num(gdR(X.tot)), num(X.inst))) + '</p>';
+  if (!X.inst) h += '<div class="gdrc bad"><div class="gdrh"><span class="gdri">⚠️</span><b>' + esc(X.noPr ? t('gdPrNeed') : t('gdNoSur')) + '</b></div>' + (X.noPr ? '' : '<div class="gdra">💡 ' + esc(t('gdNoSurA2')) + '</div>') + '</div>';
+  h += '<div class="gdgoal"><span class="ic">🏁</span><div><small>' + esc(t('gdGoalL')) + '</small><b>' + (X.lastFin ? esc(gdMName(X.lastFin, 1)) : '—') + '</b><small>' + esc(X.lastFin ? (fm <= 0 ? t('gdThisM') : t('gdInM', fm)) : t('gdDFinNo')) + '</small></div><div class="r"><small>' + esc(t('gdClosedL')) + '</small><b>' + t('gdOfN', X.closedNow, X.N) + '</b></div></div>';
+  var stp = X.MS.length <= 6 ? X.MS : X.MS.filter(function (m, j) { return j === 0 || j === X.MS.length - 1 || j % Math.ceil(X.MS.length / 5) === 0; }), prevC = 0;
+  h += '<div class="gdms">' + stp.map(function (m, j) { var last = j === stp.length - 1 && X.lastFin, nc = m.closed - prevC; prevC = m.closed; return '<div class="' + (m.cur ? 'd' : '') + '"><b>' + esc(m.cur ? gdMName(m.ym) : gdMName(m.ym, m.ym.slice(0, 4) !== X.cur.slice(0, 4))) + '</b><span>' + esc(last ? '🏁 ' + t('gdAllN', X.N) : j ? t('gdMsC', m.closed) : t('gdMsNow', nc)) + '</span><em>' + num(gdR(m.amt)) + '</em></div>'; }).join('') + '</div></div>';
+  /* 💵 سداد هذا الشهر + 📅 شهر بشهر */
+  var tp = X.now0.reduce(function (s, o) { return s + Math.max(o.plan, o.paid); }, 0), pd = X.now0.reduce(function (s, o) { return s + Math.min(o.paid, Math.max(o.plan, o.paid)); }, 0);
+  h += '<div class="gdg2"><div class="card"><h3>💵 ' + esc(t('gdNowT', gdMName(X.cur))) + '</h3><p class="hint">' + esc(t('gdNowH', X.now0.length, num(X.mn), num(X.mx))) + '</p>' + (X.now0.length ? X.now0.map(function (o) {
+    var st = o.rem < 1 ? '<span class="gdtg up">✅ ' + esc(t('gdPaidCl')) + '</span>' : o.done ? '<span class="gdtg up">✅ ' + esc(t('gdPaidOk')) + '</span>' : o.paid > 0 ? '<span class="gdtg wr">' + esc(t('gdLeftN', num(gdR(o.plan - o.paid)))) + '</span>' : o.closes ? '<span class="gdtg">🔒 ' + esc(t('gdWillCl')) + '</span>' : '';
+    return '<div class="gdp"><span class="nm"><b>' + esc(nmO0(o.s)) + '</b><small>' + esc(t('gdRemN', num(gdR(o.rem)))) + (o.age > 60 ? ' · ' + esc(t('gdOldD', o.age)) : '') + (o.adj ? ' · ✏️ ' + esc(o.sug ? t('gdWasN', num(o.sug), o.adj.reason) : o.adj.reason) : '') + '</small></span>' + st + (o.adj ? '<span class="gdtg wr">' + esc(t('gdAdjT')) + '</span>' : '') + '<b class="a">' + (o.adj && o.sug ? '<s>' + num(o.sug) + '</s> ' : '') + num(gdR(Math.max(o.plan, o.paid))) + '</b>' + (o.rem >= 1 ? '<button type="button" class="gdedb noprint" onclick="gdAdjEd(' + esc(q(o.s)) + ')">✏️</button>' : '') + '</div>'; }).join('') : '<p class="empty">' + esc(t('noData')) + '</p>') +
+    '<div class="gdpt"><span>' + esc(t('gdSumM')) + ' <b>' + num(gdR(tp)) + '</b></span><span>' + esc(t('gdPaidS')) + ' <b class="up">' + num(gdR(pd)) + '</b> · ' + esc(t('gdLeftS')) + ' <b>' + num(gdR(Math.max(0, tp - pd))) + '</b></span></div>' +
+    '<div class="gdset noprint">⚙️ ' + esc(t('gdMaxL')) + ' <button type="button" class="gdedb" onclick="gdLimEd()">' + num(X.mx) + ' ✏️</button> · ' + esc(t('gdMinL')) + ' <button type="button" class="gdedb" onclick="gdLimEd()">' + num(X.mn) + ' ✏️</button>' +
+    '<button type="button" class="gdedb" style="margin-inline-start:auto" onclick="gdOtherSup()">➕ ' + esc(t('gdAddSup')) + '</button></div></div>';
+  h += '<div class="card"><h3>📅 ' + esc(t('gdMbmT')) + '</h3><p class="hint">' + esc(t('gdMbmH')) + '</p>' + X.MS.slice(1, 13).map(function (m) { var nc = m.pays.filter(function (p) { return p.c; }).length;
+    return '<div class="gdmo"><div class="h"><b>' + esc(gdMName(m.ym, 1)) + '</b><span>' + num(gdR(m.amt)) + (nc ? ' · ' + esc(t('gdNCl', nc)) : '') + '</span></div><div class="ch">' + m.pays.map(function (p) { return '<span class="' + (p.c ? 'c' : '') + '">' + (p.c ? '🔒 ' : '') + esc(nmO0(p.s)) + ' ' + num(gdR(p.a)) + '</span>'; }).join('') + '</div></div>'; }).join('') + (X.MS.length > 13 ? '<p class="muted">… ' + esc(t('gdMoreM', X.MS.length - 13)) + '</p>' : '') +
+    '<div class="gdtip">✏️ ' + esc(t('gdRule4')) + '</div></div></div>';
   return h;
 }
-function gdExpEd() { ask({ title: '✏️ ' + t('gdFE'), msg: t('gdFEMsg'), html: '<input type="number" id="askV" min="0" inputmode="decimal" value="' + esc((DB.gdCfg || {}).exp || '') + '" style="width:100%;margin-top:8px">', ok: '💾 ' + t('save'), collect: function () { var v = $('askV').value; return v === '' || Number(v) < 0 ? t('e_qty') : { x: v }; } }).then(function (r) { if (!r) return; run('gdOp', ['exp', { v: Number(r.v.x) || 0 }], '✅', function () { renderGuide(); }); }); }
+function gdNumAsk(title, msg, cur, cb, extra) { ask({ title: title, msg: msg, html: (extra || '') + '<input type="number" id="askV" min="0" step="any" inputmode="decimal" value="' + esc(cur === undefined || cur === null ? '' : cur) + '" style="width:100%;margin-top:8px">', ok: '💾 ' + t('save'), collect: function () { var v = $('askV').value; return v === '' || Number(v) < 0 ? t('e_qty') : { x: Number(v), m: (document.querySelector('input[name="askM"]:checked') || {}).value }; } }).then(function (r) { if (r) cb(r.v); }); }
+function gdProfEd(ym) { var e = ((DB.gdCfg || {}).profit || {})[ym]; gdNumAsk('✏️ ' + t('gdPrOf', gdMName(ym, 1)), t('gdPrMsg'), e ? e.amt : '', function (v) { run('gdOp', ['profit', { ym: ym, v: v.x, mode: v.m }], '✅', function () { renderGuide(); }); }, '<span class="mpick"><label class="pchk"><input type="radio" name="askM" value="amt" checked> ' + esc(t('gdPrAmt')) + '</label><label class="pchk"><input type="radio" name="askM" value="pct"> ' + esc(t('gdPrPct')) + '</label></span>'); }
+function gdPctEd() { gdNumAsk('✏️ ' + t('gdPrPctB'), t('gdPrPctMsg'), (DB.gdCfg || {}).pct || '', function (v) { run('gdOp', ['pct', { v: v.x }], '✅', function () { renderGuide(); }); }); }
+function gdLimEd() { var C = DB.gdCfg || {}; ask({ title: '⚙️ ' + t('gdLimT'), html: '<label class="fl">' + esc(t('gdMaxL')) + '<input type="number" id="askMx" value="' + esc(C.max || 5000) + '" style="width:100%"></label><label class="fl">' + esc(t('gdMinL')) + '<input type="number" id="askMn" value="' + esc(C.min || 3000) + '" style="width:100%"></label>', ok: '💾 ' + t('save'), collect: function () { var a = Number($('askMx').value), b = Number($('askMn').value); return !(a > 0) || !(b >= 0) || b > a ? t('e_qty') : { a: a, b: b }; } }).then(function (r) { if (r) run('gdOp', ['lim', { max: r.v.a, min: r.v.b }], '✅', function () { renderGuide(); }); }); }
+function gdOtherSup() { var X = gdDebtCalc(), L = X.L.filter(function (o) { return o.rem >= 1 && !X.now0.some(function (k) { return k.s === o.s; }); }); if (!L.length) return toast(t('noData')); ask({ title: '➕ ' + t('gdAddSup'), pick: L.map(function (o) { return [o.s, nmO0(o.s) + ' — ' + num(gdR(o.rem))]; }), ok: t('gdNext') }).then(function (r) { if (r && r.v) gdAdjEd(r.v); }); }
 function gdAdjEd(s) {
   var X = gdDebtCalc(), o = X.L.find(function (k) { return k.s === s; }); if (!o) return; var cur = o.adj ? o.adj.amt : o.sug;
-  var h = '<h2>✏️ ' + esc(t('gdAdjTitle', nmO0(s), gdMName(X.cur))) + '</h2><p>' + esc(t('gdAdjSug')) + ' <b>' + num(o.sug) + '</b> · ' + esc(t('gdPaidThis', num(gdR(o.paid)))) + '</p>' +
+  var h = '<h2>✏️ ' + esc(t('gdAdjTitle', nmO0(s), gdMName(X.cur))) + '</h2><p>' + esc(t('gdAdjSug')) + ' <b>' + num(o.sug) + '</b> · ' + esc(t('gdRemN', num(gdR(o.rem)))) + ' · ' + esc(t('gdPaidThis', num(gdR(o.paid)))) + '</p>' +
     '<label class="fl"><b>' + esc(t('gdAdjPay')) + '</b><input type="number" id="gdAdjA" min="0" inputmode="decimal" value="' + esc(cur) + '" oninput="gdAdjPrev(' + esc(q(s)) + ')"></label>' +
     '<b>' + esc(t('gdAdjDiff')) + '</b><label class="ntRd"><input type="radio" name="gdAdjM" value="spread" checked onchange="gdAdjPrev(' + esc(q(s)) + ')"> ' + esc(t('gdAdjSpread')) + '</label><label class="ntRd"><input type="radio" name="gdAdjM" value="next" onchange="gdAdjPrev(' + esc(q(s)) + ')"> ' + esc(t('gdAdjNext')) + '</label>' +
     '<label class="fl"><b>' + esc(t('bkWhy')) + ' <span class="neg">*</span></b><textarea id="gdAdjR" rows="2">' + esc(o.adj ? o.adj.reason : '') + '</textarea></label><div id="gdAdjP" class="gdtip"></div>' +
@@ -9936,7 +10015,8 @@ function gdAdjEd(s) {
 function gdAdjPrev(s) {
   var a = Number($('gdAdjA').value), m = (document.querySelector('input[name="gdAdjM"]:checked') || {}).value, el = $('gdAdjP'); if (!el) return; var X0 = gdDebtCalc(), o0 = X0.L.find(function (k) { return k.s === s; });
   var keep = DB.debtAdj; DB.debtAdj = (keep || []).filter(function (k) { return !(k.sup === s && k.ym === X0.cur); }).concat(isNaN(a) ? [] : [{ sup: s, ym: X0.cur, amt: a, mode: m }]); var X1 = gdDebtCalc(), o1 = X1.L.find(function (k) { return k.s === s; }); DB.debtAdj = keep;
-  el.innerHTML = '📅 ' + esc(t('gdAdjPrev', o0.fin ? gdMName(o0.fin, 1) : '—', o1.fin ? gdMName(o1.fin, 1) : '—', num(gdR(o1.next || 0))));
+  var nx = X1.MS[1] ? (X1.MS[1].pays.find(function (p) { return p.s === s; }) || {}).a || 0 : 0;
+  el.innerHTML = '📅 ' + esc(t('gdAdjPrev', o0.fin ? gdMName(o0.fin, 1) : '—', o1.fin ? gdMName(o1.fin, 1) : '—', num(gdR(nx)))) + (X1.lastFin !== X0.lastFin ? '<br>🏁 ' + esc(t('gdAdjPrevAll', X1.lastFin ? gdMName(X1.lastFin, 1) : '—')) : '');
 }
 function gdAdjGo(s, back) { var cur = gdYM(todayS()); if (back) return run('gdOp', ['clr', { sup: s, ym: cur }], '✅', function () { tmzOvClose(); renderGuide(); }); var a = $('gdAdjA').value, why = $('gdAdjR').value.trim(), m = (document.querySelector('input[name="gdAdjM"]:checked') || {}).value; if (a === '' || Number(a) < 0) return toast('⚠️ ' + t('e_qty'), true); if (why.length < 3) return toast('⚠️ ' + t('bkWhyNeed'), true); run('gdOp', ['adj', { sup: s, ym: cur, amt: Number(a), mode: m, reason: why }], '✅', function () { tmzOvClose(); renderGuide(); }); }
 /* 🔁 الحركة: مدة التوفير، الطلبات المفتوحة، الطرق، سجل التوفير صنف بصنف */
@@ -10050,7 +10130,7 @@ function renderGuide() {
     '<label class="gdtrip">🚚 ' + esc(t('gdTripL')) + ' <input type="number" min="0" inputmode="decimal" value="' + esc(GD.trip === '' ? (gdTrip() || '') : GD.trip) + '" onchange="GD.trip=this.value;try{localStorage.setItem(\'gd_trip\',this.value)}catch(e){};renderGuide()"></label>' +
     '<button class="btn" type="button" onclick="gdXlsx()">⬇️ Excel</button><button class="btn" type="button" onclick="gdPdf()">📄 PDF</button></div>' +
     '<div class="muted gdcmp">' + esc(t('gdCmp', '1–' + R.lastDay + ' / ' + R.ym, R.pym)) + '</div>' +
-    '<div class="seg2 gdtabs noprint">' + [['rec', '🧭', 'gdTRec'], ['sales', '💰', 'gdTSales'], ['sup', '🚚', 'gdTSup'], ['debt', '💳', 'gdTDebt'], ['emp', '👥', 'gdTEmp'], ['mv', '🔁', 'gdTMv'], ['dmg', '🗑️', 'gdTDmg']].map(function (x) { return '<button type="button" class="' + (GD.tab === x[0] ? 'on' : '') + '" onclick="GD.tab=\'' + x[0] + '\';renderGuide()">' + x[1] + ' ' + esc(t(x[2])) + '</button>'; }).join('') + '</div></div>';
+    '<div class="seg2 gdtabs noprint">' + [['rec', '🧭', 'gdTRec'], ['sales', '💰', 'gdTSales'], ['sup', '🚚', 'gdTSup'], ['prof', '💹', 'gdTProf'], ['debt', '💳', 'gdTDebt'], ['emp', '👥', 'gdTEmp'], ['mv', '🔁', 'gdTMv'], ['dmg', '🗑️', 'gdTDmg']].map(function (x) { return '<button type="button" class="' + (GD.tab === x[0] ? 'on' : '') + '" onclick="GD.tab=\'' + x[0] + '\';renderGuide()">' + x[1] + ' ' + esc(t(x[2])) + '</button>'; }).join('') + '</div></div>';
   var recCard = function (r) { return '<div class="gdrc ' + r.lvl + '"><div class="gdrh"><span class="gdri">' + r.ic + '</span><b>' + esc(r.t) + '</b><span class="gdlv ' + r.lvl + '">' + esc(t(r.lvl === 'bad' ? 'gdLvBad' : r.lvl === 'warn' ? 'gdLvWarn' : 'gdLvOk')) + '</span></div><div class="gdrf">🔎 ' + r.f + '</div><div class="gdra">💡 ' + esc(r.a) + '</div>' + (r.act ? '<div class="mrow2 noprint" style="margin-top:6px">' + r.act.map(function (b) { return '<button type="button" class="btn sm" onclick="' + b[1] + '">' + esc(b[0]) + '</button>'; }).join('') + '</div>' : '') + (GD.tab === 'rec' && r.tab ? '<button type="button" class="ghost sm noprint" onclick="GD.tab=\'' + r.tab + '\';renderGuide();scrollTo(0,0)">' + esc(t('gdMore')) + ' ←</button>' : '') + '</div>'; };
   var recOf = function (tb) { var X = REC.filter(function (r) { return r.tab === tb; }); return X.length ? '<div class="gdrecs">' + X.map(recCard).join('') + '</div>' : ''; };
   if (GD.tab === 'rec') {
@@ -10085,6 +10165,7 @@ function renderGuide() {
   }
   if (GD.tab === 'mv') { GD.MV = gdMvCalc(); h += gdMvH(GD.MV, recCard); }
   if (GD.tab === 'debt') h += gdDebtH();
+  if (GD.tab === 'prof') h += dpH();
   if (GD.tab === 'dmg') {
     var DI = Object.keys(R.dmgItems).map(function (k) { return R.dmgItems[k]; }).sort(function (a, b) { return b.n - a.n; }).slice(0, 15);
     h += recOf('dmg') + '<div class="gdg2"><div class="card"><h3>' + esc(t('gdDmgBrT')) + '</h3>' + gdBars(R.BR.map(function (k, j) { var B = R.br[k]; return { l: esc(ln(k)), v: B.dmg, r: B.cur ? B.dmg / B.cur * 100 : 0, c: GD_COL[j % GD_COL.length] }; }), function (r) { return num(gdR(r.v)) + ' <small class="muted">' + r.r.toFixed(1) + '%</small>'; }) + '<p class="hint">' + esc(t('gdDmgH')) + '</p></div>' +
@@ -10113,7 +10194,7 @@ function printDoc(title, sub, inner) {
   toast('⚠️ ' + t('pdfBlocked'), true);
 }
 function pdfClean(node) { var c = node.cloneNode(true); c.querySelectorAll('.noprint,button,.xlh,script').forEach(function (e) { e.remove(); }); c.querySelectorAll('select').forEach(function (e) { var o = e.options[e.selectedIndex], sp = document.createElement('span'); sp.textContent = o ? o.text : ''; e.replaceWith(sp); }); c.querySelectorAll('input').forEach(function (e) { var sp = document.createElement('span'); sp.textContent = e.type === 'checkbox' ? (e.checked ? '✓' : '') : e.value; e.replaceWith(sp); }); return c; }
-function gdPdf() { var src = $('v-guide'); if (!src) return; var tabN = { rec: 'gdTRec', sales: 'gdTSales', sup: 'gdTSup', debt: 'gdTDebt', emp: 'gdTEmp', mv: 'gdTMv', dmg: 'gdTDmg' }[GD.tab]; printDoc(t('guide') + ' — ' + t(tabN), GD.ym, pdfClean(src).innerHTML); }
+function gdPdf() { var src = $('v-guide'); if (!src) return; var tabN = { rec: 'gdTRec', sales: 'gdTSales', sup: 'gdTSup', prof: 'gdTProf', debt: 'gdTDebt', emp: 'gdTEmp', mv: 'gdTMv', dmg: 'gdTDmg' }[GD.tab]; printDoc(t('guide') + ' — ' + t(tabN), GD.ym, pdfClean(src).innerHTML); }
 /* 📄⬇️ أي سجل (xlt): PDF أو Excel بكل السطور حسب الفلتر */
 function xlTitle(el) { var tt = el.getAttribute('data-xt') || '', v = el.closest('.view'), vt = v && v.id ? viewTitle(v.id.replace(/^v-/, '')) : ''; return { t: tt || vt, s: tt && vt && vt !== tt ? vt : '' }; }
 function xlPdf(el) { var T = xlTitle(el); printDoc(T.t, T.s, pdfClean(el).outerHTML); }
@@ -14029,6 +14110,90 @@ function mrCalc(data, ym, items) {
     gdKBest: 'أقوى يوم',
     gdKWorst: 'أضعف يوم',
     gdDailyT: 'المبيعات يوم بيوم',
+    gdToday0: 'اليوم',
+    gdTProf: 'الأرباح',
+    dpT: 'الأرباح اليومية — ملف DigitalPro',
+    dpH: 'صدّر «كشف المبيعات تجميعي حسب الصنف» ليوم واحد لكل المخازن، اختر اليوم وارفع الملف — النظام يقسمه على الفروع ويطابقه مع الإقفالات',
+    dpDay: 'يوم الملف',
+    dpPick: 'رفع ملف الإكسل',
+    dpHave: 'هذا اليوم مرفوع من قبل: {0} — لو رفعت ملف ثاني ينحفظ القديم في السجل',
+    dpBr: 'الفرع',
+    dpCost: 'صافي التكلفة',
+    dpProf: 'هامش الربح',
+    dpVat: 'الضريبة 15%',
+    dpTot: 'المجموع',
+    dpCl: 'الإقفال',
+    dpNoLoc: 'مخزن غير مربوط',
+    dpLines: '{0} صنف',
+    dpNoCl: 'ما في إقفال',
+    dpSetStore: 'حدد رقم المخزن للفرع',
+    dpNoClT: 'ما في إقفال لهذا اليوم',
+    dpOk: 'مطابق',
+    dpDiff: 'فرق {0}',
+    dpRule: 'المجموع = صافي التكلفة + هامش الربح + ضريبة 15% (محسوبة من النظام) — ويطابقه مع إقفال الفرع لنفس اليوم',
+    dpWarn: 'فيه فرع مو مطابق — تأكد إن الملف لنفس اليوم اللي اخترته. تقدر تحفظ، ويتعلّم ⚠️ في السجل',
+    dpSave: 'حفظ أرباح {0}',
+    dpSaved: 'انحفظت الأرباح',
+    dpLogT: 'سجل الأرباح — {0}',
+    dpLogH: 'ربح كل فرع كل يوم · «ارفع» = اليوم فيه إقفال وما انرفع ملفه · ⚠️ = ما طابق الإقفال',
+    dpMiss: 'ارفع',
+    dpDayP: 'ربح اليوم',
+    dpMonT: 'مجموع الشهر',
+    dpToDebt: 'أرباح الأيام المرفوعة تنحسب لحالها في خطة الديون',
+    dpBadFile: 'الملف مو «كشف المبيعات تجميعي حسب الصنف» — ما لقيت أعمدة المخزن وصافي التكلفة وهامش الربح',
+    dpFromDays: 'من {0} يوم مرفوع',
+    gdAddSup: 'سدد لمندوب ثاني',
+    gdAdjPrevAll: 'كل الديون تخلص: {0}',
+    gdAllN: 'كلهم {0}',
+    gdApx: 'تقريبي',
+    gdApxN: 'الشهر اللي ما أدخلت أرباحه يتحسب تقريبي بنسبة {0}% (متوسط اللي أدخلته) — أول ما تدخله تتعدّل الحسبة',
+    gdClosedL: 'قفلت لين الحين',
+    gdD2T: 'مبيعاتك وكم يروح للديون',
+    gdD2H: 'فلوس البضاعة (المبيعات بعد ما تطلع الأرباح) − اللي اشتريته بالشهر = اللي يروح للديون القديمة · متوسط آخر 3 شهور',
+    gdEnterPr: 'أدخلها',
+    gdEntered: 'مُدخلة',
+    gdFG: 'فلوس البضاعة',
+    gdFGH: 'حق الموردين',
+    gdFPr: 'صافي الأرباح',
+    gdFPrH: 'منها الرواتب والإيجار والمصاريف',
+    gdFX2: 'يروح للديون',
+    gdFXH2: 'بالشهر',
+    gdGoalL: 'تخلص كل الديون إن شاء الله',
+    gdInstN: 'القسط الشهري = اللي يروح للديون في أضعف شهر = {0} — عشان تقدر تلتزم فيه دايم',
+    gdLeftN: 'باقي {0}',
+    gdLeftS: 'باقي',
+    gdLimT: 'حدود القسط للمندوب',
+    gdMaxL: 'أقصى مبلغ للمندوب بالشهر:',
+    gdMinL: 'أقل مبلغ:',
+    gdMbmT: 'الخطة شهر بشهر',
+    gdMbmH: 'مين تسدد له كل شهر · 🔒 = يتقفل حسابه',
+    gdMonth: 'الشهر',
+    gdMoreM: 'و {0} شهور بعدها',
+    gdMsC: 'المجموع {0} مقفّل',
+    gdMsNow: 'قفلت {0}',
+    gdNCl: '{0} يتقفلون',
+    gdNext: 'التالي',
+    gdNoSurA2: 'مشترياتك أكثر من فلوس البضاعة — خفّف الشراء الآجل لين يصير فيه فائض',
+    gdNowT: 'سداد هذا الشهر — {0}',
+    gdNowH: '{0} مناديب · كل واحد بين {1} و {2} · القديم أول، بعدين الأصغر عشان يتقفل بسرعة',
+    gdOfN: '{0} من {1}',
+    gdPaidCl: 'تسدد — 🔒 انقفل',
+    gdPaidOk: 'تسدد',
+    gdPaidS: 'سددت',
+    gdPlanT: 'خطة سداد الديون',
+    gdPlanH: '{0} مندوب/مورد · إجمالي {1} · القسط الشهري {2}',
+    gdPrAmt: 'مبلغ',
+    gdPrPct: 'نسبة %',
+    gdPrMsg: 'صافي الأرباح للشهر (اللي تنصرف منه الرواتب والمصاريف)',
+    gdPrNeed: 'اكتب نسبة أرباحك التقريبية عشان تنحسب الخطة',
+    gdPrOf: 'صافي أرباح {0}',
+    gdPrPctB: 'نسبة الأرباح التقريبية',
+    gdPrPctMsg: 'مثلاً 10 يعني 10% من المبيعات — تنستخدم للشهور اللي ما أدخلت أرباحها',
+    gdRemN: 'المتبقي {0}',
+    gdRule4: 'أي تعديل (ظرف طارئ) ينتقل الفرق للشهر الجاي أو يتوزع — والتاريخ النهائي يتحدّث لحاله',
+    gdSumM: 'المجموع هالشهر',
+    gdWasN: 'كان {0} — {1}',
+    gdWillCl: 'ينقفل',
     gdMvRtX: 'نقل كثير ومتقطع: {0} ← {1}',
     gdTDebt: 'الديون',
     gdAddNote: 'أضف ملاحظة',
