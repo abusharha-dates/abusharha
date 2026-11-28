@@ -5087,7 +5087,7 @@ var API_URL = (typeof window !== 'undefined' && window.TAMR_API_URL) ? String(wi
 if (!/^https?:/.test(API_URL) && typeof localStorage !== 'undefined' && typeof location !== 'undefined' && location.protocol === 'https:') { try { API_URL = localStorage.getItem('tamr-api') || API_URL; } catch (e) { } }
 if (/^https?:/.test(API_URL)) { try { localStorage.setItem('tamr-api', API_URL); } catch (e) { } }
 /* رقم تطوير النظام — يزيد مع كل تحديث يُرسل */
-var APP_BUILD = 230, APP_DATE = '2026-11-28';
+var APP_BUILD = 231, APP_DATE = '2026-11-28';
 var MODE = (typeof google !== 'undefined' && google.script && google.script.run) ? 'live' : (API_URL && /^https?:/.test(API_URL) ? 'api' : 'demo');
 var LANGS = ['ar', 'ur', 'hi', 'bn'], LANG_NAMES = { ar: 'العربية', ur: 'اردو', hi: 'हिन्दी', bn: 'বাংলা' }, LANG = 'ar', LI = 0;
 var WTAG = '', MVT = 'إدخال', TF = 'pending', WLOC = '', CTV = {}, CTX = {}, USERS = [], LSEL = '';
@@ -7226,7 +7226,7 @@ var Demo = (function () {
     aiCfg: function (tok, op, x) {
       var w = wuser(tok); mgr(w); x = x || {}; var C = D.aiCfg = D.aiCfg || { on: false, model: 'gemini-2.5-flash', use: {} }, tm = now();
       var sec = function (v) { if (typeof __aiSecret_ === 'function') return __aiSecret_('GEMINI', v); if (v === undefined) return store(KEY + '-sec-gemini') || ''; store(KEY + '-sec-gemini', v || null); return ''; };
-      if (op === 'key') { var k = String(x.key || '').trim(); if (k && !/^[\w\-]{20,80}$/.test(k)) throw new Error('e_aikey'); sec(k); C.on = !!k; C.tail = k ? k.slice(-4) : ''; C.fail = null; aud(w.name, 'البحث الذكي: ' + (k ? 'حفظ مفتاح' : 'إيقاف'), k ? '…' + C.tail : ''); }
+      if (op === 'key') { var k = String(x.key || '').replace(/[\s\u200B-\u200F\u202A-\u202E\uFEFF"'`]/g, ''); if (k && !/^[\w\-.~+\/=:]{20,300}$/.test(k)) throw new Error('e_aikey'); sec(k); C.on = !!k; C.tail = k ? k.slice(-4) : ''; C.fail = null; aud(w.name, 'البحث الذكي: ' + (k ? 'حفظ مفتاح' : 'إيقاف'), k ? '…' + C.tail : ''); }
       else if (op === 'model') { var m = String(x.model || '').trim(); if (!/^[\w.\-]{3,60}$/.test(m)) throw new Error('e_type'); C.model = m; aud(w.name, 'البحث الذكي: النموذج', m); }
       else if (op === 'on') { if (x.on && !sec()) throw new Error('e_aikey'); C.on = !!x.on; aud(w.name, 'البحث الذكي', C.on ? 'تشغيل' : 'إيقاف'); }
       else throw new Error('e_type');
